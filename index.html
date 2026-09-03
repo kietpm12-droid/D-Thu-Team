@@ -2,54 +2,116 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Nhập Dự Thu</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="top-bg"></div>
   <main class="container">
     <section class="card">
-      <h1>📋 NHẬP DỰ THU</h1>
-      <p class="sub">Nhập thông tin dự thu khách hàng</p>
-
+      <div class="header">
+        <div class="logo">💰</div>
+        <div>
+          <h1>DỰ THU KHÁCH HÀNG</h1>
+          <p>Nhập thông tin dự thu</p>
+        </div>
+      </div>
       <form id="duThuForm">
-
-        <label>User *</label>
-        <input id="user_name" type="text" placeholder="Nhập User" required>
-
-        <label>Số CIF *</label>
-        <input id="cif" type="text" placeholder="Nhập số CIF" required>
-
-        <label>Tên Khách hàng *</label>
-        <input id="customer_name" type="text"
-               placeholder="Nhập tên khách hàng" required>
-
-        <label>Số tiền dự thu *</label>
-        <input id="amount" type="number"
-               min="0" step="1000"
-               placeholder="Ví dụ: 5000000" required>
-
-        <label>Ngày thanh toán *</label>
-        <input id="payment_date" type="date" required>
-
-        <label>SĐT</label>
-        <input id="phone" type="tel"
-               placeholder="Nhập số điện thoại">
-
-        <label>Ghi chú</label>
-        <textarea id="note" rows="4"
-                  placeholder="Nhập ghi chú"></textarea>
-
-        <button id="submitBtn" type="submit">
+        <div class="section-title">
+          👤 THÔNG TIN KHÁCH HÀNG
+        </div>
+        <div class="field">
+          <label>User <span>*</span></label>
+          <input
+            id="user_name"
+            type="text"
+            placeholder="Nhập User"
+            autocomplete="off"
+            required
+          >
+        </div>
+        <div class="field">
+          <label>Số CIF <span>*</span></label>
+          <input
+            id="cif"
+            type="text"
+            placeholder="Nhập số CIF"
+            autocomplete="off"
+            required
+          >
+        </div>
+        <div class="field">
+          <label>Tên khách hàng <span>*</span></label>
+          <input
+            id="customer_name"
+            type="text"
+            placeholder="Nhập tên khách hàng"
+            autocomplete="off"
+            required
+          >
+        </div>
+        <div class="field">
+          <label>Số điện thoại</label>
+          <input
+            id="phone"
+            type="tel"
+            inputmode="tel"
+            placeholder="Nhập số điện thoại"
+            autocomplete="off"
+          >
+        </div>
+        <div class="section-title money-title">
+          💵 THÔNG TIN DỰ THU
+        </div>
+        <div class="money-box">
+          <label>Số tiền dự thu <span>*</span></label>
+          <div class="money-input">
+            <input
+              id="amount"
+              type="number"
+              min="0"
+              step="1000"
+              inputmode="numeric"
+              placeholder="0"
+              required
+            >
+            <b>VNĐ</b>
+          </div>
+        </div>
+        <div class="field">
+          <label>Ngày thanh toán <span>*</span></label>
+          <input
+            id="payment_date"
+            type="date"
+            required
+          >
+        </div>
+        <div class="section-title note-title">
+          📝 GHI CHÚ
+        </div>
+        <div class="field">
+          <textarea
+            id="note"
+            rows="4"
+            placeholder="Nhập ghi chú nếu có..."
+          ></textarea>
+        </div>
+        <button
+          id="submitBtn"
+          type="submit"
+        >
+          <span>🚀</span>
           GỬI DỰ THU
         </button>
-
         <div id="message"></div>
       </form>
     </section>
+    <p class="footer">
+      🔒 Dữ liệu được lưu tập trung trên hệ thống
+    </p>
   </main>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
