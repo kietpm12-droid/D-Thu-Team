@@ -2,302 +2,195 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <title>Quản Lý Dự Thu</title>
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+  <title>Nhập Dự Thu</title>
 
   <link rel="stylesheet" href="style.css">
-
-  <style>
-    .manager-card {
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .stat {
-      background: #f1f5f9;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .stat-title {
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .stat-value {
-      font-size: 22px;
-      font-weight: bold;
-      margin-top: 6px;
-    }
-
-    .filters {
-      display: grid;
-      gap: 10px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      margin-top: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1000px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 9px;
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    th {
-      background: #f1f5f9;
-    }
-
-    .danger {
-      background: #dc2626;
-    }
-
-    .green {
-      background: #16a34a;
-    }
-
-    .gray {
-      background: #64748b;
-    }
-
-    .delete-btn {
-      background: #dc2626;
-      color: white;
-      border: 0;
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .delete-btn:active {
-      transform: scale(.96);
-    }
-
-    #managerMessage,
-    #loginMessage {
-      margin-top: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-    }
-  </style>
 </head>
 
 <body>
 
-<main class="container manager-card">
+  <div class="top-bg"></div>
 
-  <section class="card">
+  <main class="container">
 
-    <h1>📊 QUẢN LÝ DỰ THU</h1>
+    <section class="card">
 
-    <!-- ĐĂNG NHẬP -->
+      <div class="header">
 
-    <div id="loginBox">
+        <div class="logo">
+          💰
+        </div>
 
-      <label>Email quản lý</label>
+        <div>
+          <h1>DỰ THU KHÁCH HÀNG</h1>
+          <p>Nhập thông tin dự thu</p>
+        </div>
 
-      <input
-        id="email"
-        type="email"
-        placeholder="Nhập email">
-
-      <label>Mật khẩu</label>
-
-      <input
-        id="password"
-        type="password"
-        placeholder="Nhập mật khẩu">
-
-      <button id="loginBtn">
-        🔐 ĐĂNG NHẬP
-      </button>
-
-      <div id="loginMessage"></div>
-
-    </div>
+      </div>
 
 
-    <!-- TRANG QUẢN LÝ -->
+      <form id="duThuForm">
 
-    <div
-      id="managerBox"
-      style="display:none">
-
-      <button
-        id="logoutBtn"
-        class="danger">
-
-        🚪 ĐĂNG XUẤT
-
-      </button>
+        <div class="section-title">
+          👤 THÔNG TIN KHÁCH HÀNG
+        </div>
 
 
-      <!-- THỐNG KÊ -->
+        <div class="field">
 
-      <div class="stats">
+          <label>
+            User <span>*</span>
+          </label>
 
-        <div class="stat">
+          <input
+            id="user_name"
+            type="text"
+            placeholder="Nhập User"
+            autocomplete="off"
+            required>
 
-          <div class="stat-title">
-            Tổng khách hàng
-          </div>
+        </div>
 
-          <div
-            class="stat-value"
-            id="totalCustomers">
 
-            0
+        <div class="field">
+
+          <label>
+            Số CIF <span>*</span>
+          </label>
+
+          <input
+            id="cif"
+            type="text"
+            placeholder="Nhập số CIF"
+            autocomplete="off"
+            required>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Tên khách hàng <span>*</span>
+          </label>
+
+          <input
+            id="customer_name"
+            type="text"
+            placeholder="Nhập tên khách hàng"
+            autocomplete="off"
+            required>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Số điện thoại
+          </label>
+
+          <input
+            id="phone"
+            type="tel"
+            inputmode="tel"
+            placeholder="Nhập số điện thoại"
+            autocomplete="off">
+
+        </div>
+
+
+        <div class="section-title money-title">
+          💵 THÔNG TIN DỰ THU
+        </div>
+
+
+        <div class="money-box">
+
+          <label>
+            Số tiền dự thu <span>*</span>
+          </label>
+
+
+          <div class="money-input">
+
+            <input
+              id="amount"
+              type="text"
+              inputmode="numeric"
+              placeholder="0"
+              autocomplete="off"
+              required>
+
+            <b>VNĐ</b>
 
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="field">
 
-          <div class="stat-title">
-            Tổng dự thu
-          </div>
+          <label>
+            Ngày thanh toán <span>*</span>
+          </label>
 
-          <div
-            class="stat-value"
-            id="totalAmount">
-
-            0 đ
-
-          </div>
+          <input
+            id="payment_date"
+            type="date"
+            required>
 
         </div>
 
-      </div>
+
+        <div class="section-title note-title">
+          📝 GHI CHÚ
+        </div>
 
 
-      <!-- BỘ LỌC -->
+        <div class="field">
 
-      <div class="filters">
+          <textarea
+            id="note"
+            rows="4"
+            placeholder="Nhập ghi chú nếu có..."></textarea>
 
-        <label>Lọc theo User</label>
-
-        <input
-          id="filterUser"
-          type="text"
-          placeholder="Nhập User">
-
-
-        <label>Lọc theo ngày thanh toán</label>
-
-        <input
-          id="filterDate"
-          type="date">
+        </div>
 
 
         <button
-          id="filterBtn"
-          class="gray">
+          id="submitBtn"
+          type="submit">
 
-          🔎 LỌC DỮ LIỆU
-
-        </button>
-
-
-        <button
-          id="refreshBtn"
-          class="green">
-
-          🔄 LÀM MỚI
+          <span>🚀</span>
+          GỬI DỰ THU
 
         </button>
 
 
-        <button id="exportBtn">
+        <div id="message"></div>
 
-          📥 XUẤT EXCEL
+      </form>
 
-        </button>
-
-      </div>
+    </section>
 
 
-      <!-- BẢNG -->
+    <p class="footer">
+      🔒 Dữ liệu được lưu tập trung trên hệ thống
+    </p>
 
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>User</th>
-
-              <th>Số CIF</th>
-
-              <th>Tên Khách hàng</th>
-
-              <th>Số tiền dự thu</th>
-
-              <th>Ngày thanh toán</th>
-
-              <th>SĐT</th>
-
-              <th>Ghi chú</th>
-
-              <th>Xóa</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="tableBody"></tbody>
-
-        </table>
-
-      </div>
+  </main>
 
 
-      <div id="managerMessage"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    </div>
+  <script src="config.js"></script>
 
-  </section>
-
-</main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-<script src="config.js"></script>
-
-<script src="manager.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
