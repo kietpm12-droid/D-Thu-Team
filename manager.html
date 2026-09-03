@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1">
+  <title>Quản Lý Dự Thu</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .manager-card {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .filters {
+      display: grid;
+      gap: 10px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 9px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f1f5f9;
+    }
+
+    .total {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .danger {
+      background: #dc2626;
+    }
+
+    #managerMessage,
+    #loginMessage {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="container manager-card">
+  <section class="card">
+
+    <h1>📊 QUẢN LÝ DỰ THU</h1>
+
+    <div id="loginBox">
+
+      <label>Email</label>
+      <input id="email" type="email"
+             placeholder="Email quản lý">
+
+      <label>Mật khẩu</label>
+      <input id="password" type="password"
+             placeholder="Mật khẩu">
+
+      <button id="loginBtn">
+        ĐĂNG NHẬP
+      </button>
+
+      <div id="loginMessage"></div>
+    </div>
+
+
+    <div id="managerBox" style="display:none">
+
+      <button id="logoutBtn" class="danger">
+        ĐĂNG XUẤT
+      </button>
+
+      <div class="filters">
+
+        <label>Lọc theo User</label>
+        <input id="filterUser"
+               type="text"
+               placeholder="Nhập User">
+
+        <label>Lọc theo ngày thanh toán</label>
+        <input id="filterDate" type="date">
+
+        <button id="filterBtn">
+          🔎 LỌC DỮ LIỆU
+        </button>
+
+        <button id="exportBtn">
+          📥 XUẤT EXCEL
+        </button>
+
+      </div>
+
+      <div class="total">
+        Tổng dự thu:
+        <span id="totalAmount">0</span> đ
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>CIF</th>
+              <th>Khách hàng</th>
+              <th>Dự thu</th>
+              <th>Ngày TT</th>
+              <th>SĐT</th>
+              <th>Ghi chú</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableBody"></tbody>
+        </table>
+
+      </div>
+
+      <div id="managerMessage"></div>
+
+    </div>
+
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="config.js"></script>
+<script src="manager.js"></script>
+
+</body>
+</html>
