@@ -8,112 +8,101 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="top-bg"></div>
-  <main class="container">
-    <section class="card">
-      <div class="header">
-        <div class="logo">💰</div>
-        <div>
-          <h1>DỰ THU KHÁCH HÀNG</h1>
-          <p>Nhập thông tin dự thu</p>
+<div class="top-bg"></div>
+<main class="container">
+  <section class="card">
+    <div class="header">
+      <div class="logo">💰</div>
+      <div>
+        <h1>DỰ THU KHÁCH HÀNG</h1>
+        <p>Nhập thông tin dự thu</p>
+      </div>
+    </div>
+    <form id="duThuForm">
+      <div class="section-title">
+        👤 THÔNG TIN KHÁCH HÀNG
+      </div>
+      <div class="field">
+        <label>User <span>*</span></label>
+        <input
+          id="user_name"
+          type="text"
+          placeholder="Nhập User"
+          autocomplete="off"
+          required>
+      </div>
+      <div class="field">
+        <label>Số CIF <span>*</span></label>
+        <input
+          id="cif"
+          type="text"
+          placeholder="Nhập số CIF"
+          autocomplete="off"
+          required>
+      </div>
+      <div class="field">
+        <label>Tên khách hàng <span>*</span></label>
+        <input
+          id="customer_name"
+          type="text"
+          placeholder="Nhập tên khách hàng"
+          autocomplete="off"
+          required>
+      </div>
+      <div class="field">
+        <label>Số điện thoại</label>
+        <input
+          id="phone"
+          type="tel"
+          inputmode="tel"
+          placeholder="Nhập số điện thoại"
+          autocomplete="off">
+      </div>
+      <div class="section-title money-title">
+        💵 THÔNG TIN DỰ THU
+      </div>
+      <div class="money-box">
+        <label>Số tiền dự thu <span>*</span></label>
+        <div class="money-input">
+          <input
+            id="amount"
+            type="text"
+            inputmode="numeric"
+            placeholder="0"
+            autocomplete="off"
+            required>
+          <b>VNĐ</b>
         </div>
       </div>
-      <form id="duThuForm">
-        <div class="section-title">
-          👤 THÔNG TIN KHÁCH HÀNG
-        </div>
-        <div class="field">
-          <label>User <span>*</span></label>
-          <input
-            id="user_name"
-            type="text"
-            placeholder="Nhập User"
-            autocomplete="off"
-            required
-          >
-        </div>
-        <div class="field">
-          <label>Số CIF <span>*</span></label>
-          <input
-            id="cif"
-            type="text"
-            placeholder="Nhập số CIF"
-            autocomplete="off"
-            required
-          >
-        </div>
-        <div class="field">
-          <label>Tên khách hàng <span>*</span></label>
-          <input
-            id="customer_name"
-            type="text"
-            placeholder="Nhập tên khách hàng"
-            autocomplete="off"
-            required
-          >
-        </div>
-        <div class="field">
-          <label>Số điện thoại</label>
-          <input
-            id="phone"
-            type="tel"
-            inputmode="tel"
-            placeholder="Nhập số điện thoại"
-            autocomplete="off"
-          >
-        </div>
-        <div class="section-title money-title">
-          💵 THÔNG TIN DỰ THU
-        </div>
-        <div class="money-box">
-          <label>Số tiền dự thu <span>*</span></label>
-          <div class="money-input">
-            <input
-              id="amount"
-              type="number"
-              min="0"
-              step="1000"
-              inputmode="numeric"
-              placeholder="0"
-              required
-            >
-            <b>VNĐ</b>
-          </div>
-        </div>
-        <div class="field">
-          <label>Ngày thanh toán <span>*</span></label>
-          <input
-            id="payment_date"
-            type="date"
-            required
-          >
-        </div>
-        <div class="section-title note-title">
-          📝 GHI CHÚ
-        </div>
-        <div class="field">
-          <textarea
-            id="note"
-            rows="4"
-            placeholder="Nhập ghi chú nếu có..."
-          ></textarea>
-        </div>
-        <button
-          id="submitBtn"
-          type="submit"
-        >
-          <span>🚀</span>
-          GỬI DỰ THU
-        </button>
-        <div id="message"></div>
-      </form>
-    </section>
-    <p class="footer">
-      🔒 Dữ liệu được lưu tập trung trên hệ thống
-    </p>
-  </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+      <div class="field">
+        <label>Ngày thanh toán <span>*</span></label>
+        <input
+          id="payment_date"
+          type="date"
+          required>
+      </div>
+      <div class="section-title note-title">
+        📝 GHI CHÚ
+      </div>
+      <div class="field">
+        <textarea
+          id="note"
+          rows="4"
+          placeholder="Nhập ghi chú nếu có..."></textarea>
+      </div>
+      <button id="submitBtn" type="submit">
+        <span>🚀</span>
+        GỬI DỰ THU
+      </button>
+      <div id="message"></div>
+    </form>
+  </section>
+  <p class="footer">
+    🔒 Dữ liệu được lưu tập trung trên hệ thống
+  </p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
