@@ -3,186 +3,301 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
   <title>Quản Lý Dự Thu</title>
+
   <link rel="stylesheet" href="style.css">
+
   <style>
     .manager-card {
       max-width: 1200px;
       margin: auto;
     }
+
     .stats {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       margin: 20px 0;
     }
+
     .stat {
       background: #f1f5f9;
       padding: 16px;
       border-radius: 12px;
       text-align: center;
     }
+
     .stat-title {
       color: #64748b;
       font-size: 14px;
     }
+
     .stat-value {
       font-size: 22px;
       font-weight: bold;
       margin-top: 6px;
     }
+
     .filters {
       display: grid;
       gap: 10px;
     }
+
     .table-wrap {
       overflow-x: auto;
       margin-top: 20px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      min-width: 1000px;
     }
+
     th, td {
       border: 1px solid #ddd;
       padding: 9px;
       text-align: left;
       white-space: nowrap;
     }
+
     th {
       background: #f1f5f9;
     }
+
     .danger {
       background: #dc2626;
     }
+
     .green {
       background: #16a34a;
     }
+
     .gray {
       background: #64748b;
     }
+
+    .delete-btn {
+      background: #dc2626;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .delete-btn:active {
+      transform: scale(.96);
+    }
+
     #managerMessage,
     #loginMessage {
       margin-top: 15px;
       text-align: center;
       font-weight: bold;
     }
+
     @media (max-width: 600px) {
+
       .stats {
         grid-template-columns: 1fr;
       }
+
     }
   </style>
 </head>
+
 <body>
+
 <main class="container manager-card">
+
   <section class="card">
+
     <h1>📊 QUẢN LÝ DỰ THU</h1>
+
     <!-- ĐĂNG NHẬP -->
+
     <div id="loginBox">
+
       <label>Email quản lý</label>
+
       <input
         id="email"
         type="email"
-        placeholder="Nhập email"
-      >
+        placeholder="Nhập email">
+
       <label>Mật khẩu</label>
+
       <input
         id="password"
         type="password"
-        placeholder="Nhập mật khẩu"
-      >
+        placeholder="Nhập mật khẩu">
+
       <button id="loginBtn">
         🔐 ĐĂNG NHẬP
       </button>
+
       <div id="loginMessage"></div>
+
     </div>
+
+
     <!-- TRANG QUẢN LÝ -->
-    <div id="managerBox" style="display:none">
-      <button id="logoutBtn" class="danger">
+
+    <div
+      id="managerBox"
+      style="display:none">
+
+      <button
+        id="logoutBtn"
+        class="danger">
+
         🚪 ĐĂNG XUẤT
+
       </button>
+
+
       <!-- THỐNG KÊ -->
+
       <div class="stats">
+
         <div class="stat">
+
           <div class="stat-title">
             Tổng khách hàng
           </div>
+
           <div
             class="stat-value"
-            id="totalCustomers"
-          >
+            id="totalCustomers">
+
             0
+
           </div>
+
         </div>
+
+
         <div class="stat">
+
           <div class="stat-title">
             Tổng dự thu
           </div>
+
           <div
             class="stat-value"
-            id="totalAmount"
-          >
+            id="totalAmount">
+
             0 đ
+
           </div>
+
         </div>
+
       </div>
+
+
       <!-- BỘ LỌC -->
+
       <div class="filters">
+
         <label>Lọc theo User</label>
+
         <input
           id="filterUser"
           type="text"
-          placeholder="Nhập User"
-        >
+          placeholder="Nhập User">
+
+
         <label>Lọc theo ngày thanh toán</label>
+
         <input
           id="filterDate"
-          type="date"
-        >
+          type="date">
+
+
         <button
           id="filterBtn"
-          class="gray"
-        >
+          class="gray">
+
           🔎 LỌC DỮ LIỆU
+
         </button>
+
+
         <button
           id="refreshBtn"
-          class="green"
-        >
+          class="green">
+
           🔄 LÀM MỚI
+
         </button>
-        <button
-          id="exportBtn"
-        >
+
+
+        <button id="exportBtn">
+
           📥 XUẤT EXCEL
+
         </button>
+
       </div>
-      <!-- BẢNG DỮ LIỆU -->
+
+
+      <!-- BẢNG -->
+
       <div class="table-wrap">
+
         <table>
+
           <thead>
+
             <tr>
+
               <th>User</th>
+
               <th>Số CIF</th>
+
               <th>Tên Khách hàng</th>
+
               <th>Số tiền dự thu</th>
+
               <th>Ngày thanh toán</th>
+
               <th>SĐT</th>
+
               <th>Ghi chú</th>
+
+              <th>Xóa</th>
+
             </tr>
+
           </thead>
+
           <tbody id="tableBody"></tbody>
+
         </table>
+
       </div>
+
+
       <div id="managerMessage"></div>
+
     </div>
+
   </section>
+
 </main>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
 <script src="config.js"></script>
+
 <script src="manager.js"></script>
+
 </body>
 </html>
