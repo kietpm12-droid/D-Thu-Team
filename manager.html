@@ -1,8 +1,12 @@
 <!doctype html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1">
 
   <title>Quản Lý Dự Thu</title>
 
@@ -55,7 +59,8 @@
       min-width: 1000px;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 9px;
       text-align: left;
@@ -99,15 +104,67 @@
       font-weight: bold;
     }
 
+    /* PHÂN TRANG */
+    #pagination {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 5px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    #pagination button {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      background: white;
+      color: #334155;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    #pagination button:hover {
+      background: #f1f5f9;
+    }
+
+    #pagination button.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+      font-weight: bold;
+    }
+
+    #pagination button.arrow {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #pagination button:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 600px) {
 
       .stats {
         grid-template-columns: 1fr;
       }
 
+      #pagination {
+        gap: 4px;
+      }
+
+      #pagination button {
+        width: 34px;
+        height: 34px;
+      }
     }
   </style>
 </head>
+
 
 <body>
 
@@ -117,7 +174,10 @@
 
     <h1>📊 QUẢN LÝ DỰ THU</h1>
 
+
+    <!-- ========================= -->
     <!-- ĐĂNG NHẬP -->
+    <!-- ========================= -->
 
     <div id="loginBox">
 
@@ -128,6 +188,7 @@
         type="email"
         placeholder="Nhập email">
 
+
       <label>Mật khẩu</label>
 
       <input
@@ -135,20 +196,27 @@
         type="password"
         placeholder="Nhập mật khẩu">
 
+
       <button id="loginBtn">
         🔐 ĐĂNG NHẬP
       </button>
+
 
       <div id="loginMessage"></div>
 
     </div>
 
 
+    <!-- ========================= -->
     <!-- TRANG QUẢN LÝ -->
+    <!-- ========================= -->
 
     <div
       id="managerBox"
       style="display:none">
+
+
+      <!-- ĐĂNG XUẤT -->
 
       <button
         id="logoutBtn"
@@ -159,7 +227,9 @@
       </button>
 
 
+      <!-- ========================= -->
       <!-- THỐNG KÊ -->
+      <!-- ========================= -->
 
       <div class="stats">
 
@@ -199,7 +269,9 @@
       </div>
 
 
+      <!-- ========================= -->
       <!-- BỘ LỌC -->
+      <!-- ========================= -->
 
       <div class="filters">
 
@@ -245,7 +317,9 @@
       </div>
 
 
-      <!-- BẢNG -->
+      <!-- ========================= -->
+      <!-- BẢNG DỮ LIỆU -->
+      <!-- ========================= -->
 
       <div class="table-wrap">
 
@@ -275,6 +349,7 @@
 
           </thead>
 
+
           <tbody id="tableBody"></tbody>
 
         </table>
@@ -282,7 +357,17 @@
       </div>
 
 
+      <!-- ========================= -->
+      <!-- PHÂN TRANG -->
+      <!-- ========================= -->
+
+      <div id="pagination"></div>
+
+
+      <!-- THÔNG BÁO -->
+
       <div id="managerMessage"></div>
+
 
     </div>
 
@@ -291,13 +376,25 @@
 </main>
 
 
+<!-- ========================= -->
+<!-- THƯ VIỆN -->
+<!-- ========================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
+
+<!-- CONFIG -->
+
 <script src="config.js"></script>
+
+
+<!-- MANAGER JS -->
 
 <script src="manager.js"></script>
 
+
 </body>
+
 </html>
