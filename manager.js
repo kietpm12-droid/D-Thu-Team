@@ -2,7 +2,7 @@
 
 // ============================================================
 // QUẢN LÝ DỰ THU - MANAGER.JS
-// BẢN HOÀN CHỈNH - ĐÃ BỎ CỘT STT KHI XUẤT EXCEL
+// BẢN HOÀN CHỈNH - EXCEL KHÔNG CÓ STT
 // ============================================================
 
 
@@ -18,22 +18,18 @@ try {
     !window.supabase ||
     typeof window.supabase.createClient !== "function"
   ) {
-
     throw new Error(
       "Không tải được thư viện Supabase."
     );
-
   }
 
   if (
     !window.SUPABASE_URL ||
     !window.SUPABASE_ANON_KEY
   ) {
-
     throw new Error(
       "Thiếu SUPABASE_URL hoặc SUPABASE_ANON_KEY trong config.js."
     );
-
   }
 
   client =
@@ -205,9 +201,7 @@ function formatDateVietnamese(
   if (
     parts.length !== 3
   ) {
-
     return text;
-
   }
 
   return (
@@ -227,9 +221,7 @@ function escapeHTML(value) {
     value === null ||
     value === undefined
   ) {
-
     return "";
-
   }
 
   return String(value)
@@ -546,7 +538,6 @@ async function loadData() {
     }
   );
 
-
   filteredData =
     [...allData];
 
@@ -679,6 +670,7 @@ function renderTable() {
 
   }
 
+
   const startIndex =
     (currentPage - 1) *
     PAGE_SIZE;
@@ -692,6 +684,7 @@ function renderTable() {
       startIndex,
       endIndex
     );
+
 
   pageData.forEach(
     function (row) {
@@ -766,6 +759,7 @@ function renderTable() {
 
       `;
 
+
       const deleteButton =
         tr.querySelector(
           ".delete-btn"
@@ -817,6 +811,7 @@ function renderPagination() {
       )
     );
 
+
   if (
     totalPages <= 1
   ) {
@@ -849,6 +844,7 @@ function renderPagination() {
 
   }
 
+
   const previousButton =
     document.createElement(
       "button"
@@ -877,6 +873,7 @@ function renderPagination() {
     }
   );
 
+
   const pageText =
     document.createElement(
       "span"
@@ -884,6 +881,7 @@ function renderPagination() {
 
   pageText.textContent =
     `Trang ${currentPage} / ${totalPages}`;
+
 
   const nextButton =
     document.createElement(
@@ -912,6 +910,7 @@ function renderPagination() {
 
     }
   );
+
 
   pagination.appendChild(
     previousButton
@@ -1002,6 +1001,7 @@ function updateStatistics() {
     }
   );
 
+
   if (totalCustomers) {
 
     totalCustomers.textContent =
@@ -1037,12 +1037,14 @@ async function deleteData(
     return;
   }
 
+
   try {
 
     showManagerMessage(
       "⏳ Đang xóa...",
       "#2563eb"
     );
+
 
     const {
       error
@@ -1055,18 +1057,22 @@ async function deleteData(
           id
         );
 
+
     if (error) {
       throw error;
     }
+
 
     showManagerMessage(
       "✅ Đã xóa bản ghi thành công.",
       "#16a34a"
     );
 
+
     await loadData();
 
     applyFilter();
+
 
   } catch (error) {
 
@@ -1091,13 +1097,13 @@ async function deleteData(
 
 // ============================================================
 // XUẤT EXCEL - EXCELJS
-// ĐÃ BỎ HOÀN TOÀN CỘT STT
+// KHÔNG CÓ CỘT STT
 // ============================================================
 
 async function exportExcel() {
 
   console.log(
-    "Đã bấm nút XUẤT EXCEL"
+    "Đã bấm nút XUẤT EXCEL - BẢN KHÔNG STT"
   );
 
 
@@ -1154,6 +1160,7 @@ async function exportExcel() {
 
     }
 
+
     showManagerMessage(
       "⏳ Đang tạo file Excel...",
       "#2563eb"
@@ -1185,6 +1192,7 @@ async function exportExcel() {
 
     const year =
       now.getFullYear();
+
 
     const exportDate =
       `${day}/${month}/${year}`;
@@ -1289,7 +1297,7 @@ async function exportExcel() {
 
     // ========================================================
     // SHEET DỰ THU
-    // KHÔNG CÓ STT
+    // 7 CỘT - KHÔNG CÓ STT
     // ========================================================
 
     const worksheet =
@@ -1299,8 +1307,14 @@ async function exportExcel() {
 
 
     // ========================================================
-    // CỘT EXCEL
-    // A → G
+    // CẤU TRÚC 7 CỘT
+    // A User
+    // B Số CIF
+    // C Tên khách hàng
+    // D Số tiền dự thu
+    // E Ngày thanh toán
+    // F SĐT
+    // G Ghi chú
     // ========================================================
 
     worksheet.columns = [
@@ -1368,9 +1382,7 @@ async function exportExcel() {
     ).font = {
 
       name: "Arial",
-
       size: 18,
-
       bold: true
 
     };
@@ -1380,7 +1392,6 @@ async function exportExcel() {
     ).alignment = {
 
       horizontal: "center",
-
       vertical: "middle"
 
     };
@@ -1407,9 +1418,7 @@ async function exportExcel() {
     ).font = {
 
       name: "Arial",
-
       size: 11,
-
       italic: true
 
     };
@@ -1419,7 +1428,6 @@ async function exportExcel() {
     ).alignment = {
 
       horizontal: "center",
-
       vertical: "middle"
 
     };
@@ -1443,9 +1451,7 @@ async function exportExcel() {
     ).font = {
 
       name: "Arial",
-
       size: 11,
-
       bold: true
 
     };
@@ -1455,7 +1461,6 @@ async function exportExcel() {
     ).alignment = {
 
       horizontal: "center",
-
       vertical: "middle"
 
     };
@@ -1470,7 +1475,7 @@ async function exportExcel() {
 
     // ========================================================
     // HEADER
-    // KHÔNG CÓ STT
+    // 7 CỘT - KHÔNG STT
     // ========================================================
 
     const headerRow =
@@ -1492,8 +1497,10 @@ async function exportExcel() {
 
       ]);
 
+
     headerRow.height =
       28;
+
 
     headerRow.eachCell(
       function (cell) {
@@ -1543,7 +1550,7 @@ async function exportExcel() {
 
     // ========================================================
     // DỮ LIỆU
-    // KHÔNG CÓ INDEX + 1
+    // KHÔNG CÓ index + 1
     // ========================================================
 
     filteredData.forEach(
@@ -1603,7 +1610,6 @@ async function exportExcel() {
 
 
         // USER
-
         excelRow.getCell(
           1
         ).alignment = {
@@ -1616,7 +1622,6 @@ async function exportExcel() {
 
 
         // CIF
-
         excelRow.getCell(
           2
         ).alignment = {
@@ -1628,8 +1633,7 @@ async function exportExcel() {
         };
 
 
-        // TÊN KH
-
+        // TÊN KHÁCH HÀNG
         excelRow.getCell(
           3
         ).alignment = {
@@ -1644,7 +1648,6 @@ async function exportExcel() {
 
 
         // SỐ TIỀN
-
         excelRow.getCell(
           4
         ).numFmt =
@@ -1662,7 +1665,6 @@ async function exportExcel() {
 
 
         // NGÀY
-
         excelRow.getCell(
           5
         ).alignment = {
@@ -1675,7 +1677,6 @@ async function exportExcel() {
 
 
         // SĐT
-
         excelRow.getCell(
           6
         ).alignment = {
@@ -1688,7 +1689,6 @@ async function exportExcel() {
 
 
         // GHI CHÚ
-
         excelRow.getCell(
           7
         ).alignment = {
@@ -1832,7 +1832,7 @@ async function exportExcel() {
 
     // ========================================================
     // AUTO FILTER
-    // HEADER TỪ A5 → G
+    // CHỈ A:G
     // ========================================================
 
     worksheet.autoFilter = {
@@ -1969,6 +1969,7 @@ async function exportExcel() {
     // ========================================================
 
     summarySheet.addRow([]);
+
 
     const indicatorHeader =
       summarySheet.addRow([
@@ -2204,7 +2205,6 @@ async function exportExcel() {
 
         item.count++;
 
-
         item.amount +=
           amount;
 
@@ -2406,7 +2406,7 @@ async function exportExcel() {
     // ========================================================
 
     showManagerMessage(
-      "✅ Đã xuất Excel thành công.",
+      "✅ Đã xuất Excel thành công - không có cột STT.",
       "#16a34a"
     );
 
@@ -2426,7 +2426,6 @@ async function exportExcel() {
       ),
       "#dc2626"
     );
-
 
   } finally {
 
@@ -2553,7 +2552,6 @@ async function login() {
       error
     );
 
-
     showLoginMessage(
       "❌ Đăng nhập thất bại: " +
       (
@@ -2641,7 +2639,6 @@ async function logout() {
       error
     );
 
-
     showManagerMessage(
       "❌ Đăng xuất thất bại: " +
       (
@@ -2721,7 +2718,6 @@ async function checkSession() {
           error
         );
 
-
         showManagerMessage(
           "❌ Không thể tải dữ liệu: " +
           (
@@ -2760,7 +2756,6 @@ async function checkSession() {
       "Lỗi kiểm tra session:",
       error
     );
-
 
     showLoginMessage(
       "❌ Không thể kiểm tra đăng nhập: " +
@@ -2813,6 +2808,7 @@ if (refreshBtn) {
 
   refreshBtn.addEventListener(
     "click",
+
     async function () {
 
       try {
@@ -2828,7 +2824,6 @@ if (refreshBtn) {
           error
         );
 
-
         showManagerMessage(
           "❌ Làm mới thất bại: " +
           (
@@ -2841,6 +2836,7 @@ if (refreshBtn) {
       }
 
     }
+
   );
 
 }
@@ -2850,6 +2846,7 @@ if (exportBtn) {
 
   exportBtn.addEventListener(
     "click",
+
     function (event) {
 
       event.preventDefault();
@@ -2857,6 +2854,7 @@ if (exportBtn) {
       exportExcel();
 
     }
+
   );
 
 }
