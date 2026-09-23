@@ -2,7 +2,7 @@
 
 // ============================================================
 // QUẢN LÝ DỰ THU - MANAGER.JS
-// BẢN HOÀN CHỈNH - CÓ NÚT CHỈNH SỬA & EXCEL KHÔNG CÓ STT & BỔ SUNG ĐĂNG NHẬP
+// BẢN HOÀN CHỈNH - CÓ NÚT CHỈNH SỬA, EXCEL KHÔNG CÓ STT & ĐĂNG NHẬP ĐÃ SỬA LỖI
 // ============================================================
 
 // ============================================================
@@ -89,12 +89,19 @@ function showManagerMessage(text, color = "#2563eb") {
 // XỬ LÝ ĐĂNG NHẬP & ĐĂNG XUẤT
 // ============================================================
 
-async function handleLogin() {
+async function handleLogin(e) {
+  if (e) e.preventDefault(); // Ngăn ngừa reload trang nếu nút nằm trong thẻ <form>
+
   const email = emailInput?.value.trim();
   const password = passwordInput?.value.trim();
 
   if (!email || !password) {
     showLoginMessage("⚠️ Vui lòng nhập đầy đủ Email và Mật khẩu!");
+    return;
+  }
+
+  if (!client) {
+    showLoginMessage("❌ Lỗi kết nối Supabase, vui lòng kiểm tra lại cấu hình!");
     return;
   }
 
@@ -122,9 +129,12 @@ async function handleLogin() {
   }
 }
 
-async function handleLogout() {
+async function handleLogout(e) {
+  if (e) e.preventDefault();
   try {
-    await client.auth.signOut();
+    if (client) {
+      await client.auth.signOut();
+    }
     if (loginBox) loginBox.style.display = "block";
     if (managerBox) managerBox.style.display = "none";
     if (emailInput) emailInput.value = "";
@@ -251,46 +261,52 @@ async function removeDuplicateCIF(rows) {
 
 async function loadData() {
   if (!client) {
-    throw new Error("Supabase chưa được khởi tạo.");
+    showManagerMessage("❌ Supabase chưa được khởi tạo.", "#dc2626");
+    return;
   }
 
   showManagerMessage("⏳ Đang tải dữ liệu...", "#2563eb");
 
-  const { data, error } = await client
-    .from("du_thu")
-    .select("*")
-    .order("payment_date", { ascending: false })
-    .order("created_at", { ascending: false });
+  try {
+    const { data, error } = await client
+      .from("du_thu")
+      .select("*")
+      .order("payment_date", { ascending: false })
+      .order("created_at", { ascending: false });
 
-  if (error) throw error;
+    if (error) throw error;
 
-  const rows = Array.isArray(data) ? data : [];
-  allData = await removeDuplicateCIF(rows);
+    const rows = Array.isArray(data) ? data : [];
+    allData = await removeDuplicateCIF(rows);
 
-  // SẮP XẾP
-  allData.sort(function (a, b) {
-    const dateA = String(a.payment_date || "");
-    const dateB = String(b.payment_date || "");
+    // SẮP XẾP
+    allData.sort(function (a, b) {
+      const dateA = String(a.payment_date || "");
+      const dateB = String(b.payment_date || "");
 
-    if (dateA !== dateB) {
-      return dateB.localeCompare(dateA);
-    }
+      if (dateA !== dateB) {
+        return dateB.localeCompare(dateA);
+      }
 
-    const createdA = a.created_at ? new Date(a.created_at).getTime() : 0;
-    const createdB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      const createdA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const createdB = b.created_at ? new Date(b.created_at).getTime() : 0;
 
-    return createdB - createdA;
-  });
+      return createdB - createdA;
+    });
 
-  filteredData = [...allData];
-  currentPage = 1;
-  editingRowId = null;
+    filteredData = [...allData];
+    currentPage = 1;
+    editingRowId = null;
 
-  renderTable();
-  renderPagination();
-  updateStatistics();
+    renderTable();
+    renderPagination();
+    updateStatistics();
 
-  showManagerMessage(`✅ Đã tải ${allData.length} bản ghi.`, "#16a34a");
+    showManagerMessage(`✅ Đã tải ${allData.length} bản ghi.`, "#16a34a");
+  } catch (error) {
+    console.error("Lỗi tải dữ liệu:", error);
+    showManagerMessage("❌ Lỗi tải dữ liệu: " + (error.message || error), "#dc2626");
+  }
 }
 
 // ============================================================
@@ -645,8 +661,6 @@ async function deleteData(id) {
 // ============================================================
 
 async function exportExcel() {
-  console.log("Đã bấm nút XUẤT EXCEL - BẢN KHÔNG STT");
-
   if (!filteredData || filteredData.length === 0) {
     showManagerMessage("⚠️ Không có dữ liệu để xuất Excel.", "#d97706");
     return;
@@ -657,7 +671,6 @@ async function exportExcel() {
       "❌ Thư viện Excel chưa tải được. Hãy kiểm tra Internet/CDN.",
       "#dc2626"
     );
-    console.error("ExcelJS không tồn tại.");
     return;
   }
 
@@ -908,27 +921,41 @@ async function exportExcel() {
 }
 
 // ============================================================
-// KHỞI TẠO SỰ KIỆN
+// KHỞI TẠO SỰ KIỆN (DOM READY)
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Gắn sự kiện Đăng nhập & Đăng xuất
-  if (loginBtn) loginBtn.addEventListener("click", handleLogin);
-  if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+  // Gắn sự kiện Đăng nhập
+  if (loginBtn) {
+    loginBtn.addEventListener("click", handleLogin);
+  }
 
-  // Hỗ trợ ấn phím Enter để đăng nhập nhanh
+  // Bắt sự kiện submit nếu nút đăng nhập nằm trong thẻ <form>
+  const loginForm = document.querySelector("#loginBox form") || loginBtn?.closest("form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", handleLogin);
+  }
+
+  // Gắn sự kiện Đăng xuất
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", handleLogout);
+  }
+
+  // Hỗ trợ ấn phím Enter để đăng nhập khi đang ở ô mật khẩu
   if (passwordInput) {
     passwordInput.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") handleLogin();
+      if (e.key === "Enter") {
+        handleLogin(e);
+      }
     });
   }
 
-  // Sự kiện quản lý
+  // Sự kiện bảng Quản lý
   if (filterBtn) filterBtn.addEventListener("click", filterData);
   if (refreshBtn) refreshBtn.addEventListener("click", loadData);
   if (exportBtn) exportBtn.addEventListener("click", exportExcel);
 
-  // Tải dữ liệu ban đầu nếu đã hiển thị bảng quản lý
+  // Tải dữ liệu ban đầu nếu khu vực quản lý đang hiển thị
   if (managerBox && managerBox.style.display !== "none") {
     loadData();
   }
