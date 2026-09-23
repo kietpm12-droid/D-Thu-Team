@@ -6,33 +6,25 @@
 
 // FULL VERSION
 
-//
+// - CHỈNH SỬA
 
-// CHỨC NĂNG:
+// - XÓA
 
-// - Đăng nhập Supabase
+// - LỌC
 
-// - Tải dữ liệu
+// - PHÂN TRANG
 
-// - Lọc User / ngày
+// - THỐNG KÊ
 
-// - Phân trang 20 dòng
+// - TỰ XỬ LÝ CIF TRÙNG
 
-// - Thống kê
-
-// - CHỈNH SỬA BẢN GHI
-
-// - XÓA BẢN GHI
-
-// - Tự loại CIF trùng
-
-// - Xuất Excel không có STT
+// - XUẤT EXCEL KHÔNG STT
 
 // ============================================================
 
 // ============================================================
 
-// KẾT NỐI SUPABASE
+// SUPABASE
 
 // ============================================================
 
@@ -72,15 +64,13 @@ try {
 
   }
 
-  client =
+  client = window.supabase.createClient(
 
-    window.supabase.createClient(
+    window.SUPABASE_URL,
 
-      window.SUPABASE_URL,
+    window.SUPABASE_ANON_KEY
 
-      window.SUPABASE_ANON_KEY
-
-    );
+  );
 
 } catch (error) {
 
@@ -96,7 +86,7 @@ try {
 
 // ============================================================
 
-// BIẾN TOÀN CỤC
+// BIẾN
 
 // ============================================================
 
@@ -108,9 +98,11 @@ let currentPage = 1;
 
 const PAGE_SIZE = 20;
 
+let editingId = null;
+
 // ============================================================
 
-// LẤY PHẦN TỬ HTML
+// HTML
 
 // ============================================================
 
@@ -184,7 +176,7 @@ const pagination =
 
 // ============================================================
 
-// THÔNG BÁO ĐĂNG NHẬP
+// THÔNG BÁO LOGIN
 
 // ============================================================
 
@@ -214,7 +206,7 @@ function showLoginMessage(
 
 // ============================================================
 
-// THÔNG BÁO QUẢN LÝ
+// THÔNG BÁO MANAGER
 
 // ============================================================
 
@@ -244,11 +236,15 @@ function showManagerMessage(
 
 // ============================================================
 
-// ĐỊNH DẠNG SỐ TIỀN
+// FORMAT TIỀN
 
 // ============================================================
 
-function formatAmount(amount) {
+function formatAmount(
+
+  amount
+
+) {
 
   const number =
 
@@ -264,11 +260,75 @@ function formatAmount(amount) {
 
 // ============================================================
 
-// ĐỊNH DẠNG NGÀY VIỆT NAM
+// CHUYỂN TIỀN NHẬP VỀ NUMBER
 
-// YYYY-MM-DD
+// Ví dụ:
 
-// -> DD/MM/YYYY
+// 160,000,000
+
+// 160.000.000
+
+// 160000000
+
+// ============================================================
+
+function parseAmount(
+
+  value
+
+) {
+
+  if (
+
+    value === null ||
+
+    value === undefined
+
+  ) {
+
+    return 0;
+
+  }
+
+  let text =
+
+    String(value)
+
+      .trim();
+
+  if (!text) {
+
+    return 0;
+
+  }
+
+  text =
+
+    text.replace(
+
+      /[^\d-]/g,
+
+      ""
+
+    );
+
+  const number =
+
+    Number(text);
+
+  return Number.isFinite(number)
+
+    ? number
+
+    : 0;
+
+}
+
+// ============================================================
+
+// FORMAT NGÀY
+
+// YYYY-MM-DD -> DD/MM/YYYY
 
 // ============================================================
 
@@ -314,11 +374,39 @@ function formatDateVietnamese(
 
 // ============================================================
 
+// FORMAT DATE INPUT
+
+// ============================================================
+
+function formatDateInput(
+
+  dateValue
+
+) {
+
+  if (!dateValue) {
+
+    return "";
+
+  }
+
+  return String(dateValue)
+
+    .substring(0, 10);
+
+}
+
+// ============================================================
+
 // ESCAPE HTML
 
 // ============================================================
 
-function escapeHTML(value) {
+function escapeHTML(
+
+  value
+
+) {
 
   if (
 
@@ -378,7 +466,7 @@ function escapeHTML(value) {
 
 // ============================================================
 
-// SO SÁNH BẢN GHI
+// SO SÁNH RECORD
 
 // ============================================================
 
@@ -456,7 +544,7 @@ function isNewerRecord(
 
 // ============================================================
 
-// LOẠI BỎ CIF TRÙNG
+// XỬ LÝ CIF TRÙNG
 
 // ============================================================
 
@@ -470,7 +558,9 @@ async function removeDuplicateCIF(
 
     new Map();
 
-  const duplicateIds = [];
+  const duplicateIds =
+
+    [];
 
   for (
 
@@ -485,6 +575,8 @@ async function removeDuplicateCIF(
         row.cif || ""
 
       ).trim();
+
+    // Không có CIF thì giữ nguyên
 
     if (!cif) {
 
@@ -570,7 +662,7 @@ async function removeDuplicateCIF(
 
   // ==========================================================
 
-  // XÓA CIF TRÙNG TRONG DATABASE
+  // XÓA RECORD TRÙNG
 
   // ==========================================================
 
@@ -582,11 +674,7 @@ async function removeDuplicateCIF(
 
     try {
 
-      const {
-
-        error
-
-      } =
+      const result =
 
         await client
 
@@ -602,13 +690,19 @@ async function removeDuplicateCIF(
 
           );
 
-      if (error) {
+      if (
+
+        result &&
+
+        result.error
+
+      ) {
 
         console.warn(
 
-          "Không thể xóa CIF trùng:",
+          "Không xóa được CIF trùng:",
 
-          error.message
+          result.error.message
 
         );
 
@@ -618,11 +712,59 @@ async function removeDuplicateCIF(
 
       console.warn(
 
-        "Lỗi xóa CIF trùng:",
+        "Lỗi xử lý CIF trùng:",
 
         error
 
       );
+
+    }
+
+  }
+
+  // ==========================================================
+
+  // RECORD KHÔNG CÓ CIF
+
+  // ==========================================================
+
+  for (
+
+    const row of rows
+
+  ) {
+
+    const cif =
+
+      String(
+
+        row.cif || ""
+
+      ).trim();
+
+    if (!cif) {
+
+      // Nếu không có CIF thì thêm vào kết quả
+
+      const alreadyExists =
+
+        latestByCIF.has(
+
+          "__NO_CIF__" + row.id
+
+        );
+
+      if (!alreadyExists) {
+
+        latestByCIF.set(
+
+          "__NO_CIF__" + row.id,
+
+          row
+
+        );
+
+      }
 
     }
 
@@ -662,167 +804,217 @@ async function loadData() {
 
   );
 
-  const {
+  try {
 
-    data,
+    const result =
 
-    error
+      await client
 
-  } =
+        .from("du_thu")
 
-    await client
+        .select("*")
 
-      .from("du_thu")
+        .order(
 
-      .select("*")
+          "payment_date",
 
-      .order(
+          {
 
-        "payment_date",
+            ascending: false
 
-        {
+          }
 
-          ascending: false
+        )
 
-        }
+        .order(
 
-      )
+          "created_at",
 
-      .order(
+          {
 
-        "created_at",
+            ascending: false
 
-        {
+          }
 
-          ascending: false
+        );
 
-        }
+    if (
+
+      result.error
+
+    ) {
+
+      throw result.error;
+
+    }
+
+    const rows =
+
+      Array.isArray(result.data)
+
+        ? result.data
+
+        : [];
+
+    // ========================================================
+
+    // XỬ LÝ CIF TRÙNG
+
+    // ========================================================
+
+    allData =
+
+      await removeDuplicateCIF(
+
+        rows
 
       );
 
-  if (error) {
+    // ========================================================
 
-    throw error;
+    // SẮP XẾP
 
-  }
+    // ========================================================
 
-  const rows =
+    allData.sort(
 
-    Array.isArray(data)
+      function (
 
-      ? data
+        a,
 
-      : [];
-
-  allData =
-
-    await removeDuplicateCIF(
-
-      rows
-
-    );
-
-  // ==========================================================
-
-  // SẮP XẾP
-
-  // ==========================================================
-
-  allData.sort(
-
-    function (a, b) {
-
-      const dateA =
-
-        String(
-
-          a.payment_date || ""
-
-        );
-
-      const dateB =
-
-        String(
-
-          b.payment_date || ""
-
-        );
-
-      if (
-
-        dateA !== dateB
+        b
 
       ) {
 
-        return dateB.localeCompare(
+        const dateA =
 
-          dateA
+          String(
+
+            a.payment_date || ""
+
+          );
+
+        const dateB =
+
+          String(
+
+            b.payment_date || ""
+
+          );
+
+        if (
+
+          dateA !== dateB
+
+        ) {
+
+          return dateB.localeCompare(
+
+            dateA
+
+          );
+
+        }
+
+        const createdA =
+
+          a.created_at
+
+            ? new Date(
+
+                a.created_at
+
+              ).getTime()
+
+            : 0;
+
+        const createdB =
+
+          b.created_at
+
+            ? new Date(
+
+                b.created_at
+
+              ).getTime()
+
+            : 0;
+
+        return (
+
+          createdB -
+
+          createdA
 
         );
 
       }
 
-      const createdA =
+    );
 
-        a.created_at
+    // ========================================================
 
-          ? new Date(
+    // RESET
 
-              a.created_at
+    // ========================================================
 
-            ).getTime()
+    currentPage = 1;
 
-          : 0;
+    filteredData =
 
-      const createdB =
+      [...allData];
 
-        b.created_at
+    renderTable();
 
-          ? new Date(
+    renderPagination();
 
-              b.created_at
+    updateStatistics();
 
-            ).getTime()
+    showManagerMessage(
 
-          : 0;
+      `✅ Đã tải ${allData.length} bản ghi.`,
 
-      return (
+      "#16a34a"
 
-        createdB -
+    );
 
-        createdA
+    return true;
 
-      );
+  } catch (error) {
 
-    }
+    console.error(
 
-  );
+      "LOAD DATA ERROR:",
 
-  filteredData =
+      error
 
-    [...allData];
+    );
 
-  currentPage = 1;
+    showManagerMessage(
 
-  renderTable();
+      "❌ Không thể tải dữ liệu: " +
 
-  renderPagination();
+      (
 
-  updateStatistics();
+        error.message ||
 
-  showManagerMessage(
+        error
 
-    `✅ Đã tải ${allData.length} bản ghi.`,
+      ),
 
-    "#16a34a"
+      "#dc2626"
 
-  );
+    );
+
+    throw error;
+
+  }
 
 }
 
 // ============================================================
 
-// LỌC DỮ LIỆU
+// LỌC
 
 // ============================================================
 
@@ -852,7 +1044,11 @@ function applyFilter() {
 
     allData.filter(
 
-      function (row) {
+      function (
+
+        row
+
+      ) {
 
         const rowUser =
 
@@ -860,7 +1056,9 @@ function applyFilter() {
 
             row.user_name || ""
 
-          ).toLowerCase();
+          )
+
+            .toLowerCase();
 
         const rowDate =
 
@@ -868,7 +1066,15 @@ function applyFilter() {
 
             row.payment_date || ""
 
-          ).substring(0, 10);
+          )
+
+            .substring(
+
+              0,
+
+              10
+
+            );
 
         const matchUser =
 
@@ -956,9 +1162,15 @@ function renderTable() {
 
         <td
 
-          colspan="8"
+          colspan="9"
 
-          style="text-align:center;">
+          style="
+
+            text-align:center;
+
+            padding:25px;
+
+          ">
 
           Không có dữ liệu phù hợp.
 
@@ -974,7 +1186,13 @@ function renderTable() {
 
   const startIndex =
 
-    (currentPage - 1) *
+    (
+
+      currentPage -
+
+      1
+
+    ) *
 
     PAGE_SIZE;
 
@@ -996,7 +1214,11 @@ function renderTable() {
 
   pageData.forEach(
 
-    function (row) {
+    function (
+
+      row
+
+    ) {
 
       const tr =
 
@@ -1040,7 +1262,13 @@ function renderTable() {
 
         <td
 
-          style="text-align:right;">
+          style="
+
+            text-align:right;
+
+            white-space:nowrap;
+
+          ">
 
           ${formatAmount(
 
@@ -1100,7 +1328,27 @@ function renderTable() {
 
               row.id
 
-            )}">
+            )}"
+
+            style="
+
+              border:none;
+
+              background:#2563eb;
+
+              color:white;
+
+              padding:8px 12px;
+
+              border-radius:7px;
+
+              cursor:pointer;
+
+              margin-right:5px;
+
+              font-weight:600;
+
+            ">
 
             ✏️ Sửa
 
@@ -1116,7 +1364,25 @@ function renderTable() {
 
               row.id
 
-            )}">
+            )}"
+
+            style="
+
+              border:none;
+
+              background:#dc3545;
+
+              color:white;
+
+              padding:8px 12px;
+
+              border-radius:7px;
+
+              cursor:pointer;
+
+              font-weight:600;
+
+            ">
 
             🗑️ Xóa
 
@@ -1126,11 +1392,11 @@ function renderTable() {
 
       `;
 
-      // ========================================================
+      // ======================================================
 
       // NÚT SỬA
 
-      // ========================================================
+      // ======================================================
 
       const editButton =
 
@@ -1148,7 +1414,11 @@ function renderTable() {
 
           function () {
 
-            editData(row);
+            openEditModal(
+
+              row.id
+
+            );
 
           }
 
@@ -1156,11 +1426,11 @@ function renderTable() {
 
       }
 
-      // ========================================================
+      // ======================================================
 
       // NÚT XÓA
 
-      // ========================================================
+      // ======================================================
 
       const deleteButton =
 
@@ -1204,7 +1474,9 @@ function renderTable() {
 
 // ============================================================
 
-// TẠO FORM CHỈNH SỬA
+// TẠO MODAL CHỈNH SỬA
+
+// Không cần sửa manager.html
 
 // ============================================================
 
@@ -1214,7 +1486,7 @@ function createEditModal() {
 
     document.getElementById(
 
-      "editModal"
+      "editDataModal"
 
     )
 
@@ -1234,239 +1506,515 @@ function createEditModal() {
 
   modal.id =
 
-    "editModal";
+    "editDataModal";
+
+  modal.style.cssText = `
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.55);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:99999;
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+  `;
 
   modal.innerHTML = `
 
     <div
 
-      class="edit-modal-overlay">
+      style="
+
+        width:100%;
+
+        max-width:550px;
+
+        max-height:90vh;
+
+        overflow-y:auto;
+
+        background:white;
+
+        border-radius:15px;
+
+        box-shadow:0 20px 60px rgba(0,0,0,.3);
+
+        padding:22px;
+
+        box-sizing:border-box;
+
+      ">
 
       <div
 
-        class="edit-modal-box">
+        style="
 
-        <div
+          display:flex;
 
-          class="edit-modal-header">
+          justify-content:space-between;
 
-          <h2>
+          align-items:center;
 
-            ✏️ CHỈNH SỬA DỰ THU
+          margin-bottom:20px;
 
-          </h2>
+        ">
 
-          <button
+        <h2
 
-            type="button"
+          style="
 
-            id="closeEditModal"
+            margin:0;
 
-            class="edit-close-btn">
+            color:#1d4ed8;
 
-            ✕
+            font-size:21px;
 
-          </button>
+          ">
 
-        </div>
+          ✏️ CHỈNH SỬA DỰ THU
 
-        <div
+        </h2>
 
-          class="edit-modal-body">
+        <button
+
+          type="button"
+
+          id="editCloseBtn"
+
+          style="
+
+            border:none;
+
+            background:#f1f5f9;
+
+            width:35px;
+
+            height:35px;
+
+            border-radius:50%;
+
+            font-size:20px;
+
+            cursor:pointer;
+
+          ">
+
+          ✕
+
+        </button>
+
+      </div>
+
+      <div
+
+        style="
+
+          display:grid;
+
+          gap:14px;
+
+        ">
+
+        <div>
+
+          <label
+
+            style="
+
+              display:block;
+
+              margin-bottom:6px;
+
+              font-weight:600;
+
+            ">
+
+            User
+
+          </label>
 
           <input
 
-            type="hidden"
+            id="editUser"
 
-            id="editId"
+            type="text"
+
+            style="
+
+              width:100%;
+
+              box-sizing:border-box;
+
+              padding:11px;
+
+              border:1px solid #d1d5db;
+
+              border-radius:8px;
+
+            "
 
           >
 
-          <div
+        </div>
 
-            class="edit-form-group">
+        <div>
 
-            <label>
+          <label
 
-              User cán bộ
+            style="
 
-            </label>
+              display:block;
 
-            <input
+              margin-bottom:6px;
 
-              type="text"
+              font-weight:600;
 
-              id="editUser"
+            ">
 
-              placeholder="Nhập User cán bộ"
+            Số CIF
 
-            >
+          </label>
 
-          </div>
+          <input
 
-          <div
+            id="editCIF"
 
-            class="edit-form-group">
+            type="text"
 
-            <label>
+            style="
 
-              Số CIF
+              width:100%;
 
-            </label>
+              box-sizing:border-box;
 
-            <input
+              padding:11px;
 
-              type="text"
+              border:1px solid #d1d5db;
 
-              id="editCif"
+              border-radius:8px;
 
-              placeholder="Nhập số CIF"
+            "
 
-            >
-
-          </div>
-
-          <div
-
-            class="edit-form-group">
-
-            <label>
-
-              Tên khách hàng
-
-            </label>
-
-            <input
-
-              type="text"
-
-              id="editCustomerName"
-
-              placeholder="Nhập tên khách hàng"
-
-            >
-
-          </div>
-
-          <div
-
-            class="edit-form-group">
-
-            <label>
-
-              Số tiền dự thu
-
-            </label>
-
-            <input
-
-              type="text"
-
-              id="editAmount"
-
-              inputmode="numeric"
-
-              placeholder="Nhập số tiền"
-
-            >
-
-          </div>
-
-          <div
-
-            class="edit-form-group">
-
-            <label>
-
-              Ngày thanh toán
-
-            </label>
-
-            <input
-
-              type="date"
-
-              id="editPaymentDate"
-
-            >
-
-          </div>
-
-          <div
-
-            class="edit-form-group">
-
-            <label>
-
-              SĐT
-
-            </label>
-
-            <input
-
-              type="text"
-
-              id="editPhone"
-
-              inputmode="tel"
-
-              placeholder="Nhập số điện thoại"
-
-            >
-
-          </div>
-
-          <div
-
-            class="edit-form-group">
-
-            <label>
-
-              Ghi chú
-
-            </label>
-
-            <textarea
-
-              id="editNote"
-
-              rows="4"
-
-              placeholder="Nhập ghi chú"></textarea>
-
-          </div>
+          >
 
         </div>
 
-        <div
+        <div>
 
-          class="edit-modal-footer">
+          <label
 
-          <button
+            style="
 
-            type="button"
+              display:block;
 
-            id="cancelEditBtn"
+              margin-bottom:6px;
 
-            class="edit-cancel-btn">
+              font-weight:600;
 
-            Hủy
+            ">
 
-          </button>
+            Tên khách hàng
 
-          <button
+          </label>
 
-            type="button"
+          <input
 
-            id="saveEditBtn"
+            id="editCustomer"
 
-            class="edit-save-btn">
+            type="text"
 
-            💾 LƯU THAY ĐỔI
+            style="
 
-          </button>
+              width:100%;
+
+              box-sizing:border-box;
+
+              padding:11px;
+
+              border:1px solid #d1d5db;
+
+              border-radius:8px;
+
+            "
+
+          >
 
         </div>
+
+        <div>
+
+          <label
+
+            style="
+
+              display:block;
+
+              margin-bottom:6px;
+
+              font-weight:600;
+
+            ">
+
+            Số tiền dự thu
+
+          </label>
+
+          <input
+
+            id="editAmount"
+
+            type="text"
+
+            inputmode="numeric"
+
+            placeholder="Ví dụ: 160,000,000"
+
+            style="
+
+              width:100%;
+
+              box-sizing:border-box;
+
+              padding:11px;
+
+              border:1px solid #d1d5db;
+
+              border-radius:8px;
+
+            "
+
+          >
+
+        </div>
+
+        <div>
+
+          <label
+
+            style="
+
+              display:block;
+
+              margin-bottom:6px;
+
+              font-weight:600;
+
+            ">
+
+            Ngày thanh toán
+
+          </label>
+
+          <input
+
+            id="editPaymentDate"
+
+            type="date"
+
+            style="
+
+              width:100%;
+
+              box-sizing:border-box;
+
+              padding:11px;
+
+              border:1px solid #d1d5db;
+
+              border-radius:8px;
+
+            "
+
+          >
+
+        </div>
+
+        <div>
+
+          <label
+
+            style="
+
+              display:block;
+
+              margin-bottom:6px;
+
+              font-weight:600;
+
+            ">
+
+            SĐT
+
+          </label>
+
+          <input
+
+            id="editPhone"
+
+            type="text"
+
+            inputmode="tel"
+
+            style="
+
+              width:100%;
+
+              box-sizing:border-box;
+
+              padding:11px;
+
+              border:1px solid #d1d5db;
+
+              border-radius:8px;
+
+            "
+
+          >
+
+        </div>
+
+        <div>
+
+          <label
+
+            style="
+
+              display:block;
+
+              margin-bottom:6px;
+
+              font-weight:600;
+
+            ">
+
+            Ghi chú
+
+          </label>
+
+          <textarea
+
+            id="editNote"
+
+            rows="4"
+
+            style="
+
+              width:100%;
+
+              box-sizing:border-box;
+
+              padding:11px;
+
+              border:1px solid #d1d5db;
+
+              border-radius:8px;
+
+              resize:vertical;
+
+            "
+
+          ></textarea>
+
+        </div>
+
+      </div>
+
+      <div
+
+        style="
+
+          display:flex;
+
+          gap:10px;
+
+          justify-content:flex-end;
+
+          margin-top:22px;
+
+        ">
+
+        <button
+
+          type="button"
+
+          id="editCancelBtn"
+
+          style="
+
+            border:none;
+
+            background:#6b7280;
+
+            color:white;
+
+            padding:11px 18px;
+
+            border-radius:8px;
+
+            cursor:pointer;
+
+            font-weight:600;
+
+          ">
+
+          Hủy
+
+        </button>
+
+        <button
+
+          type="button"
+
+          id="editSaveBtn"
+
+          style="
+
+            border:none;
+
+            background:#16a34a;
+
+            color:white;
+
+            padding:11px 18px;
+
+            border-radius:8px;
+
+            cursor:pointer;
+
+            font-weight:600;
+
+          ">
+
+          💾 Lưu thay đổi
+
+        </button>
+
+      </div>
+
+      <div
+
+        id="editMessage"
+
+        style="
+
+          margin-top:12px;
+
+          text-align:center;
+
+          font-weight:600;
+
+        ">
 
       </div>
 
@@ -1482,29 +2030,19 @@ function createEditModal() {
 
   // ==========================================================
 
-  // ĐÓNG
+  // NÚT ĐÓNG
 
   // ==========================================================
 
-  const closeButton =
+  document
 
-    document.getElementById(
+    .getElementById(
 
-      "closeEditModal"
+      "editCloseBtn"
 
-    );
+    )
 
-  const cancelButton =
-
-    document.getElementById(
-
-      "cancelEditBtn"
-
-    );
-
-  if (closeButton) {
-
-    closeButton.addEventListener(
+    .addEventListener(
 
       "click",
 
@@ -1512,11 +2050,15 @@ function createEditModal() {
 
     );
 
-  }
+  document
 
-  if (cancelButton) {
+    .getElementById(
 
-    cancelButton.addEventListener(
+      "editCancelBtn"
+
+    )
+
+    .addEventListener(
 
       "click",
 
@@ -1524,25 +2066,15 @@ function createEditModal() {
 
     );
 
-  }
+  document
 
-  // ==========================================================
+    .getElementById(
 
-  // LƯU
+      "editSaveBtn"
 
-  // ==========================================================
+    )
 
-  const saveButton =
-
-    document.getElementById(
-
-      "saveEditBtn"
-
-    );
-
-  if (saveButton) {
-
-    saveButton.addEventListener(
+    .addEventListener(
 
       "click",
 
@@ -1550,279 +2082,173 @@ function createEditModal() {
 
     );
 
-  }
+  // Click nền để đóng
 
-  // ==========================================================
+  modal.addEventListener(
 
-  // FORMAT TIỀN
+    "click",
 
-  // ==========================================================
+    function (
 
-  const amountInput =
+      event
 
-    document.getElementById(
+    ) {
 
-      "editAmount"
+      if (
 
-    );
+        event.target === modal
 
-  if (amountInput) {
+      ) {
 
-    amountInput.addEventListener(
-
-      "input",
-
-      function () {
-
-        let value =
-
-          this.value.replace(
-
-            /[^0-9]/g,
-
-            ""
-
-          );
-
-        if (!value) {
-
-          this.value = "";
-
-          return;
-
-        }
-
-        this.value =
-
-          Number(
-
-            value
-
-          ).toLocaleString(
-
-            "en-US"
-
-          );
+        closeEditModal();
 
       }
 
-    );
+    }
 
-  }
-
-  // ==========================================================
-
-  // CLICK RA NGOÀI
-
-  // ==========================================================
-
-  const overlay =
-
-    modal.querySelector(
-
-      ".edit-modal-overlay"
-
-    );
-
-  if (overlay) {
-
-    overlay.addEventListener(
-
-      "click",
-
-      function (event) {
-
-        if (
-
-          event.target === overlay
-
-        ) {
-
-          closeEditModal();
-
-        }
-
-      }
-
-    );
-
-  }
+  );
 
 }
 
 // ============================================================
 
-// MỞ FORM CHỈNH SỬA
+// MỞ FORM SỬA
 
 // ============================================================
 
-function editData(row) {
+function openEditModal(
+
+  id
+
+) {
 
   createEditModal();
 
-  const editId =
+  const row =
 
-    document.getElementById(
+    allData.find(
 
-      "editId"
+      function (
 
-    );
+        item
 
-  const editUser =
+      ) {
 
-    document.getElementById(
+        return (
 
-      "editUser"
+          String(item.id) ===
 
-    );
+          String(id)
 
-  const editCif =
+        );
 
-    document.getElementById(
-
-      "editCif"
+      }
 
     );
 
-  const editCustomerName =
+  if (!row) {
 
-    document.getElementById(
+    showManagerMessage(
 
-      "editCustomerName"
+      "❌ Không tìm thấy bản ghi cần sửa.",
 
-    );
-
-  const editAmount =
-
-    document.getElementById(
-
-      "editAmount"
+      "#dc2626"
 
     );
 
-  const editPaymentDate =
+    return;
 
-    document.getElementById(
+  }
 
-      "editPaymentDate"
+  editingId =
+
+    id;
+
+  document.getElementById(
+
+    "editUser"
+
+  ).value =
+
+    row.user_name || "";
+
+  document.getElementById(
+
+    "editCIF"
+
+  ).value =
+
+    row.cif || "";
+
+  document.getElementById(
+
+    "editCustomer"
+
+  ).value =
+
+    row.customer_name || "";
+
+  document.getElementById(
+
+    "editAmount"
+
+  ).value =
+
+    formatAmount(
+
+      row.amount
 
     );
 
-  const editPhone =
+  document.getElementById(
 
-    document.getElementById(
+    "editPaymentDate"
 
-      "editPhone"
+  ).value =
 
-    );
+    formatDateInput(
 
-  const editNote =
-
-    document.getElementById(
-
-      "editNote"
+      row.payment_date
 
     );
 
-  if (editId) {
+  document.getElementById(
 
-    editId.value =
+    "editPhone"
 
-      row.id || "";
+  ).value =
 
-  }
+    row.phone || "";
 
-  if (editUser) {
+  document.getElementById(
 
-    editUser.value =
+    "editNote"
 
-      row.user_name || "";
+  ).value =
 
-  }
+    row.note || "";
 
-  if (editCif) {
+  document.getElementById(
 
-    editCif.value =
+    "editMessage"
 
-      row.cif || "";
+  ).textContent =
 
-  }
+    "";
 
-  if (editCustomerName) {
+  document.getElementById(
 
-    editCustomerName.value =
+    "editDataModal"
 
-      row.customer_name || "";
+  ).style.display =
 
-  }
-
-  if (editAmount) {
-
-    editAmount.value =
-
-      formatAmount(
-
-        row.amount || 0
-
-      );
-
-  }
-
-  if (editPaymentDate) {
-
-    editPaymentDate.value =
-
-      String(
-
-        row.payment_date || ""
-
-      ).substring(
-
-        0,
-
-        10
-
-      );
-
-  }
-
-  if (editPhone) {
-
-    editPhone.value =
-
-      row.phone || "";
-
-  }
-
-  if (editNote) {
-
-    editNote.value =
-
-      row.note || "";
-
-  }
-
-  const modal =
-
-    document.getElementById(
-
-      "editModal"
-
-    );
-
-  if (modal) {
-
-    modal.style.display =
-
-      "flex";
-
-  }
+    "flex";
 
 }
 
 // ============================================================
 
-// ĐÓNG FORM CHỈNH SỬA
+// ĐÓNG FORM SỬA
 
 // ============================================================
 
@@ -1832,7 +2258,7 @@ function closeEditModal() {
 
     document.getElementById(
 
-      "editModal"
+      "editDataModal"
 
     );
 
@@ -1844,169 +2270,101 @@ function closeEditModal() {
 
   }
 
+  editingId =
+
+    null;
+
 }
 
 // ============================================================
 
-// LƯU DỮ LIỆU CHỈNH SỬA
+// LƯU CHỈNH SỬA
 
 // ============================================================
 
 async function saveEditData() {
 
-  const editId =
+  if (!editingId) {
 
-    document.getElementById(
+    return;
 
-      "editId"
-
-    );
-
-  const editUser =
-
-    document.getElementById(
-
-      "editUser"
-
-    );
-
-  const editCif =
-
-    document.getElementById(
-
-      "editCif"
-
-    );
-
-  const editCustomerName =
-
-    document.getElementById(
-
-      "editCustomerName"
-
-    );
-
-  const editAmount =
-
-    document.getElementById(
-
-      "editAmount"
-
-    );
-
-  const editPaymentDate =
-
-    document.getElementById(
-
-      "editPaymentDate"
-
-    );
-
-  const editPhone =
-
-    document.getElementById(
-
-      "editPhone"
-
-    );
-
-  const editNote =
-
-    document.getElementById(
-
-      "editNote"
-
-    );
+  }
 
   const saveButton =
 
     document.getElementById(
 
-      "saveEditBtn"
+      "editSaveBtn"
 
     );
 
-  const id =
+  const editMessage =
 
-    editId
+    document.getElementById(
 
-      ? editId.value.trim()
+      "editMessage"
 
-      : "";
+    );
 
-  const userName =
+  const user =
 
-    editUser
+    document.getElementById(
 
-      ? editUser.value.trim()
+      "editUser"
 
-      : "";
+    ).value.trim();
 
   const cif =
 
-    editCif
+    document.getElementById(
 
-      ? editCif.value.trim()
+      "editCIF"
 
-      : "";
+    ).value.trim();
 
-  const customerName =
+  const customer =
 
-    editCustomerName
+    document.getElementById(
 
-      ? editCustomerName.value.trim()
+      "editCustomer"
 
-      : "";
-
-  const amountText =
-
-    editAmount
-
-      ? editAmount.value
-
-          .replace(
-
-            /,/g,
-
-            ""
-
-          )
-
-          .trim()
-
-      : "";
+    ).value.trim();
 
   const amount =
 
-    Number(
+    parseAmount(
 
-      amountText || 0
+      document.getElementById(
+
+        "editAmount"
+
+      ).value
 
     );
 
   const paymentDate =
 
-    editPaymentDate
+    document.getElementById(
 
-      ? editPaymentDate.value
+      "editPaymentDate"
 
-      : "";
+    ).value;
 
   const phone =
 
-    editPhone
+    document.getElementById(
 
-      ? editPhone.value.trim()
+      "editPhone"
 
-      : "";
+    ).value.trim();
 
   const note =
 
-    editNote
+    document.getElementById(
 
-      ? editNote.value.trim()
+      "editNote"
 
-      : "";
+    ).value.trim();
 
   // ==========================================================
 
@@ -2014,13 +2372,15 @@ async function saveEditData() {
 
   // ==========================================================
 
-  if (!id) {
+  if (!user) {
 
-    alert(
+    editMessage.textContent =
 
-      "Không xác định được bản ghi cần sửa."
+      "⚠️ Vui lòng nhập User.";
 
-    );
+    editMessage.style.color =
+
+      "#dc2626";
 
     return;
 
@@ -2028,83 +2388,55 @@ async function saveEditData() {
 
   if (!cif) {
 
-    alert(
+    editMessage.textContent =
 
-      "Vui lòng nhập Số CIF."
+      "⚠️ Vui lòng nhập Số CIF.";
 
-    );
+    editMessage.style.color =
 
-    if (editCif) {
-
-      editCif.focus();
-
-    }
+      "#dc2626";
 
     return;
 
   }
 
-  if (!customerName) {
+  if (!customer) {
 
-    alert(
+    editMessage.textContent =
 
-      "Vui lòng nhập tên khách hàng."
+      "⚠️ Vui lòng nhập Tên khách hàng.";
 
-    );
+    editMessage.style.color =
 
-    if (editCustomerName) {
-
-      editCustomerName.focus();
-
-    }
+      "#dc2626";
 
     return;
 
   }
 
-  if (amount <= 0) {
+  if (
 
-    alert(
+    !paymentDate
 
-      "Số tiền dự thu phải lớn hơn 0."
+  ) {
 
-    );
+    editMessage.textContent =
 
-    if (editAmount) {
+      "⚠️ Vui lòng chọn Ngày thanh toán.";
 
-      editAmount.focus();
+    editMessage.style.color =
 
-    }
-
-    return;
-
-  }
-
-  if (!paymentDate) {
-
-    alert(
-
-      "Vui lòng chọn ngày thanh toán."
-
-    );
-
-    if (editPaymentDate) {
-
-      editPaymentDate.focus();
-
-    }
+      "#dc2626";
 
     return;
 
   }
 
-  // ==========================================================
+  if (
 
-  // KHÓA NÚT
+    saveButton
 
-  // ==========================================================
-
-  if (saveButton) {
+  ) {
 
     saveButton.disabled =
 
@@ -2116,97 +2448,129 @@ async function saveEditData() {
 
   }
 
+  editMessage.textContent =
+
+    "⏳ Đang lưu...";
+
+  editMessage.style.color =
+
+    "#2563eb";
+
   try {
 
-    showManagerMessage(
+    const updateData = {
 
-      "⏳ Đang cập nhật dữ liệu...",
+      user_name:
 
-      "#2563eb"
+        user,
 
-    );
+      cif:
 
-    const {
+        cif,
 
-      data,
+      customer_name:
 
-      error
+        customer,
 
-    } =
+      amount:
+
+        amount,
+
+      payment_date:
+
+        paymentDate,
+
+      phone:
+
+        phone,
+
+      note:
+
+        note
+
+    };
+
+    const result =
 
       await client
 
         .from("du_thu")
 
-        .update({
+        .update(
 
-          user_name:
+          updateData
 
-            userName,
-
-          cif:
-
-            cif,
-
-          customer_name:
-
-            customerName,
-
-          amount:
-
-            amount,
-
-          payment_date:
-
-            paymentDate,
-
-          phone:
-
-            phone,
-
-          note:
-
-            note
-
-        })
+        )
 
         .eq(
 
           "id",
 
-          id
+          editingId
 
         )
 
-        .select()
+        .select();
 
-        .single();
+    if (
 
-    if (error) {
+      result.error
 
-      throw error;
+    ) {
+
+      throw result.error;
 
     }
 
-    console.log(
+    editMessage.textContent =
 
-      "Đã cập nhật:",
+      "✅ Đã lưu thay đổi.";
 
-      data
+    editMessage.style.color =
 
-    );
-
-    closeEditModal();
-
-    await loadData();
-
-    applyFilter();
+      "#16a34a";
 
     showManagerMessage(
 
-      "✅ Đã cập nhật bản ghi thành công.",
+      "✅ Đã cập nhật bản ghi.",
 
       "#16a34a"
+
+    );
+
+    // ========================================================
+
+    // Đóng sau một chút
+
+    // ========================================================
+
+    setTimeout(
+
+      async function () {
+
+        closeEditModal();
+
+        try {
+
+          await loadData();
+
+          applyFilter();
+
+        } catch (error) {
+
+          console.error(
+
+            "Lỗi tải lại sau khi sửa:",
+
+            error
+
+          );
+
+        }
+
+      },
+
+      500
 
     );
 
@@ -2214,11 +2578,27 @@ async function saveEditData() {
 
     console.error(
 
-      "Lỗi cập nhật dữ liệu:",
+      "Lỗi cập nhật:",
 
       error
 
     );
+
+    editMessage.textContent =
+
+      "❌ Lưu thất bại: " +
+
+      (
+
+        error.message ||
+
+        error
+
+      );
+
+    editMessage.style.color =
+
+      "#dc2626";
 
     showManagerMessage(
 
@@ -2236,23 +2616,13 @@ async function saveEditData() {
 
     );
 
-    alert(
-
-      "Không thể cập nhật dữ liệu:\n\n" +
-
-      (
-
-        error.message ||
-
-        error
-
-      )
-
-    );
-
   } finally {
 
-    if (saveButton) {
+    if (
+
+      saveButton
+
+    ) {
 
       saveButton.disabled =
 
@@ -2260,7 +2630,7 @@ async function saveEditData() {
 
       saveButton.textContent =
 
-        "💾 LƯU THAY ĐỔI";
+        "💾 Lưu thay đổi";
 
     }
 
@@ -2270,7 +2640,7 @@ async function saveEditData() {
 
 // ============================================================
 
-// XÓA BẢN GHI
+// XÓA
 
 // ============================================================
 
@@ -2304,11 +2674,7 @@ async function deleteData(
 
     );
 
-    const {
-
-      error
-
-    } =
+    const result =
 
       await client
 
@@ -2324,11 +2690,45 @@ async function deleteData(
 
         );
 
-    if (error) {
+    if (
 
-      throw error;
+      result.error
+
+    ) {
+
+      throw result.error;
 
     }
+
+    // ========================================================
+
+    // XÓA LOCAL NGAY
+
+    // ========================================================
+
+    allData =
+
+      allData.filter(
+
+        function (
+
+          row
+
+        ) {
+
+          return (
+
+            String(row.id) !==
+
+            String(id)
+
+          );
+
+        }
+
+      );
+
+    applyFilter();
 
     showManagerMessage(
 
@@ -2338,15 +2738,11 @@ async function deleteData(
 
     );
 
-    await loadData();
-
-    applyFilter();
-
   } catch (error) {
 
     console.error(
 
-      "Lỗi xóa dữ liệu:",
+      "Lỗi xóa:",
 
       error
 
@@ -2374,19 +2770,291 @@ async function deleteData(
 
 // ============================================================
 
-// XUẤT EXCEL - EXCELJS
+// PHÂN TRANG
 
-// KHÔNG CÓ STT
+// ============================================================
+
+function renderPagination() {
+
+  if (!pagination) {
+
+    return;
+
+  }
+
+  pagination.innerHTML = "";
+
+  const totalPages =
+
+    Math.max(
+
+      1,
+
+      Math.ceil(
+
+        filteredData.length /
+
+        PAGE_SIZE
+
+      )
+
+    );
+
+  const previousButton =
+
+    document.createElement(
+
+      "button"
+
+    );
+
+  previousButton.type =
+
+    "button";
+
+  previousButton.textContent =
+
+    "‹";
+
+  previousButton.disabled =
+
+    currentPage === 1;
+
+  previousButton.addEventListener(
+
+    "click",
+
+    function () {
+
+      changePage(
+
+        currentPage - 1
+
+      );
+
+    }
+
+  );
+
+  const pageText =
+
+    document.createElement(
+
+      "span"
+
+    );
+
+  pageText.textContent =
+
+    `Trang ${currentPage} / ${totalPages}`;
+
+  const nextButton =
+
+    document.createElement(
+
+      "button"
+
+    );
+
+  nextButton.type =
+
+    "button";
+
+  nextButton.textContent =
+
+    "›";
+
+  nextButton.disabled =
+
+    currentPage ===
+
+    totalPages;
+
+  nextButton.addEventListener(
+
+    "click",
+
+    function () {
+
+      changePage(
+
+        currentPage + 1
+
+      );
+
+    }
+
+  );
+
+  pagination.appendChild(
+
+    previousButton
+
+  );
+
+  pagination.appendChild(
+
+    pageText
+
+  );
+
+  pagination.appendChild(
+
+    nextButton
+
+  );
+
+}
+
+// ============================================================
+
+// CHUYỂN TRANG
+
+// ============================================================
+
+function changePage(
+
+  page
+
+) {
+
+  const totalPages =
+
+    Math.max(
+
+      1,
+
+      Math.ceil(
+
+        filteredData.length /
+
+        PAGE_SIZE
+
+      )
+
+    );
+
+  if (page < 1) {
+
+    page = 1;
+
+  }
+
+  if (
+
+    page > totalPages
+
+  ) {
+
+    page =
+
+      totalPages;
+
+  }
+
+  currentPage =
+
+    page;
+
+  renderTable();
+
+  renderPagination();
+
+}
+
+// ============================================================
+
+// THỐNG KÊ
+
+// ============================================================
+
+function updateStatistics() {
+
+  const uniqueCIF =
+
+    new Set();
+
+  let total =
+
+    0;
+
+  filteredData.forEach(
+
+    function (
+
+      row
+
+    ) {
+
+      const cif =
+
+        String(
+
+          row.cif || ""
+
+        ).trim();
+
+      if (cif) {
+
+        uniqueCIF.add(
+
+          cif.toUpperCase()
+
+        );
+
+      }
+
+      total +=
+
+        Number(
+
+          row.amount || 0
+
+        );
+
+    }
+
+  );
+
+  if (
+
+    totalCustomers
+
+  ) {
+
+    totalCustomers.textContent =
+
+      uniqueCIF.size;
+
+  }
+
+  if (
+
+    totalAmount
+
+  ) {
+
+    totalAmount.textContent =
+
+      formatAmount(
+
+        total
+
+      ) +
+
+      " đ";
+
+  }
+
+}
+
+// ============================================================
+
+// XUẤT EXCEL
 
 // ============================================================
 
 async function exportExcel() {
-
-  console.log(
-
-    "Đã bấm nút XUẤT EXCEL - BẢN KHÔNG STT"
-
-  );
 
   if (
 
@@ -2410,21 +3078,17 @@ async function exportExcel() {
 
   if (
 
-    typeof ExcelJS === "undefined"
+    typeof ExcelJS ===
+
+    "undefined"
 
   ) {
 
     showManagerMessage(
 
-      "❌ Thư viện Excel chưa tải được. Hãy kiểm tra Internet/CDN.",
+      "❌ Thư viện Excel chưa tải được.",
 
       "#dc2626"
-
-    );
-
-    console.error(
-
-      "ExcelJS không tồn tại."
 
     );
 
@@ -2434,7 +3098,11 @@ async function exportExcel() {
 
   try {
 
-    if (exportBtn) {
+    if (
+
+      exportBtn
+
+    ) {
 
       exportBtn.disabled =
 
@@ -2600,12 +3268,6 @@ async function exportExcel() {
 
     };
 
-    // ========================================================
-
-    // WORKBOOK
-
-    // ========================================================
-
     const workbook =
 
       new ExcelJS.Workbook();
@@ -2706,12 +3368,6 @@ async function exportExcel() {
 
     ];
 
-    // ========================================================
-
-    // TIÊU ĐỀ
-
-    // ========================================================
-
     worksheet.mergeCells(
 
       "A1:G1"
@@ -2756,12 +3412,6 @@ async function exportExcel() {
 
       30;
 
-    // ========================================================
-
-    // NGÀY XUẤT
-
-    // ========================================================
-
     worksheet.mergeCells(
 
       "A2:G2"
@@ -2801,12 +3451,6 @@ async function exportExcel() {
       vertical: "middle"
 
     };
-
-    // ========================================================
-
-    // TỔNG HỒ SƠ
-
-    // ========================================================
 
     worksheet.mergeCells(
 
@@ -2850,12 +3494,6 @@ async function exportExcel() {
 
     worksheet.addRow([]);
 
-    // ========================================================
-
-    // HEADER
-
-    // ========================================================
-
     const headerRow =
 
       worksheet.addRow([
@@ -2882,7 +3520,11 @@ async function exportExcel() {
 
     headerRow.eachCell(
 
-      function (cell) {
+      function (
+
+        cell
+
+      ) {
 
         cell.font = {
 
@@ -2932,31 +3574,23 @@ async function exportExcel() {
 
     );
 
-    // ========================================================
-
-    // DỮ LIỆU
-
-    // ========================================================
-
     filteredData.forEach(
 
-      function (row) {
+      function (
+
+        row
+
+      ) {
 
         const excelRow =
 
           worksheet.addRow([
 
-            row.user_name ||
+            row.user_name || "",
 
-              "",
+            row.cif || "",
 
-            row.cif ||
-
-              "",
-
-            row.customer_name ||
-
-              "",
+            row.customer_name || "",
 
             Number(
 
@@ -2970,19 +3604,19 @@ async function exportExcel() {
 
             ),
 
-            row.phone ||
+            row.phone || "",
 
-              "",
-
-            row.note ||
-
-              ""
+            row.note || ""
 
           ]);
 
         excelRow.eachCell(
 
-          function (cell) {
+          function (
+
+            cell
+
+          ) {
 
             cell.font = {
 
@@ -3008,44 +3642,6 @@ async function exportExcel() {
 
         excelRow.getCell(
 
-          1
-
-        ).alignment = {
-
-          horizontal: "left",
-
-          vertical: "middle"
-
-        };
-
-        excelRow.getCell(
-
-          2
-
-        ).alignment = {
-
-          horizontal: "center",
-
-          vertical: "middle"
-
-        };
-
-        excelRow.getCell(
-
-          3
-
-        ).alignment = {
-
-          horizontal: "left",
-
-          vertical: "middle",
-
-          wrapText: true
-
-        };
-
-        excelRow.getCell(
-
           4
 
         ).numFmt =
@@ -3059,30 +3655,6 @@ async function exportExcel() {
         ).alignment = {
 
           horizontal: "right",
-
-          vertical: "middle"
-
-        };
-
-        excelRow.getCell(
-
-          5
-
-        ).alignment = {
-
-          horizontal: "center",
-
-          vertical: "middle"
-
-        };
-
-        excelRow.getCell(
-
-          6
-
-        ).alignment = {
-
-          horizontal: "center",
 
           vertical: "middle"
 
@@ -3106,12 +3678,6 @@ async function exportExcel() {
 
     );
 
-    // ========================================================
-
-    // DÒNG TỔNG
-
-    // ========================================================
-
     const totalRow =
 
       worksheet.addRow([
@@ -3134,7 +3700,11 @@ async function exportExcel() {
 
     totalRow.eachCell(
 
-      function (cell) {
+      function (
+
+        cell
+
+      ) {
 
         cell.font = {
 
@@ -3160,73 +3730,13 @@ async function exportExcel() {
 
         };
 
-        cell.border = {
+        cell.border =
 
-          top: {
-
-            style: "medium",
-
-            color: {
-
-              argb: BLUE
-
-            }
-
-          },
-
-          bottom: {
-
-            style: "medium",
-
-            color: {
-
-              argb: BLUE
-
-            }
-
-          },
-
-          left: {
-
-            style: "thin",
-
-            color: {
-
-              argb: BORDER
-
-            }
-
-          },
-
-          right: {
-
-            style: "thin",
-
-            color: {
-
-              argb: BORDER
-
-            }
-
-          }
-
-        };
+          thinBorder;
 
       }
 
     );
-
-    totalRow.getCell(
-
-      3
-
-    ).alignment = {
-
-      horizontal: "right",
-
-      vertical: "middle"
-
-    };
 
     totalRow.getCell(
 
@@ -3247,12 +3757,6 @@ async function exportExcel() {
       vertical: "middle"
 
     };
-
-    // ========================================================
-
-    // AUTO FILTER
-
-    // ========================================================
 
     worksheet.autoFilter = {
 
@@ -3278,7 +3782,7 @@ async function exportExcel() {
 
     // ========================================================
 
-    // SHEET TỔNG QUAN
+    // TỔNG QUAN
 
     // ========================================================
 
@@ -3374,20 +3878,6 @@ async function exportExcel() {
 
       "A2"
 
-    ).font = {
-
-      name: "Arial",
-
-      size: 11,
-
-      italic: true
-
-    };
-
-    summarySheet.getCell(
-
-      "A2"
-
     ).alignment = {
 
       horizontal: "center",
@@ -3410,7 +3900,11 @@ async function exportExcel() {
 
     indicatorHeader.eachCell(
 
-      function (cell) {
+      function (
+
+        cell
+
+      ) {
 
         cell.font = {
 
@@ -3482,27 +3976,29 @@ async function exportExcel() {
 
       .forEach(
 
-        function (row) {
+        function (
+
+          row
+
+        ) {
 
           row.eachCell(
 
-            function (cell) {
+            function (
+
+              cell
+
+            ) {
+
+              cell.border =
+
+                thinBorder;
 
               cell.font = {
 
                 name: "Arial",
 
                 size: 10
-
-              };
-
-              cell.border =
-
-                thinBorder;
-
-              cell.alignment = {
-
-                vertical: "middle"
 
               };
 
@@ -3522,18 +4018,6 @@ async function exportExcel() {
 
       "#,##0";
 
-    amountRow.getCell(
-
-      2
-
-    ).alignment = {
-
-      horizontal: "right",
-
-      vertical: "middle"
-
-    };
-
     summarySheet.addRow([]);
 
     const userHeader =
@@ -3550,7 +4034,11 @@ async function exportExcel() {
 
     userHeader.eachCell(
 
-      function (cell) {
+      function (
+
+        cell
+
+      ) {
 
         cell.font = {
 
@@ -3598,19 +4086,17 @@ async function exportExcel() {
 
     );
 
-    // ========================================================
-
-    // GROUP THEO USER
-
-    // ========================================================
-
     const userMap =
 
       new Map();
 
     filteredData.forEach(
 
-      function (row) {
+      function (
+
+        row
+
+      ) {
 
         const user =
 
@@ -3716,7 +4202,11 @@ async function exportExcel() {
 
         row.eachCell(
 
-          function (cell) {
+          function (
+
+            cell
+
+          ) {
 
             cell.font = {
 
@@ -3730,27 +4220,9 @@ async function exportExcel() {
 
               thinBorder;
 
-            cell.alignment = {
-
-              vertical: "middle"
-
-            };
-
           }
 
         );
-
-        row.getCell(
-
-          2
-
-        ).alignment = {
-
-          horizontal: "center",
-
-          vertical: "middle"
-
-        };
 
         row.getCell(
 
@@ -3759,18 +4231,6 @@ async function exportExcel() {
         ).numFmt =
 
           "#,##0";
-
-        row.getCell(
-
-          3
-
-        ).alignment = {
-
-          horizontal: "right",
-
-          vertical: "middle"
-
-        };
 
       }
 
@@ -3802,11 +4262,7 @@ async function exportExcel() {
 
       new Blob(
 
-        [
-
-          buffer
-
-        ],
+        [buffer],
 
         {
 
@@ -3842,10 +4298,6 @@ async function exportExcel() {
 
       `DU_THU_${fileDate}.xlsx`;
 
-    link.style.display =
-
-      "none";
-
     document.body.appendChild(
 
       link
@@ -3878,7 +4330,7 @@ async function exportExcel() {
 
     showManagerMessage(
 
-      "✅ Đã xuất Excel thành công - không có cột STT.",
+      "✅ Đã xuất Excel thành công.",
 
       "#16a34a"
 
@@ -3912,7 +4364,11 @@ async function exportExcel() {
 
   } finally {
 
-    if (exportBtn) {
+    if (
+
+      exportBtn
+
+    ) {
 
       exportBtn.disabled =
 
@@ -3982,7 +4438,11 @@ async function login() {
 
   }
 
-  if (loginBtn) {
+  if (
+
+    loginBtn
+
+  ) {
 
     loginBtn.disabled =
 
@@ -3994,21 +4454,9 @@ async function login() {
 
   }
 
-  showLoginMessage(
-
-    "",
-
-    "#2563eb"
-
-  );
-
   try {
 
-    const {
-
-      error
-
-    } =
+    const result =
 
       await client.auth
 
@@ -4024,13 +4472,21 @@ async function login() {
 
         });
 
-    if (error) {
+    if (
 
-      throw error;
+      result.error
+
+    ) {
+
+      throw result.error;
 
     }
 
-    if (loginBox) {
+    if (
+
+      loginBox
+
+    ) {
 
       loginBox.style.display =
 
@@ -4038,7 +4494,11 @@ async function login() {
 
     }
 
-    if (managerBox) {
+    if (
+
+      managerBox
+
+    ) {
 
       managerBox.style.display =
 
@@ -4074,7 +4534,11 @@ async function login() {
 
   } finally {
 
-    if (loginBtn) {
+    if (
+
+      loginBtn
+
+    ) {
 
       loginBtn.disabled =
 
@@ -4106,21 +4570,25 @@ async function logout() {
 
   try {
 
-    const {
-
-      error
-
-    } =
+    const result =
 
       await client.auth.signOut();
 
-    if (error) {
+    if (
 
-      throw error;
+      result.error
+
+    ) {
+
+      throw result.error;
 
     }
 
-    if (managerBox) {
+    if (
+
+      managerBox
+
+    ) {
 
       managerBox.style.display =
 
@@ -4128,7 +4596,11 @@ async function logout() {
 
     }
 
-    if (loginBox) {
+    if (
+
+      loginBox
+
+    ) {
 
       loginBox.style.display =
 
@@ -4136,7 +4608,11 @@ async function logout() {
 
     }
 
-    if (passwordInput) {
+    if (
+
+      passwordInput
+
+    ) {
 
       passwordInput.value =
 
@@ -4204,33 +4680,35 @@ async function checkSession() {
 
   try {
 
-    const {
-
-      data,
-
-      error
-
-    } =
+    const result =
 
       await client.auth.getSession();
 
-    if (error) {
+    if (
 
-      throw error;
+      result.error
+
+    ) {
+
+      throw result.error;
 
     }
 
     const session =
 
-      data
+      result.data
 
-        ? data.session
+        ? result.data.session
 
         : null;
 
     if (session) {
 
-      if (loginBox) {
+      if (
+
+        loginBox
+
+      ) {
 
         loginBox.style.display =
 
@@ -4238,7 +4716,11 @@ async function checkSession() {
 
       }
 
-      if (managerBox) {
+      if (
+
+        managerBox
+
+      ) {
 
         managerBox.style.display =
 
@@ -4254,23 +4736,9 @@ async function checkSession() {
 
         console.error(
 
+          "Không tải được dữ liệu:",
+
           error
-
-        );
-
-        showManagerMessage(
-
-          "❌ Không thể tải dữ liệu: " +
-
-          (
-
-            error.message ||
-
-            error
-
-          ),
-
-          "#dc2626"
 
         );
 
@@ -4278,7 +4746,11 @@ async function checkSession() {
 
     } else {
 
-      if (loginBox) {
+      if (
+
+        loginBox
+
+      ) {
 
         loginBox.style.display =
 
@@ -4286,7 +4758,11 @@ async function checkSession() {
 
       }
 
-      if (managerBox) {
+      if (
+
+        managerBox
+
+      ) {
 
         managerBox.style.display =
 
@@ -4326,11 +4802,15 @@ async function checkSession() {
 
 // ============================================================
 
-// GẮN SỰ KIỆN
+// SỰ KIỆN LOGIN
 
 // ============================================================
 
-if (loginBtn) {
+if (
+
+  loginBtn
+
+) {
 
   loginBtn.addEventListener(
 
@@ -4342,7 +4822,57 @@ if (loginBtn) {
 
 }
 
-if (logoutBtn) {
+// ============================================================
+
+// ENTER ĐỂ ĐĂNG NHẬP
+
+// ============================================================
+
+if (
+
+  passwordInput
+
+) {
+
+  passwordInput.addEventListener(
+
+    "keydown",
+
+    function (
+
+      event
+
+    ) {
+
+      if (
+
+        event.key ===
+
+        "Enter"
+
+      ) {
+
+        login();
+
+      }
+
+    }
+
+  );
+
+}
+
+// ============================================================
+
+// LOGOUT
+
+// ============================================================
+
+if (
+
+  logoutBtn
+
+) {
 
   logoutBtn.addEventListener(
 
@@ -4354,7 +4884,17 @@ if (logoutBtn) {
 
 }
 
-if (filterBtn) {
+// ============================================================
+
+// FILTER
+
+// ============================================================
+
+if (
+
+  filterBtn
+
+) {
 
   filterBtn.addEventListener(
 
@@ -4366,7 +4906,17 @@ if (filterBtn) {
 
 }
 
-if (refreshBtn) {
+// ============================================================
+
+// REFRESH
+
+// ============================================================
+
+if (
+
+  refreshBtn
+
+) {
 
   refreshBtn.addEventListener(
 
@@ -4374,17 +4924,49 @@ if (refreshBtn) {
 
     async function () {
 
+      // Không cho bấm liên tục
+
+      if (
+
+        refreshBtn.disabled
+
+      ) {
+
+        return;
+
+      }
+
+      refreshBtn.disabled =
+
+        true;
+
+      const oldText =
+
+        refreshBtn.textContent;
+
+      refreshBtn.textContent =
+
+        "⏳ ĐANG TẢI...";
+
       try {
 
         await loadData();
 
         applyFilter();
 
+        showManagerMessage(
+
+          "✅ Đã làm mới dữ liệu.",
+
+          "#16a34a"
+
+        );
+
       } catch (error) {
 
         console.error(
 
-          "Lỗi làm mới:",
+          "REFRESH ERROR:",
 
           error
 
@@ -4406,6 +4988,18 @@ if (refreshBtn) {
 
         );
 
+      } finally {
+
+        refreshBtn.disabled =
+
+          false;
+
+        refreshBtn.textContent =
+
+          oldText ||
+
+          "🔄 LÀM MỚI";
+
       }
 
     }
@@ -4414,13 +5008,27 @@ if (refreshBtn) {
 
 }
 
-if (exportBtn) {
+// ============================================================
+
+// EXPORT
+
+// ============================================================
+
+if (
+
+  exportBtn
+
+) {
 
   exportBtn.addEventListener(
 
     "click",
 
-    function (event) {
+    function (
+
+      event
+
+    ) {
 
       event.preventDefault();
 
@@ -4431,6 +5039,14 @@ if (exportBtn) {
   );
 
 }
+
+// ============================================================
+
+// TẠO MODAL
+
+// ============================================================
+
+createEditModal();
 
 // ============================================================
 
