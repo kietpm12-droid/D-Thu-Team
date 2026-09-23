@@ -451,3 +451,64 @@ form button[type="submit"]:disabled {
   box-shadow: none !important;
   cursor: not-allowed;
 }
+/* =========================================
+   CỤM PHÂN TRANG GỌN GÀNG (PAGINATION)
+========================================= */
+
+/* Khung chứa căn giữa */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+/* Kiểu dáng chữ Trang 1/6 */
+.page-info {
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+  background-color: #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+}
+
+/* Nút mũi tên nhỏ 2 bên */
+.page-btn,
+button.page-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: initial !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important; /* Tạo nút hình tròn */
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #4f46e5 !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Hiệu ứng rê chuột vào nút mũi tên */
+.page-btn:hover {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  border-color: #4f46e5 !important;
+}
+
+/* Khi nút bị vô hiệu hóa (Trang đầu / Trang cuối) */
+.page-btn:disabled {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  border-color: #e2e8f0 !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
