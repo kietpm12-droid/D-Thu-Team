@@ -2,7 +2,7 @@
 
 // ============================================================
 // QUẢN LÝ DỰ THU - MANAGER.JS
-// BẢN HOÀN CHỈNH - CÓ NÚT CHỈNH SỬA & EXCEL KHÔNG CÓ STT
+// BẢN HOÀN CHỈNH - CÓ NÚT CHỈNH SỬA & EXCEL KHÔNG CÓ STT & BỔ SUNG ĐĂNG NHẬP
 // ============================================================
 
 // ============================================================
@@ -83,6 +83,56 @@ function showManagerMessage(text, color = "#2563eb") {
   if (!managerMessage) return;
   managerMessage.textContent = text;
   managerMessage.style.color = color;
+}
+
+// ============================================================
+// XỬ LÝ ĐĂNG NHẬP & ĐĂNG XUẤT
+// ============================================================
+
+async function handleLogin() {
+  const email = emailInput?.value.trim();
+  const password = passwordInput?.value.trim();
+
+  if (!email || !password) {
+    showLoginMessage("⚠️ Vui lòng nhập đầy đủ Email và Mật khẩu!");
+    return;
+  }
+
+  try {
+    showLoginMessage("⏳ Đang đăng nhập...", "#2563eb");
+
+    const { data, error } = await client.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) throw error;
+
+    showLoginMessage("✅ Đăng nhập thành công!", "#16a34a");
+
+    // Chuyển giao diện
+    if (loginBox) loginBox.style.display = "none";
+    if (managerBox) managerBox.style.display = "block";
+
+    // Tải dữ liệu
+    await loadData();
+  } catch (error) {
+    console.error("Lỗi đăng nhập:", error);
+    showLoginMessage("❌ " + (error.message || "Sai email hoặc mật khẩu!"));
+  }
+}
+
+async function handleLogout() {
+  try {
+    await client.auth.signOut();
+    if (loginBox) loginBox.style.display = "block";
+    if (managerBox) managerBox.style.display = "none";
+    if (emailInput) emailInput.value = "";
+    if (passwordInput) passwordInput.value = "";
+    showLoginMessage("Đã đăng xuất thành công.", "#16a34a");
+  } catch (error) {
+    console.error("Lỗi đăng xuất:", error);
+  }
 }
 
 // ============================================================
@@ -524,7 +574,7 @@ function changePage(page) {
   if (page > totalPages) page = totalPages;
 
   currentPage = page;
-  editingRowId = null; // Reset trạng thái sửa khi chuyển trang
+  editingRowId = null;
 
   renderTable();
   renderPagination();
@@ -858,14 +908,28 @@ async function exportExcel() {
 }
 
 // ============================================================
-// LÍNH GÁC BẢO VỆ / KHỞI TẠO SỰ KIỆN
+// KHỞI TẠO SỰ KIỆN
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Gắn sự kiện Đăng nhập & Đăng xuất
+  if (loginBtn) loginBtn.addEventListener("click", handleLogin);
+  if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+
+  // Hỗ trợ ấn phím Enter để đăng nhập nhanh
+  if (passwordInput) {
+    passwordInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") handleLogin();
+    });
+  }
+
+  // Sự kiện quản lý
   if (filterBtn) filterBtn.addEventListener("click", filterData);
   if (refreshBtn) refreshBtn.addEventListener("click", loadData);
   if (exportBtn) exportBtn.addEventListener("click", exportExcel);
 
-  // Tải dữ liệu ban đầu
-  loadData();
+  // Tải dữ liệu ban đầu nếu đã hiển thị bảng quản lý
+  if (managerBox && managerBox.style.display !== "none") {
+    loadData();
+  }
 });
