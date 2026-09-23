@@ -1,250 +1,19 @@
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-}
-
-body {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-  color: #1e293b;
-  line-height: 1.5;
-}
-
 /* =========================
-   NỀN TRANG TRÍ (BACKGROUND EFFECT)
+   BUTTONS (ĐÃ PHÂN MÀU TỪNG NÚT)
 ========================= */
-.top-bg {
-  position: fixed;
-  top: -100px;
-  left: -80px;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  opacity: 0.12;
-  pointer-events: none;
-  filter: blur(40px);
-}
 
-/* =========================
-   CONTAINER
-========================= */
-.container {
-  width: 100%;
-  max-width: 1100px; /* Mở rộng tối đa để chứa vừa bảng dữ liệu */
-  margin: 0 auto;
-  padding: 24px 16px 40px;
-}
-
-/* =========================
-   CARD (KHUNG CHÍNH)
-========================= */
-.card {
-  position: relative;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 20px 25px -5px rgba(0, 0, 0, 0.03);
-  border: 1px solid #f1f5f9;
-}
-
-/* =========================
-   HEADER
-========================= */
-.header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.logo {
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-  font-size: 24px;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: #ffffff;
-  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
-}
-
-h1 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.3px;
-}
-
-.header p {
-  margin: 4px 0 0;
-  color: #64748b;
-  font-size: 14px;
-}
-
-/* =========================
-   SECTION TITLE
-========================= */
-.section-title {
-  margin: 16px 0 12px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: #e0e7ff;
-  color: #3730a3;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-
-.money-title {
-  background: #ffedd5;
-  color: #c2410c;
-}
-
-.note-title {
-  background: #cffafe;
-  color: #0e7490;
-}
-
-/* =========================
-   FIELD & INPUTS
-========================= */
-.field {
-  margin-bottom: 16px;
-}
-
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #334155;
-}
-
-label span {
-  color: #ef4444;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 14px;
-  color: #0f172a;
-  outline: none;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-input {
-  height: 44px;
-}
-
-textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  background: #ffffff;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #94a3b8;
-}
-
-/* =========================
-   MONEY BOX
-========================= */
-.money-box {
-  padding: 16px;
-  margin-bottom: 20px;
-  border-radius: 14px;
-  background: #fff7ed;
-  border: 1px solid #ffedd5;
-}
-
-.money-box label {
-  color: #9a3412;
-}
-
-.money-input {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1.5px solid #fdba74;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.money-input input {
-  height: 48px;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  font-size: 20px;
-  font-weight: 700;
-  color: #ea580c;
-  padding-right: 8px;
-}
-
-.money-input input:focus {
-  border: 0;
-  box-shadow: none;
-}
-
-.money-input b {
-  padding: 0 14px;
-  color: #ea580c;
-  font-size: 14px;
-}
-
-/* =========================
-   BUTTONS (TOÀN CỤC CHÍNH)
-========================= */
-/* Lưu ý: Dành cho nút submit / nút hành động lớn */
+/* Định dạng khung chung cho nút */
 .btn-primary,
-button:not(#tableBody button):not(.edit-btn):not(.delete-btn):not(.save-btn):not(.cancel-btn) {
+button:not(#tableBody button) {
   width: 100%;
   height: 46px;
   margin-top: 8px;
   border: 0;
   border-radius: 10px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: #ffffff;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -252,172 +21,43 @@ button:not(#tableBody button):not(.edit-btn):not(.delete-btn):not(.save-btn):not
   gap: 8px;
 }
 
-button:not(#tableBody button):hover {
+/* Nút Đăng xuất - Màu Xám/Đỏ Đô nhã nhặn */
+#logoutBtn {
+  background: #64748b;
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
+}
+#logoutBtn:hover {
+  background: #475569;
+}
+
+/* Nút Lọc dữ liệu - Màu Tím Indigo chính */
+#filterBtn {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+#filterBtn:hover {
   opacity: 0.95;
-  transform: translateY(-1px);
 }
 
+/* Nút Làm mới - Màu Xanh Lam (Cyan/Blue) */
+#refreshBtn {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+#refreshBtn:hover {
+  opacity: 0.95;
+}
+
+/* Nút Xuất Excel - Màu Xanh Lá Cây (Excel Style) */
+#exportBtn {
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+}
+#exportBtn:hover {
+  opacity: 0.95;
+}
+
+/* Hiệu ứng chung khi bấm nút */
 button:not(#tableBody button):active {
-  transform: translateY(0);
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* =========================
-   TABLE & KHU VỰC DỮ LIỆU
-========================= */
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  margin-top: 16px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
-  font-size: 14px;
-  text-align: left;
-}
-
-thead th {
-  background: #f8fafc;
-  color: #475569;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 12px 14px;
-  border-bottom: 1px solid #e2e8f0;
-  white-space: nowrap;
-}
-
-tbody tr {
-  border-bottom: 1px solid #f1f5f9;
-  transition: background-color 0.15s ease;
-}
-
-tbody tr:hover {
-  background-color: #f8fafc;
-}
-
-tbody td {
-  padding: 12px 14px;
-  color: #334155;
-  vertical-align: middle;
-}
-
-/* =========================
-   NÚT BẤM TRONG BẢNG (FIX LỖI PHỒNG TO)
-========================= */
-#tableBody button,
-table .edit-btn,
-table .delete-btn,
-table .save-btn,
-table .cancel-btn {
-  width: auto !important;
-  height: auto !important;
-  min-height: initial !important;
-  margin: 0 2px !important;
-  padding: 5px 10px !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  border-radius: 6px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  box-shadow: none !important;
-  border: none !important;
-  cursor: pointer;
-  line-height: 1.2 !important;
-}
-
-/* Màu từng nút trong bảng */
-.edit-btn {
-  background-color: #8b5cf6 !important;
-  color: #ffffff !important;
-}
-
-.edit-btn:hover {
-  background-color: #7c3aed !important;
-}
-
-.delete-btn {
-  background-color: #ef4444 !important;
-  color: #ffffff !important;
-}
-
-.delete-btn:hover {
-  background-color: #dc2626 !important;
-}
-
-.save-btn {
-  background-color: #10b981 !important;
-  color: #ffffff !important;
-}
-
-.cancel-btn {
-  background-color: #64748b !important;
-  color: #ffffff !important;
-}
-
-/* =========================
-   MESSAGE
-========================= */
-#message,
-#loginMessage,
-#managerMessage {
-  min-height: 20px;
-  margin-top: 12px;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* =========================
-   FOOTER
-========================= */
-.footer {
-  text-align: center;
-  color: #94a3b8;
-  font-size: 12px;
-  margin-top: 20px;
-}
-
-/* =========================
-   MOBILE RESPONSIVE
-========================= */
-@media (max-width: 640px) {
-  .container {
-    padding: 12px 10px 24px;
-  }
-
-  .card {
-    border-radius: 16px;
-    padding: 16px;
-  }
-
-  .logo {
-    width: 44px;
-    height: 44px;
-    font-size: 20px;
-    border-radius: 12px;
-  }
-
-  h1 {
-    font-size: 18px;
-  }
-
-  input {
-    height: 40px;
-  }
-
-  .money-input input {
-    font-size: 18px;
-  }
+  transform: translateY(1px);
 }
