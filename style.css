@@ -1,264 +1,668 @@
-/* =========================================
-   1. RESET & BASE STYLES
-========================================= */
 * {
+
   box-sizing: border-box;
+
+}
+
+html,
+
+body {
+
   margin: 0;
+
   padding: 0;
+
+  min-height: 100%;
+
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #f1f5f9;
-  color: #1e293b;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 12px;
+
+  font-family:
+
+    -apple-system,
+
+    BlinkMacSystemFont,
+
+    "Segoe UI",
+
+    Arial,
+
+    sans-serif;
+
+  background:
+
+    linear-gradient(
+
+      160deg,
+
+      #eef2ff 0%,
+
+      #fdf2f8 45%,
+
+      #ecfeff 100%
+
+    );
+
+  color: #172033;
+
 }
 
-/* Hiệu ứng nền mềm phía trên */
+/* =========================
+
+   NỀN
+
+========================= */
+
 .top-bg {
+
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 220px;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  z-index: -1;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
+
+  top: -100px;
+
+  left: -80px;
+
+  width: 260px;
+
+  height: 260px;
+
+  border-radius: 50%;
+
+  background:
+
+    linear-gradient(
+
+      135deg,
+
+      #6366f1,
+
+      #a855f7
+
+    );
+
+  opacity: .18;
+
+  pointer-events: none;
+
 }
 
-/* =========================================
-   2. CONTAINER & CARD LAYOUT
-========================================= */
+/* =========================
+
+   CONTAINER
+
+========================= */
+
 .container {
+
   width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
+
+  max-width: 620px;
+
+  margin: auto;
+
+  padding:
+
+    20px
+
+    16px
+
+    30px;
+
 }
+
+/* =========================
+
+   CARD
+
+========================= */
 
 .card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 28px 24px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+
+  position: relative;
+
+  background: rgba(255,255,255,.96);
+
+  border-radius: 28px;
+
+  padding: 22px 18px 24px;
+
+  box-shadow:
+
+    0 15px 45px rgba(79,70,229,.13);
+
+  border: 1px solid rgba(255,255,255,.8);
+
 }
 
-/* =========================================
-   3. HEADER
-========================================= */
+/* =========================
+
+   HEADER
+
+========================= */
+
 .header {
+
   display: flex;
+
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f1f5f9;
+
+  gap: 14px;
+
+  margin-bottom: 25px;
+
+  padding-bottom: 20px;
+
+  border-bottom:
+
+    1px solid #edf0f7;
+
 }
 
 .logo {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
+
+  width: 58px;
+
+  height: 58px;
+
   flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 18px;
+
+  font-size: 29px;
+
+  background:
+
+    linear-gradient(
+
+      135deg,
+
+      #6366f1,
+
+      #a855f7
+
+    );
+
+  box-shadow:
+
+    0 8px 20px rgba(99,102,241,.25);
+
 }
 
 h1 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.2px;
+
+  margin: 0;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  letter-spacing: -.3px;
+
 }
 
 .header p {
-  font-size: 13px;
-  color: #64748b;
-  margin-top: 2px;
+
+  margin: 5px 0 0;
+
+  color: #7c8498;
+
+  font-size: 14px;
+
 }
 
-/* =========================================
-   4. SECTION TITLES
-========================================= */
+/* =========================
+
+   SECTION TITLE
+
+========================= */
+
 .section-title {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  background: #e0e7ff;
-  color: #3730a3;
-  margin: 20px 0 12px 0;
-  display: inline-block;
+
+  margin:
+
+    4px
+
+    0
+
+    13px;
+
+  padding:
+
+    10px
+
+    13px;
+
+  border-radius: 12px;
+
+  background: #eef2ff;
+
+  color: #4f46e5;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  letter-spacing: .2px;
+
 }
 
 .money-title {
-  background: #ffedd5;
-  color: #9a3412;
+
+  background: #fff7ed;
+
+  color: #ea580c;
+
+  margin-top: 23px;
+
 }
 
 .note-title {
-  background: #e0f2fe;
-  color: #0369a1;
+
+  background: #ecfeff;
+
+  color: #0891b2;
+
+  margin-top: 23px;
+
 }
 
-/* =========================================
-   5. FORM FIELDS & INPUTS
-========================================= */
+/* =========================
+
+   FIELD
+
+========================= */
+
 .field {
-  margin-bottom: 14px;
+
+  margin-bottom: 16px;
+
 }
 
 label {
+
   display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #334155;
-  margin-bottom: 6px;
+
+  margin:
+
+    0
+
+    0
+
+    7px
+
+    3px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #374151;
+
 }
 
 label span {
+
   color: #ef4444;
+
 }
 
-/* Định dạng chuẩn cho toàn bộ input, select, textarea */
-input[type="text"],
-input[type="tel"],
-input[type="date"],
+/* =========================
+
+   INPUT
+
+========================= */
+
+input,
+
 textarea {
+
   width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  font-family: inherit;
-  font-size: 14px;
-  color: #0f172a;
-  background-color: #f8fafc;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 10px;
+
+  border: 2px solid #edf0f5;
+
+  background: #f8fafc;
+
+  border-radius: 15px;
+
+  padding:
+
+    14px
+
+    15px;
+
+  font-size: 16px;
+
+  color: #172033;
+
   outline: none;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
+
+  transition:
+
+    .2s ease;
+
+  font-family: inherit;
+
+}
+
+input {
+
+  height: 52px;
+
 }
 
 textarea {
-  height: auto;
-  padding: 10px 14px;
+
+  min-height: 105px;
+
   resize: vertical;
+
 }
 
-/* Hiệu ứng khi click/focus vào ô nhập */
 input:focus,
+
 textarea:focus {
-  background-color: #ffffff;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3.5px rgba(99, 102, 241, 0.15);
+
+  background: #fff;
+
+  border-color: #818cf8;
+
+  box-shadow:
+
+    0 0 0 4px rgba(99,102,241,.10);
+
 }
 
-::placeholder {
-  color: #94a3b8;
+input::placeholder,
+
+textarea::placeholder {
+
+  color: #a1a8b7;
+
 }
 
-/* =========================================
-   6. MONEY INPUT BOX
-========================================= */
+/* =========================
+
+   MONEY
+
+========================= */
+
 .money-box {
-  background: #fff7ed;
-  border: 1px solid #ffedd5;
-  padding: 14px;
-  border-radius: 12px;
-  margin-bottom: 14px;
+
+  padding: 16px;
+
+  margin-bottom: 16px;
+
+  border-radius: 19px;
+
+  background:
+
+    linear-gradient(
+
+      135deg,
+
+      #fff7ed,
+
+      #fff1f2
+
+    );
+
+  border:
+
+    1px solid #fed7aa;
+
 }
 
 .money-box label {
+
   color: #9a3412;
+
 }
 
 .money-input {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1.5px solid #fdba74;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: all 0.2s ease;
-}
 
-.money-input:focus-within {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 3.5px rgba(234, 88, 12, 0.15);
+  display: flex;
+
+  align-items: center;
+
+  background: #fff;
+
+  border:
+
+    2px solid #fdba74;
+
+  border-radius: 15px;
+
+  overflow: hidden;
+
 }
 
 .money-input input {
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 18px;
-  font-weight: 700;
-  color: #c2410c;
-  padding-right: 8px;
+
+  height: 58px;
+
+  border: 0;
+
+  background: transparent;
+
+  box-shadow: none;
+
+  font-size: 23px;
+
+  font-weight: 800;
+
+  color: #ea580c;
+
+  padding-right: 5px;
+
+}
+
+.money-input input:focus {
+
+  border: 0;
+
+  box-shadow: none;
+
 }
 
 .money-input b {
-  padding-right: 14px;
+
+  padding:
+
+    0
+
+    14px;
+
   color: #ea580c;
+
   font-size: 13px;
-  font-weight: 700;
+
 }
 
-/* =========================================
-   7. SUBMIT BUTTON
-========================================= */
-#submitBtn {
+/* =========================
+
+   BUTTON
+
+========================= */
+
+button {
+
   width: 100%;
-  height: 48px;
-  margin-top: 20px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
+
+  height: 56px;
+
+  margin-top: 8px;
+
+  border: 0;
+
+  border-radius: 17px;
+
+  background:
+
+    linear-gradient(
+
+      135deg,
+
+      #4f46e5,
+
+      #9333ea
+
+    );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  letter-spacing: .2px;
+
+  box-shadow:
+
+    0 10px 25px rgba(99,102,241,.30);
+
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-  transition: all 0.2s ease;
+
+  transition:
+
+    transform .15s ease,
+
+    opacity .15s ease;
+
 }
 
-#submitBtn:hover {
-  opacity: 0.95;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+button:active {
+
+  transform: scale(.98);
+
 }
 
-#submitBtn:active {
-  transform: translateY(0);
+button:disabled {
+
+  opacity: .65;
+
+  cursor: not-allowed;
+
 }
 
-/* =========================================
-   8. MESSAGE & FOOTER
-========================================= */
+button span {
+
+  margin-right: 6px;
+
+}
+
+/* =========================
+
+   MESSAGE
+
+========================= */
+
 #message {
-  margin-top: 12px;
-  font-size: 13px;
+
+  min-height: 22px;
+
+  margin-top: 14px;
+
   text-align: center;
-  font-weight: 600;
-  min-height: 20px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
 }
+
+/* =========================
+
+   FOOTER
+
+========================= */
 
 .footer {
+
   text-align: center;
+
+  color: #8991a3;
+
   font-size: 12px;
-  color: #64748b;
-  margin-top: 16px;
+
+  margin:
+
+    14px
+
+    0
+
+    0;
+
 }
+
+/* =========================
+
+   MOBILE
+
+========================= */
+
+@media (max-width: 420px) {
+
+  .container {
+
+    padding:
+
+      12px
+
+      10px
+
+      25px;
+
+  }
+
+  .card {
+
+    border-radius: 24px;
+
+    padding:
+
+      19px
+
+      15px
+
+      21px;
+
+  }
+
+  .logo {
+
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 16px;
+
+    font-size: 25px;
+
+  }
+
+  h1 {
+
+    font-size: 18px;
+
+  }
+
+  input {
+
+    height: 50px;
+
+  }
+
+  .money-input input {
+
+    font-size: 21px;
+
+  }
+
+} 
+
