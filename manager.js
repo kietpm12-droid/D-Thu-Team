@@ -1,13 +1,39 @@
 "use strict";
 
 // ============================================================
+
 // QUẢN LÝ DỰ THU - MANAGER.JS
-// BẢN HOÀN CHỈNH - EXCEL KHÔNG CÓ STT
+
+// FULL VERSION
+
+//
+
+// CHỨC NĂNG:
+
+// - Đăng nhập Supabase
+
+// - Tải dữ liệu
+
+// - Lọc User / ngày
+
+// - Phân trang 20 dòng
+
+// - Thống kê
+
+// - CHỈNH SỬA BẢN GHI
+
+// - XÓA BẢN GHI
+
+// - Tự loại CIF trùng
+
+// - Xuất Excel không có STT
+
 // ============================================================
 
-
 // ============================================================
+
 // KẾT NỐI SUPABASE
+
 // ============================================================
 
 let client = null;
@@ -15,41 +41,63 @@ let client = null;
 try {
 
   if (
+
     !window.supabase ||
+
     typeof window.supabase.createClient !== "function"
+
   ) {
+
     throw new Error(
+
       "Không tải được thư viện Supabase."
+
     );
+
   }
 
   if (
+
     !window.SUPABASE_URL ||
+
     !window.SUPABASE_ANON_KEY
+
   ) {
+
     throw new Error(
+
       "Thiếu SUPABASE_URL hoặc SUPABASE_ANON_KEY trong config.js."
+
     );
+
   }
 
   client =
+
     window.supabase.createClient(
+
       window.SUPABASE_URL,
+
       window.SUPABASE_ANON_KEY
+
     );
 
 } catch (error) {
 
   console.error(
+
     "Lỗi khởi tạo Supabase:",
+
     error
+
   );
 
 }
 
-
 // ============================================================
+
 // BIẾN TOÀN CỤC
+
 // ============================================================
 
 let allData = [];
@@ -60,287 +108,406 @@ let currentPage = 1;
 
 const PAGE_SIZE = 20;
 
-
 // ============================================================
+
 // LẤY PHẦN TỬ HTML
+
 // ============================================================
 
 const loginBox =
+
   document.getElementById("loginBox");
 
 const managerBox =
+
   document.getElementById("managerBox");
 
 const emailInput =
+
   document.getElementById("email");
 
 const passwordInput =
+
   document.getElementById("password");
 
 const loginBtn =
+
   document.getElementById("loginBtn");
 
 const logoutBtn =
+
   document.getElementById("logoutBtn");
 
 const loginMessage =
+
   document.getElementById("loginMessage");
 
 const managerMessage =
+
   document.getElementById("managerMessage");
 
 const totalCustomers =
+
   document.getElementById("totalCustomers");
 
 const totalAmount =
+
   document.getElementById("totalAmount");
 
 const filterUser =
+
   document.getElementById("filterUser");
 
 const filterDate =
+
   document.getElementById("filterDate");
 
 const filterBtn =
+
   document.getElementById("filterBtn");
 
 const refreshBtn =
+
   document.getElementById("refreshBtn");
 
 const exportBtn =
+
   document.getElementById("exportBtn");
 
 const tableBody =
+
   document.getElementById("tableBody");
 
 const pagination =
+
   document.getElementById("pagination");
 
-
 // ============================================================
+
 // THÔNG BÁO ĐĂNG NHẬP
+
 // ============================================================
 
 function showLoginMessage(
+
   text,
+
   color = "#dc2626"
+
 ) {
 
   if (!loginMessage) {
+
     return;
+
   }
 
   loginMessage.textContent =
+
     text;
 
   loginMessage.style.color =
+
     color;
 
 }
 
-
 // ============================================================
+
 // THÔNG BÁO QUẢN LÝ
+
 // ============================================================
 
 function showManagerMessage(
+
   text,
+
   color = "#2563eb"
+
 ) {
 
   if (!managerMessage) {
+
     return;
+
   }
 
   managerMessage.textContent =
+
     text;
 
   managerMessage.style.color =
+
     color;
 
 }
 
-
 // ============================================================
+
 // ĐỊNH DẠNG SỐ TIỀN
+
 // ============================================================
 
 function formatAmount(amount) {
 
   const number =
+
     Number(amount || 0);
 
   return number.toLocaleString(
+
     "en-US"
+
   );
 
 }
 
-
 // ============================================================
+
 // ĐỊNH DẠNG NGÀY VIỆT NAM
+
 // YYYY-MM-DD
-// → DD/MM/YYYY
+
+// -> DD/MM/YYYY
+
 // ============================================================
 
 function formatDateVietnamese(
+
   dateValue
+
 ) {
 
   if (!dateValue) {
+
     return "";
+
   }
 
   const text =
+
     String(dateValue)
+
       .substring(0, 10);
 
   const parts =
+
     text.split("-");
 
   if (
+
     parts.length !== 3
+
   ) {
+
     return text;
+
   }
 
   return (
+
     `${parts[2]}/${parts[1]}/${parts[0]}`
+
   );
 
 }
 
-
 // ============================================================
+
 // ESCAPE HTML
+
 // ============================================================
 
 function escapeHTML(value) {
 
   if (
+
     value === null ||
+
     value === undefined
+
   ) {
+
     return "";
+
   }
 
   return String(value)
 
     .replace(
+
       /&/g,
+
       "&amp;"
+
     )
 
     .replace(
+
       /</g,
+
       "&lt;"
+
     )
 
     .replace(
+
       />/g,
+
       "&gt;"
+
     )
 
     .replace(
+
       /"/g,
+
       "&quot;"
+
     )
 
     .replace(
+
       /'/g,
+
       "&#039;"
+
     );
 
 }
 
-
 // ============================================================
+
 // SO SÁNH BẢN GHI
+
 // ============================================================
 
 function isNewerRecord(
+
   newRecord,
+
   oldRecord
+
 ) {
 
   const newDate =
+
     String(
+
       newRecord.payment_date || ""
+
     );
 
   const oldDate =
+
     String(
+
       oldRecord.payment_date || ""
+
     );
 
   if (
+
     newDate !== oldDate
+
   ) {
 
     return (
+
       newDate > oldDate
+
     );
 
   }
 
   const newCreated =
+
     newRecord.created_at
+
       ? new Date(
+
           newRecord.created_at
+
         ).getTime()
+
       : 0;
 
   const oldCreated =
+
     oldRecord.created_at
+
       ? new Date(
+
           oldRecord.created_at
+
         ).getTime()
+
       : 0;
 
   return (
+
     newCreated >
+
     oldCreated
+
   );
 
 }
 
-
 // ============================================================
+
 // LOẠI BỎ CIF TRÙNG
+
 // ============================================================
 
 async function removeDuplicateCIF(
+
   rows
+
 ) {
 
   const latestByCIF =
+
     new Map();
 
   const duplicateIds = [];
 
   for (
+
     const row of rows
+
   ) {
 
     const cif =
+
       String(
+
         row.cif || ""
+
       ).trim();
 
     if (!cif) {
+
       continue;
+
     }
 
     const key =
+
       cif.toUpperCase();
 
     if (
+
       !latestByCIF.has(key)
+
     ) {
 
       latestByCIF.set(
+
         key,
+
         row
+
       );
 
       continue;
@@ -348,28 +515,41 @@ async function removeDuplicateCIF(
     }
 
     const currentLatest =
+
       latestByCIF.get(key);
 
     if (
+
       isNewerRecord(
+
         row,
+
         currentLatest
+
       )
+
     ) {
 
       if (
+
         currentLatest.id
+
       ) {
 
         duplicateIds.push(
+
           currentLatest.id
+
         );
 
       }
 
       latestByCIF.set(
+
         key,
+
         row
+
       );
 
     } else {
@@ -377,7 +557,9 @@ async function removeDuplicateCIF(
       if (row.id) {
 
         duplicateIds.push(
+
           row.id
+
         );
 
       }
@@ -386,33 +568,48 @@ async function removeDuplicateCIF(
 
   }
 
-
   // ==========================================================
+
   // XÓA CIF TRÙNG TRONG DATABASE
+
   // ==========================================================
 
   if (
+
     duplicateIds.length > 0
+
   ) {
 
     try {
 
       const {
+
         error
+
       } =
+
         await client
+
           .from("du_thu")
+
           .delete()
+
           .in(
+
             "id",
+
             duplicateIds
+
           );
 
       if (error) {
 
         console.warn(
+
           "Không thể xóa CIF trùng:",
+
           error.message
+
         );
 
       }
@@ -420,8 +617,11 @@ async function removeDuplicateCIF(
     } catch (error) {
 
       console.warn(
+
         "Lỗi xóa CIF trùng:",
+
         error
+
       );
 
     }
@@ -429,14 +629,17 @@ async function removeDuplicateCIF(
   }
 
   return Array.from(
+
     latestByCIF.values()
+
   );
 
 }
 
-
 // ============================================================
+
 // TẢI DỮ LIỆU
+
 // ============================================================
 
 async function loadData() {
@@ -444,101 +647,159 @@ async function loadData() {
   if (!client) {
 
     throw new Error(
+
       "Supabase chưa được khởi tạo."
+
     );
 
   }
 
   showManagerMessage(
+
     "⏳ Đang tải dữ liệu...",
+
     "#2563eb"
+
   );
 
   const {
+
     data,
+
     error
+
   } =
+
     await client
+
       .from("du_thu")
+
       .select("*")
+
       .order(
+
         "payment_date",
+
         {
+
           ascending: false
+
         }
+
       )
+
       .order(
+
         "created_at",
+
         {
+
           ascending: false
+
         }
+
       );
 
   if (error) {
+
     throw error;
+
   }
 
   const rows =
+
     Array.isArray(data)
+
       ? data
+
       : [];
 
   allData =
+
     await removeDuplicateCIF(
+
       rows
+
     );
 
-
   // ==========================================================
+
   // SẮP XẾP
+
   // ==========================================================
 
   allData.sort(
+
     function (a, b) {
 
       const dateA =
+
         String(
+
           a.payment_date || ""
+
         );
 
       const dateB =
+
         String(
+
           b.payment_date || ""
+
         );
 
       if (
+
         dateA !== dateB
+
       ) {
 
         return dateB.localeCompare(
+
           dateA
+
         );
 
       }
 
       const createdA =
+
         a.created_at
+
           ? new Date(
+
               a.created_at
+
             ).getTime()
+
           : 0;
 
       const createdB =
+
         b.created_at
+
           ? new Date(
+
               b.created_at
+
             ).getTime()
+
           : 0;
 
       return (
+
         createdB -
+
         createdA
+
       );
 
     }
+
   );
 
   filteredData =
+
     [...allData];
 
   currentPage = 1;
@@ -550,61 +811,91 @@ async function loadData() {
   updateStatistics();
 
   showManagerMessage(
+
     `✅ Đã tải ${allData.length} bản ghi.`,
+
     "#16a34a"
+
   );
 
 }
 
-
 // ============================================================
+
 // LỌC DỮ LIỆU
+
 // ============================================================
 
 function applyFilter() {
 
   const selectedUser =
+
     filterUser
+
       ? filterUser.value
+
           .trim()
+
           .toLowerCase()
+
       : "";
 
   const selectedDate =
+
     filterDate
+
       ? filterDate.value
+
       : "";
 
   filteredData =
+
     allData.filter(
+
       function (row) {
 
         const rowUser =
+
           String(
+
             row.user_name || ""
+
           ).toLowerCase();
 
         const rowDate =
+
           String(
+
             row.payment_date || ""
+
           ).substring(0, 10);
 
         const matchUser =
+
           !selectedUser ||
+
           rowUser.includes(
+
             selectedUser
+
           );
 
         const matchDate =
+
           !selectedDate ||
+
           rowDate === selectedDate;
 
         return (
+
           matchUser &&
+
           matchDate
+
         );
 
       }
+
     );
 
   currentPage = 1;
@@ -617,9 +908,10 @@ function applyFilter() {
 
 }
 
-
 // ============================================================
+
 // NÚT LỌC
+
 // ============================================================
 
 function filterData() {
@@ -627,27 +919,35 @@ function filterData() {
   applyFilter();
 
   showManagerMessage(
+
     `🔎 Đã lọc ${filteredData.length} bản ghi.`,
+
     "#2563eb"
+
   );
 
 }
 
-
 // ============================================================
+
 // HIỂN THỊ BẢNG
+
 // ============================================================
 
 function renderTable() {
 
   if (!tableBody) {
+
     return;
+
   }
 
   tableBody.innerHTML = "";
 
   if (
+
     filteredData.length === 0
+
   ) {
 
     tableBody.innerHTML = `
@@ -655,7 +955,9 @@ function renderTable() {
       <tr>
 
         <td
+
           colspan="8"
+
           style="text-align:center;">
 
           Không có dữ liệu phù hợp.
@@ -670,85 +972,150 @@ function renderTable() {
 
   }
 
-
   const startIndex =
+
     (currentPage - 1) *
+
     PAGE_SIZE;
 
   const endIndex =
+
     startIndex +
+
     PAGE_SIZE;
 
   const pageData =
+
     filteredData.slice(
+
       startIndex,
+
       endIndex
+
     );
 
-
   pageData.forEach(
+
     function (row) {
 
       const tr =
+
         document.createElement(
+
           "tr"
+
         );
 
       tr.innerHTML = `
 
         <td>
+
           ${escapeHTML(
+
             row.user_name
+
           )}
+
         </td>
 
         <td>
+
           ${escapeHTML(
+
             row.cif
+
           )}
+
         </td>
 
         <td>
+
           ${escapeHTML(
+
             row.customer_name
+
           )}
+
         </td>
 
         <td
+
           style="text-align:right;">
 
           ${formatAmount(
+
             row.amount
+
           )}
 
         </td>
 
         <td>
+
           ${formatDateVietnamese(
+
             row.payment_date
+
           )}
+
         </td>
 
         <td>
+
           ${escapeHTML(
+
             row.phone || ""
+
           )}
+
         </td>
 
         <td>
+
           ${escapeHTML(
+
             row.note || ""
+
           )}
+
         </td>
 
         <td
-          style="text-align:center;">
+
+          style="
+
+            text-align:center;
+
+            white-space:nowrap;
+
+          ">
 
           <button
+
             type="button"
-            class="delete-btn"
+
+            class="edit-btn"
+
             data-id="${escapeHTML(
+
               row.id
+
+            )}">
+
+            ✏️ Sửa
+
+          </button>
+
+          <button
+
+            type="button"
+
+            class="delete-btn"
+
+            data-id="${escapeHTML(
+
+              row.id
+
             )}">
 
             🗑️ Xóa
@@ -759,726 +1126,1738 @@ function renderTable() {
 
       `;
 
+      // ========================================================
+
+      // NÚT SỬA
+
+      // ========================================================
+
+      const editButton =
+
+        tr.querySelector(
+
+          ".edit-btn"
+
+        );
+
+      if (editButton) {
+
+        editButton.addEventListener(
+
+          "click",
+
+          function () {
+
+            editData(row);
+
+          }
+
+        );
+
+      }
+
+      // ========================================================
+
+      // NÚT XÓA
+
+      // ========================================================
 
       const deleteButton =
+
         tr.querySelector(
+
           ".delete-btn"
+
         );
 
       if (deleteButton) {
 
         deleteButton.addEventListener(
+
           "click",
+
           function () {
 
             deleteData(
+
               row.id
+
             );
 
           }
+
         );
 
       }
 
       tableBody.appendChild(
+
         tr
+
       );
 
     }
+
   );
 
 }
 
-
-// ============================================================
-// PHÂN TRANG
 // ============================================================
 
-function renderPagination() {
+// TẠO FORM CHỈNH SỬA
 
-  if (!pagination) {
-    return;
-  }
+// ============================================================
 
-  pagination.innerHTML = "";
-
-  const totalPages =
-    Math.max(
-      1,
-      Math.ceil(
-        filteredData.length /
-        PAGE_SIZE
-      )
-    );
-
+function createEditModal() {
 
   if (
-    totalPages <= 1
+
+    document.getElementById(
+
+      "editModal"
+
+    )
+
   ) {
-
-    pagination.innerHTML = `
-
-      <button
-        type="button"
-        disabled>
-
-        ‹
-
-      </button>
-
-      <span>
-        Trang 1 / 1
-      </span>
-
-      <button
-        type="button"
-        disabled>
-
-        ›
-
-      </button>
-
-    `;
 
     return;
 
   }
 
+  const modal =
 
-  const previousButton =
     document.createElement(
-      "button"
+
+      "div"
+
     );
 
-  previousButton.type =
-    "button";
+  modal.id =
 
-  previousButton.textContent =
-    "‹";
+    "editModal";
 
-  previousButton.className =
-    "arrow";
+  modal.innerHTML = `
 
-  previousButton.disabled =
-    currentPage === 1;
+    <div
 
-  previousButton.addEventListener(
-    "click",
-    function () {
+      class="edit-modal-overlay">
 
-      changePage(
-        currentPage - 1
-      );
+      <div
 
-    }
+        class="edit-modal-box">
+
+        <div
+
+          class="edit-modal-header">
+
+          <h2>
+
+            ✏️ CHỈNH SỬA DỰ THU
+
+          </h2>
+
+          <button
+
+            type="button"
+
+            id="closeEditModal"
+
+            class="edit-close-btn">
+
+            ✕
+
+          </button>
+
+        </div>
+
+        <div
+
+          class="edit-modal-body">
+
+          <input
+
+            type="hidden"
+
+            id="editId"
+
+          >
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              User cán bộ
+
+            </label>
+
+            <input
+
+              type="text"
+
+              id="editUser"
+
+              placeholder="Nhập User cán bộ"
+
+            >
+
+          </div>
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              Số CIF
+
+            </label>
+
+            <input
+
+              type="text"
+
+              id="editCif"
+
+              placeholder="Nhập số CIF"
+
+            >
+
+          </div>
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              Tên khách hàng
+
+            </label>
+
+            <input
+
+              type="text"
+
+              id="editCustomerName"
+
+              placeholder="Nhập tên khách hàng"
+
+            >
+
+          </div>
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              Số tiền dự thu
+
+            </label>
+
+            <input
+
+              type="text"
+
+              id="editAmount"
+
+              inputmode="numeric"
+
+              placeholder="Nhập số tiền"
+
+            >
+
+          </div>
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              Ngày thanh toán
+
+            </label>
+
+            <input
+
+              type="date"
+
+              id="editPaymentDate"
+
+            >
+
+          </div>
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              SĐT
+
+            </label>
+
+            <input
+
+              type="text"
+
+              id="editPhone"
+
+              inputmode="tel"
+
+              placeholder="Nhập số điện thoại"
+
+            >
+
+          </div>
+
+          <div
+
+            class="edit-form-group">
+
+            <label>
+
+              Ghi chú
+
+            </label>
+
+            <textarea
+
+              id="editNote"
+
+              rows="4"
+
+              placeholder="Nhập ghi chú"></textarea>
+
+          </div>
+
+        </div>
+
+        <div
+
+          class="edit-modal-footer">
+
+          <button
+
+            type="button"
+
+            id="cancelEditBtn"
+
+            class="edit-cancel-btn">
+
+            Hủy
+
+          </button>
+
+          <button
+
+            type="button"
+
+            id="saveEditBtn"
+
+            class="edit-save-btn">
+
+            💾 LƯU THAY ĐỔI
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  document.body.appendChild(
+
+    modal
+
   );
 
+  // ==========================================================
 
-  const pageText =
-    document.createElement(
-      "span"
+  // ĐÓNG
+
+  // ==========================================================
+
+  const closeButton =
+
+    document.getElementById(
+
+      "closeEditModal"
+
     );
 
-  pageText.textContent =
-    `Trang ${currentPage} / ${totalPages}`;
+  const cancelButton =
 
+    document.getElementById(
 
-  const nextButton =
-    document.createElement(
-      "button"
+      "cancelEditBtn"
+
     );
 
-  nextButton.type =
-    "button";
+  if (closeButton) {
 
-  nextButton.textContent =
-    "›";
+    closeButton.addEventListener(
 
-  nextButton.className =
-    "arrow";
+      "click",
 
-  nextButton.disabled =
-    currentPage === totalPages;
+      closeEditModal
 
-  nextButton.addEventListener(
-    "click",
-    function () {
-
-      changePage(
-        currentPage + 1
-      );
-
-    }
-  );
-
-
-  pagination.appendChild(
-    previousButton
-  );
-
-  pagination.appendChild(
-    pageText
-  );
-
-  pagination.appendChild(
-    nextButton
-  );
-
-}
-
-
-// ============================================================
-// CHUYỂN TRANG
-// ============================================================
-
-function changePage(
-  page
-) {
-
-  const totalPages =
-    Math.max(
-      1,
-      Math.ceil(
-        filteredData.length /
-        PAGE_SIZE
-      )
     );
 
-  if (page < 1) {
-    page = 1;
   }
 
-  if (
-    page > totalPages
-  ) {
+  if (cancelButton) {
 
-    page = totalPages;
+    cancelButton.addEventListener(
+
+      "click",
+
+      closeEditModal
+
+    );
 
   }
 
-  currentPage =
-    page;
+  // ==========================================================
 
-  renderTable();
+  // LƯU
 
-  renderPagination();
+  // ==========================================================
 
-}
+  const saveButton =
 
+    document.getElementById(
 
-// ============================================================
-// THỐNG KÊ
-// ============================================================
+      "saveEditBtn"
 
-function updateStatistics() {
+    );
 
-  const uniqueCIF =
-    new Set();
+  if (saveButton) {
 
-  let total = 0;
+    saveButton.addEventListener(
 
-  filteredData.forEach(
-    function (row) {
+      "click",
 
-      const cif =
-        String(
-          row.cif || ""
-        ).trim();
+      saveEditData
 
-      if (cif) {
+    );
 
-        uniqueCIF.add(
-          cif.toUpperCase()
-        );
+  }
+
+  // ==========================================================
+
+  // FORMAT TIỀN
+
+  // ==========================================================
+
+  const amountInput =
+
+    document.getElementById(
+
+      "editAmount"
+
+    );
+
+  if (amountInput) {
+
+    amountInput.addEventListener(
+
+      "input",
+
+      function () {
+
+        let value =
+
+          this.value.replace(
+
+            /[^0-9]/g,
+
+            ""
+
+          );
+
+        if (!value) {
+
+          this.value = "";
+
+          return;
+
+        }
+
+        this.value =
+
+          Number(
+
+            value
+
+          ).toLocaleString(
+
+            "en-US"
+
+          );
 
       }
 
-      total +=
-        Number(
-          row.amount || 0
-        );
-
-    }
-  );
-
-
-  if (totalCustomers) {
-
-    totalCustomers.textContent =
-      uniqueCIF.size;
+    );
 
   }
 
-  if (totalAmount) {
+  // ==========================================================
 
-    totalAmount.textContent =
-      formatAmount(total) +
-      " đ";
+  // CLICK RA NGOÀI
+
+  // ==========================================================
+
+  const overlay =
+
+    modal.querySelector(
+
+      ".edit-modal-overlay"
+
+    );
+
+  if (overlay) {
+
+    overlay.addEventListener(
+
+      "click",
+
+      function (event) {
+
+        if (
+
+          event.target === overlay
+
+        ) {
+
+          closeEditModal();
+
+        }
+
+      }
+
+    );
 
   }
 
 }
 
-
-// ============================================================
-// XÓA BẢN GHI
 // ============================================================
 
-async function deleteData(
-  id
-) {
+// MỞ FORM CHỈNH SỬA
 
-  const confirmed =
-    confirm(
-      "Bạn có chắc muốn xóa bản ghi dự thu này không?"
+// ============================================================
+
+function editData(row) {
+
+  createEditModal();
+
+  const editId =
+
+    document.getElementById(
+
+      "editId"
+
     );
 
-  if (!confirmed) {
-    return;
+  const editUser =
+
+    document.getElementById(
+
+      "editUser"
+
+    );
+
+  const editCif =
+
+    document.getElementById(
+
+      "editCif"
+
+    );
+
+  const editCustomerName =
+
+    document.getElementById(
+
+      "editCustomerName"
+
+    );
+
+  const editAmount =
+
+    document.getElementById(
+
+      "editAmount"
+
+    );
+
+  const editPaymentDate =
+
+    document.getElementById(
+
+      "editPaymentDate"
+
+    );
+
+  const editPhone =
+
+    document.getElementById(
+
+      "editPhone"
+
+    );
+
+  const editNote =
+
+    document.getElementById(
+
+      "editNote"
+
+    );
+
+  if (editId) {
+
+    editId.value =
+
+      row.id || "";
+
   }
 
+  if (editUser) {
+
+    editUser.value =
+
+      row.user_name || "";
+
+  }
+
+  if (editCif) {
+
+    editCif.value =
+
+      row.cif || "";
+
+  }
+
+  if (editCustomerName) {
+
+    editCustomerName.value =
+
+      row.customer_name || "";
+
+  }
+
+  if (editAmount) {
+
+    editAmount.value =
+
+      formatAmount(
+
+        row.amount || 0
+
+      );
+
+  }
+
+  if (editPaymentDate) {
+
+    editPaymentDate.value =
+
+      String(
+
+        row.payment_date || ""
+
+      ).substring(
+
+        0,
+
+        10
+
+      );
+
+  }
+
+  if (editPhone) {
+
+    editPhone.value =
+
+      row.phone || "";
+
+  }
+
+  if (editNote) {
+
+    editNote.value =
+
+      row.note || "";
+
+  }
+
+  const modal =
+
+    document.getElementById(
+
+      "editModal"
+
+    );
+
+  if (modal) {
+
+    modal.style.display =
+
+      "flex";
+
+  }
+
+}
+
+// ============================================================
+
+// ĐÓNG FORM CHỈNH SỬA
+
+// ============================================================
+
+function closeEditModal() {
+
+  const modal =
+
+    document.getElementById(
+
+      "editModal"
+
+    );
+
+  if (modal) {
+
+    modal.style.display =
+
+      "none";
+
+  }
+
+}
+
+// ============================================================
+
+// LƯU DỮ LIỆU CHỈNH SỬA
+
+// ============================================================
+
+async function saveEditData() {
+
+  const editId =
+
+    document.getElementById(
+
+      "editId"
+
+    );
+
+  const editUser =
+
+    document.getElementById(
+
+      "editUser"
+
+    );
+
+  const editCif =
+
+    document.getElementById(
+
+      "editCif"
+
+    );
+
+  const editCustomerName =
+
+    document.getElementById(
+
+      "editCustomerName"
+
+    );
+
+  const editAmount =
+
+    document.getElementById(
+
+      "editAmount"
+
+    );
+
+  const editPaymentDate =
+
+    document.getElementById(
+
+      "editPaymentDate"
+
+    );
+
+  const editPhone =
+
+    document.getElementById(
+
+      "editPhone"
+
+    );
+
+  const editNote =
+
+    document.getElementById(
+
+      "editNote"
+
+    );
+
+  const saveButton =
+
+    document.getElementById(
+
+      "saveEditBtn"
+
+    );
+
+  const id =
+
+    editId
+
+      ? editId.value.trim()
+
+      : "";
+
+  const userName =
+
+    editUser
+
+      ? editUser.value.trim()
+
+      : "";
+
+  const cif =
+
+    editCif
+
+      ? editCif.value.trim()
+
+      : "";
+
+  const customerName =
+
+    editCustomerName
+
+      ? editCustomerName.value.trim()
+
+      : "";
+
+  const amountText =
+
+    editAmount
+
+      ? editAmount.value
+
+          .replace(
+
+            /,/g,
+
+            ""
+
+          )
+
+          .trim()
+
+      : "";
+
+  const amount =
+
+    Number(
+
+      amountText || 0
+
+    );
+
+  const paymentDate =
+
+    editPaymentDate
+
+      ? editPaymentDate.value
+
+      : "";
+
+  const phone =
+
+    editPhone
+
+      ? editPhone.value.trim()
+
+      : "";
+
+  const note =
+
+    editNote
+
+      ? editNote.value.trim()
+
+      : "";
+
+  // ==========================================================
+
+  // KIỂM TRA
+
+  // ==========================================================
+
+  if (!id) {
+
+    alert(
+
+      "Không xác định được bản ghi cần sửa."
+
+    );
+
+    return;
+
+  }
+
+  if (!cif) {
+
+    alert(
+
+      "Vui lòng nhập Số CIF."
+
+    );
+
+    if (editCif) {
+
+      editCif.focus();
+
+    }
+
+    return;
+
+  }
+
+  if (!customerName) {
+
+    alert(
+
+      "Vui lòng nhập tên khách hàng."
+
+    );
+
+    if (editCustomerName) {
+
+      editCustomerName.focus();
+
+    }
+
+    return;
+
+  }
+
+  if (amount <= 0) {
+
+    alert(
+
+      "Số tiền dự thu phải lớn hơn 0."
+
+    );
+
+    if (editAmount) {
+
+      editAmount.focus();
+
+    }
+
+    return;
+
+  }
+
+  if (!paymentDate) {
+
+    alert(
+
+      "Vui lòng chọn ngày thanh toán."
+
+    );
+
+    if (editPaymentDate) {
+
+      editPaymentDate.focus();
+
+    }
+
+    return;
+
+  }
+
+  // ==========================================================
+
+  // KHÓA NÚT
+
+  // ==========================================================
+
+  if (saveButton) {
+
+    saveButton.disabled =
+
+      true;
+
+    saveButton.textContent =
+
+      "⏳ ĐANG LƯU...";
+
+  }
 
   try {
 
     showManagerMessage(
-      "⏳ Đang xóa...",
-      "#2563eb"
-    );
 
+      "⏳ Đang cập nhật dữ liệu...",
+
+      "#2563eb"
+
+    );
 
     const {
-      error
-    } =
-      await client
-        .from("du_thu")
-        .delete()
-        .eq(
-          "id",
-          id
-        );
 
+      data,
+
+      error
+
+    } =
+
+      await client
+
+        .from("du_thu")
+
+        .update({
+
+          user_name:
+
+            userName,
+
+          cif:
+
+            cif,
+
+          customer_name:
+
+            customerName,
+
+          amount:
+
+            amount,
+
+          payment_date:
+
+            paymentDate,
+
+          phone:
+
+            phone,
+
+          note:
+
+            note
+
+        })
+
+        .eq(
+
+          "id",
+
+          id
+
+        )
+
+        .select()
+
+        .single();
 
     if (error) {
+
       throw error;
+
     }
 
+    console.log(
 
-    showManagerMessage(
-      "✅ Đã xóa bản ghi thành công.",
-      "#16a34a"
+      "Đã cập nhật:",
+
+      data
+
     );
 
+    closeEditModal();
 
     await loadData();
 
     applyFilter();
 
+    showManagerMessage(
+
+      "✅ Đã cập nhật bản ghi thành công.",
+
+      "#16a34a"
+
+    );
 
   } catch (error) {
 
     console.error(
-      "Lỗi xóa dữ liệu:",
+
+      "Lỗi cập nhật dữ liệu:",
+
       error
+
     );
 
     showManagerMessage(
-      "❌ Xóa thất bại: " +
+
+      "❌ Cập nhật thất bại: " +
+
       (
+
         error.message ||
+
         error
+
       ),
+
       "#dc2626"
+
+    );
+
+    alert(
+
+      "Không thể cập nhật dữ liệu:\n\n" +
+
+      (
+
+        error.message ||
+
+        error
+
+      )
+
+    );
+
+  } finally {
+
+    if (saveButton) {
+
+      saveButton.disabled =
+
+        false;
+
+      saveButton.textContent =
+
+        "💾 LƯU THAY ĐỔI";
+
+    }
+
+  }
+
+}
+
+// ============================================================
+
+// XÓA BẢN GHI
+
+// ============================================================
+
+async function deleteData(
+
+  id
+
+) {
+
+  const confirmed =
+
+    confirm(
+
+      "Bạn có chắc muốn xóa bản ghi dự thu này không?"
+
+    );
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+  try {
+
+    showManagerMessage(
+
+      "⏳ Đang xóa...",
+
+      "#2563eb"
+
+    );
+
+    const {
+
+      error
+
+    } =
+
+      await client
+
+        .from("du_thu")
+
+        .delete()
+
+        .eq(
+
+          "id",
+
+          id
+
+        );
+
+    if (error) {
+
+      throw error;
+
+    }
+
+    showManagerMessage(
+
+      "✅ Đã xóa bản ghi thành công.",
+
+      "#16a34a"
+
+    );
+
+    await loadData();
+
+    applyFilter();
+
+  } catch (error) {
+
+    console.error(
+
+      "Lỗi xóa dữ liệu:",
+
+      error
+
+    );
+
+    showManagerMessage(
+
+      "❌ Xóa thất bại: " +
+
+      (
+
+        error.message ||
+
+        error
+
+      ),
+
+      "#dc2626"
+
     );
 
   }
 
 }
 
-
 // ============================================================
+
 // XUẤT EXCEL - EXCELJS
-// KHÔNG CÓ CỘT STT
+
+// KHÔNG CÓ STT
+
 // ============================================================
 
 async function exportExcel() {
 
   console.log(
+
     "Đã bấm nút XUẤT EXCEL - BẢN KHÔNG STT"
+
   );
 
-
-  // ==========================================================
-  // KIỂM TRA DỮ LIỆU
-  // ==========================================================
-
   if (
+
     !filteredData ||
+
     filteredData.length === 0
+
   ) {
 
     showManagerMessage(
+
       "⚠️ Không có dữ liệu để xuất Excel.",
+
       "#d97706"
+
     );
 
     return;
 
   }
 
-
-  // ==========================================================
-  // KIỂM TRA EXCELJS
-  // ==========================================================
-
   if (
+
     typeof ExcelJS === "undefined"
+
   ) {
 
     showManagerMessage(
+
       "❌ Thư viện Excel chưa tải được. Hãy kiểm tra Internet/CDN.",
+
       "#dc2626"
+
     );
 
     console.error(
+
       "ExcelJS không tồn tại."
+
     );
 
     return;
 
   }
-
 
   try {
 
     if (exportBtn) {
 
       exportBtn.disabled =
+
         true;
 
       exportBtn.textContent =
+
         "⏳ ĐANG XUẤT...";
 
     }
 
-
     showManagerMessage(
+
       "⏳ Đang tạo file Excel...",
+
       "#2563eb"
+
     );
 
-
-    // ========================================================
-    // NGÀY HIỆN TẠI
-    // ========================================================
-
     const now =
+
       new Date();
 
     const day =
+
       String(
+
         now.getDate()
+
       ).padStart(
+
         2,
+
         "0"
+
       );
 
     const month =
+
       String(
+
         now.getMonth() + 1
+
       ).padStart(
+
         2,
+
         "0"
+
       );
 
     const year =
+
       now.getFullYear();
 
-
     const exportDate =
+
       `${day}/${month}/${year}`;
 
     const fileDate =
+
       `${day}-${month}-${year}`;
 
-
-    // ========================================================
-    // TÍNH TỔNG
-    // ========================================================
-
     const total =
+
       filteredData.reduce(
+
         function (
+
           sum,
+
           row
+
         ) {
 
           return (
+
             sum +
+
             Number(
+
               row.amount || 0
+
             )
+
           );
 
         },
+
         0
+
       );
 
-
-    // ========================================================
-    // MÀU
-    // ========================================================
-
     const BLUE =
+
       "FF2563EB";
 
     const GREEN =
+
       "FF16A34A";
 
     const WHITE =
+
       "FFFFFFFF";
 
     const LIGHT_BLUE =
+
       "FFE0F2FE";
 
     const BORDER =
+
       "FFD1D5DB";
-
-
-    // ========================================================
-    // BORDER
-    // ========================================================
 
     const thinBorder = {
 
       top: {
+
         style: "thin",
+
         color: {
+
           argb: BORDER
+
         }
+
       },
 
       bottom: {
+
         style: "thin",
+
         color: {
+
           argb: BORDER
+
         }
+
       },
 
       left: {
+
         style: "thin",
+
         color: {
+
           argb: BORDER
+
         }
+
       },
 
       right: {
+
         style: "thin",
+
         color: {
+
           argb: BORDER
+
         }
+
       }
 
     };
 
-
     // ========================================================
+
     // WORKBOOK
+
     // ========================================================
 
     const workbook =
+
       new ExcelJS.Workbook();
 
     workbook.creator =
+
       "Quản Lý Dự Thu";
 
     workbook.created =
+
       new Date();
 
-
     // ========================================================
+
     // SHEET DỰ THU
-    // 7 CỘT - KHÔNG CÓ STT
+
     // ========================================================
 
     const worksheet =
+
       workbook.addWorksheet(
+
         "Dự Thu"
+
       );
-
-
-    // ========================================================
-    // CẤU TRÚC 7 CỘT
-    // A User
-    // B Số CIF
-    // C Tên khách hàng
-    // D Số tiền dự thu
-    // E Ngày thanh toán
-    // F SĐT
-    // G Ghi chú
-    // ========================================================
 
     worksheet.columns = [
 
       {
+
         header: "User",
+
         key: "user",
+
         width: 18
+
       },
 
       {
+
         header: "Số CIF",
+
         key: "cif",
+
         width: 18
+
       },
 
       {
+
         header: "Tên khách hàng",
+
         key: "customer",
+
         width: 30
+
       },
 
       {
+
         header: "Số tiền dự thu",
+
         key: "amount",
+
         width: 20
+
       },
 
       {
+
         header: "Ngày thanh toán",
+
         key: "paymentDate",
+
         width: 18
+
       },
 
       {
+
         header: "SĐT",
+
         key: "phone",
+
         width: 17
+
       },
 
       {
+
         header: "Ghi chú",
+
         key: "note",
+
         width: 40
+
       }
 
     ];
 
-
     // ========================================================
+
     // TIÊU ĐỀ
+
     // ========================================================
 
     worksheet.mergeCells(
+
       "A1:G1"
+
     );
 
     worksheet.getCell(
+
       "A1"
+
     ).value =
+
       "BÁO CÁO DỰ THU";
 
     worksheet.getCell(
+
       "A1"
+
     ).font = {
 
       name: "Arial",
+
       size: 18,
+
       bold: true
 
     };
 
     worksheet.getCell(
+
       "A1"
+
     ).alignment = {
 
       horizontal: "center",
+
       vertical: "middle"
 
     };
 
     worksheet.getRow(1).height =
+
       30;
 
-
     // ========================================================
+
     // NGÀY XUẤT
+
     // ========================================================
 
     worksheet.mergeCells(
+
       "A2:G2"
+
     );
 
     worksheet.getCell(
+
       "A2"
+
     ).value =
+
       `Ngày xuất: ${exportDate}`;
 
     worksheet.getCell(
+
       "A2"
+
     ).font = {
 
       name: "Arial",
+
       size: 11,
+
       italic: true
 
     };
 
     worksheet.getCell(
+
       "A2"
+
     ).alignment = {
 
       horizontal: "center",
+
       vertical: "middle"
 
     };
 
-
     // ========================================================
+
     // TỔNG HỒ SƠ
+
     // ========================================================
 
     worksheet.mergeCells(
+
       "A3:G3"
+
     );
 
     worksheet.getCell(
+
       "A3"
+
     ).value =
+
       `Tổng số hồ sơ: ${filteredData.length}`;
 
     worksheet.getCell(
+
       "A3"
+
     ).font = {
 
       name: "Arial",
+
       size: 11,
+
       bold: true
 
     };
 
     worksheet.getCell(
+
       "A3"
+
     ).alignment = {
 
       horizontal: "center",
+
       vertical: "middle"
 
     };
 
-
-    // ========================================================
-    // DÒNG TRỐNG
-    // ========================================================
-
     worksheet.addRow([]);
 
-
     // ========================================================
+
     // HEADER
-    // 7 CỘT - KHÔNG STT
+
     // ========================================================
 
     const headerRow =
+
       worksheet.addRow([
 
         "User",
@@ -1497,12 +2876,12 @@ async function exportExcel() {
 
       ]);
 
-
     headerRow.height =
+
       28;
 
-
     headerRow.eachCell(
+
       function (cell) {
 
         cell.font = {
@@ -1514,7 +2893,9 @@ async function exportExcel() {
           bold: true,
 
           color: {
+
             argb: WHITE
+
           }
 
         };
@@ -1526,7 +2907,9 @@ async function exportExcel() {
           pattern: "solid",
 
           fgColor: {
+
             argb: BLUE
+
           }
 
         };
@@ -1542,50 +2925,63 @@ async function exportExcel() {
         };
 
         cell.border =
+
           thinBorder;
 
       }
+
     );
 
-
     // ========================================================
+
     // DỮ LIỆU
-    // KHÔNG CÓ index + 1
+
     // ========================================================
 
     filteredData.forEach(
+
       function (row) {
 
         const excelRow =
+
           worksheet.addRow([
 
             row.user_name ||
+
               "",
 
             row.cif ||
+
               "",
 
             row.customer_name ||
+
               "",
 
             Number(
+
               row.amount || 0
+
             ),
 
             formatDateVietnamese(
+
               row.payment_date
+
             ),
 
             row.phone ||
+
               "",
 
             row.note ||
+
               ""
 
           ]);
 
-
         excelRow.eachCell(
+
           function (cell) {
 
             cell.font = {
@@ -1597,6 +2993,7 @@ async function exportExcel() {
             };
 
             cell.border =
+
               thinBorder;
 
             cell.alignment = {
@@ -1606,12 +3003,13 @@ async function exportExcel() {
             };
 
           }
+
         );
 
-
-        // USER
         excelRow.getCell(
+
           1
+
         ).alignment = {
 
           horizontal: "left",
@@ -1620,10 +3018,10 @@ async function exportExcel() {
 
         };
 
-
-        // CIF
         excelRow.getCell(
+
           2
+
         ).alignment = {
 
           horizontal: "center",
@@ -1632,10 +3030,10 @@ async function exportExcel() {
 
         };
 
-
-        // TÊN KHÁCH HÀNG
         excelRow.getCell(
+
           3
+
         ).alignment = {
 
           horizontal: "left",
@@ -1646,15 +3044,18 @@ async function exportExcel() {
 
         };
 
-
-        // SỐ TIỀN
         excelRow.getCell(
+
           4
+
         ).numFmt =
+
           "#,##0";
 
         excelRow.getCell(
+
           4
+
         ).alignment = {
 
           horizontal: "right",
@@ -1663,10 +3064,10 @@ async function exportExcel() {
 
         };
 
-
-        // NGÀY
         excelRow.getCell(
+
           5
+
         ).alignment = {
 
           horizontal: "center",
@@ -1675,10 +3076,10 @@ async function exportExcel() {
 
         };
 
-
-        // SĐT
         excelRow.getCell(
+
           6
+
         ).alignment = {
 
           horizontal: "center",
@@ -1687,10 +3088,10 @@ async function exportExcel() {
 
         };
 
-
-        // GHI CHÚ
         excelRow.getCell(
+
           7
+
         ).alignment = {
 
           horizontal: "left",
@@ -1702,14 +3103,17 @@ async function exportExcel() {
         };
 
       }
+
     );
 
-
     // ========================================================
+
     // DÒNG TỔNG
+
     // ========================================================
 
     const totalRow =
+
       worksheet.addRow([
 
         "",
@@ -1728,8 +3132,8 @@ async function exportExcel() {
 
       ]);
 
-
     totalRow.eachCell(
+
       function (cell) {
 
         cell.font = {
@@ -1749,7 +3153,9 @@ async function exportExcel() {
           pattern: "solid",
 
           fgColor: {
+
             argb: LIGHT_BLUE
+
           }
 
         };
@@ -1761,7 +3167,9 @@ async function exportExcel() {
             style: "medium",
 
             color: {
+
               argb: BLUE
+
             }
 
           },
@@ -1771,7 +3179,9 @@ async function exportExcel() {
             style: "medium",
 
             color: {
+
               argb: BLUE
+
             }
 
           },
@@ -1781,7 +3191,9 @@ async function exportExcel() {
             style: "thin",
 
             color: {
+
               argb: BORDER
+
             }
 
           },
@@ -1791,7 +3203,9 @@ async function exportExcel() {
             style: "thin",
 
             color: {
+
               argb: BORDER
+
             }
 
           }
@@ -1799,11 +3213,13 @@ async function exportExcel() {
         };
 
       }
+
     );
 
-
     totalRow.getCell(
+
       3
+
     ).alignment = {
 
       horizontal: "right",
@@ -1812,15 +3228,18 @@ async function exportExcel() {
 
     };
 
-
     totalRow.getCell(
+
       4
+
     ).numFmt =
+
       "#,##0";
 
-
     totalRow.getCell(
+
       4
+
     ).alignment = {
 
       horizontal: "right",
@@ -1829,10 +3248,10 @@ async function exportExcel() {
 
     };
 
-
     // ========================================================
+
     // AUTO FILTER
-    // CHỈ A:G
+
     // ========================================================
 
     worksheet.autoFilter = {
@@ -1840,14 +3259,10 @@ async function exportExcel() {
       from: "A5",
 
       to:
+
         `G${5 + filteredData.length}`
 
     };
-
-
-    // ========================================================
-    // FREEZE HEADER
-    // ========================================================
 
     worksheet.views = [
 
@@ -1861,49 +3276,60 @@ async function exportExcel() {
 
     ];
 
-
     // ========================================================
+
     // SHEET TỔNG QUAN
+
     // ========================================================
 
     const summarySheet =
-      workbook.addWorksheet(
-        "Tổng Quan"
-      );
 
+      workbook.addWorksheet(
+
+        "Tổng Quan"
+
+      );
 
     summarySheet.columns = [
 
       {
+
         width: 30
+
       },
 
       {
+
         width: 20
+
       },
 
       {
+
         width: 25
+
       }
 
     ];
 
-
-    // ========================================================
-    // TIÊU ĐỀ
-    // ========================================================
-
     summarySheet.mergeCells(
+
       "A1:C1"
+
     );
 
     summarySheet.getCell(
+
       "A1"
+
     ).value =
+
       "TỔNG QUAN DỰ THU";
 
     summarySheet.getCell(
+
       "A1"
+
     ).font = {
 
       name: "Arial",
@@ -1915,7 +3341,9 @@ async function exportExcel() {
     };
 
     summarySheet.getCell(
+
       "A1"
+
     ).alignment = {
 
       horizontal: "center",
@@ -1925,24 +3353,27 @@ async function exportExcel() {
     };
 
     summarySheet.getRow(1).height =
+
       30;
 
-
-    // ========================================================
-    // NGÀY
-    // ========================================================
-
     summarySheet.mergeCells(
+
       "A2:C2"
+
     );
 
     summarySheet.getCell(
+
       "A2"
+
     ).value =
+
       `Ngày xuất: ${exportDate}`;
 
     summarySheet.getCell(
+
       "A2"
+
     ).font = {
 
       name: "Arial",
@@ -1954,7 +3385,9 @@ async function exportExcel() {
     };
 
     summarySheet.getCell(
+
       "A2"
+
     ).alignment = {
 
       horizontal: "center",
@@ -1963,15 +3396,10 @@ async function exportExcel() {
 
     };
 
-
-    // ========================================================
-    // CHỈ TIÊU
-    // ========================================================
-
     summarySheet.addRow([]);
 
-
     const indicatorHeader =
+
       summarySheet.addRow([
 
         "CHỈ TIÊU",
@@ -1980,8 +3408,8 @@ async function exportExcel() {
 
       ]);
 
-
     indicatorHeader.eachCell(
+
       function (cell) {
 
         cell.font = {
@@ -1993,7 +3421,9 @@ async function exportExcel() {
           bold: true,
 
           color: {
+
             argb: WHITE
+
           }
 
         };
@@ -2005,7 +3435,9 @@ async function exportExcel() {
           pattern: "solid",
 
           fgColor: {
+
             argb: BLUE
+
           }
 
         };
@@ -2019,13 +3451,15 @@ async function exportExcel() {
         };
 
         cell.border =
+
           thinBorder;
 
       }
+
     );
 
-
     const countRow =
+
       summarySheet.addRow([
 
         "Tổng số hồ sơ",
@@ -2034,8 +3468,8 @@ async function exportExcel() {
 
       ]);
 
-
     const amountRow =
+
       summarySheet.addRow([
 
         "Tổng dự thu",
@@ -2044,12 +3478,14 @@ async function exportExcel() {
 
       ]);
 
-
     [countRow, amountRow]
+
       .forEach(
+
         function (row) {
 
           row.eachCell(
+
             function (cell) {
 
               cell.font = {
@@ -2061,6 +3497,7 @@ async function exportExcel() {
               };
 
               cell.border =
+
                 thinBorder;
 
               cell.alignment = {
@@ -2070,20 +3507,25 @@ async function exportExcel() {
               };
 
             }
+
           );
 
         }
+
       );
 
-
     amountRow.getCell(
+
       2
+
     ).numFmt =
+
       "#,##0";
 
-
     amountRow.getCell(
+
       2
+
     ).alignment = {
 
       horizontal: "right",
@@ -2092,19 +3534,10 @@ async function exportExcel() {
 
     };
 
-
-    // ========================================================
-    // DÒNG TRỐNG
-    // ========================================================
-
     summarySheet.addRow([]);
 
-
-    // ========================================================
-    // HEADER USER
-    // ========================================================
-
     const userHeader =
+
       summarySheet.addRow([
 
         "USER",
@@ -2115,8 +3548,8 @@ async function exportExcel() {
 
       ]);
 
-
     userHeader.eachCell(
+
       function (cell) {
 
         cell.font = {
@@ -2128,7 +3561,9 @@ async function exportExcel() {
           bold: true,
 
           color: {
+
             argb: WHITE
+
           }
 
         };
@@ -2140,7 +3575,9 @@ async function exportExcel() {
           pattern: "solid",
 
           fgColor: {
+
             argb: GREEN
+
           }
 
         };
@@ -2154,88 +3591,119 @@ async function exportExcel() {
         };
 
         cell.border =
+
           thinBorder;
 
       }
+
     );
 
-
     // ========================================================
+
     // GROUP THEO USER
+
     // ========================================================
 
     const userMap =
+
       new Map();
 
-
     filteredData.forEach(
+
       function (row) {
 
         const user =
+
           String(
+
             row.user_name ||
+
             "Không xác định"
+
           ).trim();
 
-
         const amount =
+
           Number(
+
             row.amount || 0
+
           );
 
-
         if (
+
           !userMap.has(user)
+
         ) {
 
           userMap.set(
+
             user,
+
             {
+
               count: 0,
+
               amount: 0
+
             }
+
           );
 
         }
 
-
         const item =
-          userMap.get(user);
 
+          userMap.get(user);
 
         item.count++;
 
         item.amount +=
+
           amount;
 
       }
+
     );
 
-
     const userEntries =
+
       Array.from(
+
         userMap.entries()
+
       ).sort(
+
         function (
+
           a,
+
           b
+
         ) {
 
           return (
+
             b[1].amount -
+
             a[1].amount
+
           );
 
         }
+
       );
 
-
     userEntries.forEach(
+
       function (
+
         [user, value]
+
       ) {
 
         const row =
+
           summarySheet.addRow([
 
             user,
@@ -2246,8 +3714,8 @@ async function exportExcel() {
 
           ]);
 
-
         row.eachCell(
+
           function (cell) {
 
             cell.font = {
@@ -2259,6 +3727,7 @@ async function exportExcel() {
             };
 
             cell.border =
+
               thinBorder;
 
             cell.alignment = {
@@ -2268,11 +3737,13 @@ async function exportExcel() {
             };
 
           }
+
         );
 
-
         row.getCell(
+
           2
+
         ).alignment = {
 
           horizontal: "center",
@@ -2281,15 +3752,18 @@ async function exportExcel() {
 
         };
 
-
         row.getCell(
+
           3
+
         ).numFmt =
+
           "#,##0";
 
-
         row.getCell(
+
           3
+
         ).alignment = {
 
           horizontal: "right",
@@ -2299,12 +3773,8 @@ async function exportExcel() {
         };
 
       }
+
     );
-
-
-    // ========================================================
-    // FREEZE
-    // ========================================================
 
     summarySheet.views = [
 
@@ -2318,113 +3788,126 @@ async function exportExcel() {
 
     ];
 
-
     // ========================================================
+
     // TẠO FILE
+
     // ========================================================
 
     const buffer =
+
       await workbook.xlsx.writeBuffer();
 
-
-    // ========================================================
-    // TẠO BLOB
-    // ========================================================
-
     const blob =
+
       new Blob(
 
         [
+
           buffer
+
         ],
 
         {
 
           type:
+
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         }
 
       );
 
-
-    // ========================================================
-    // TẠO LINK TẢI
-    // ========================================================
-
     const url =
-      window.URL.createObjectURL(
-        blob
-      );
 
+      window.URL.createObjectURL(
+
+        blob
+
+      );
 
     const link =
+
       document.createElement(
+
         "a"
+
       );
 
-
     link.href =
+
       url;
 
-
     link.download =
+
       `DU_THU_${fileDate}.xlsx`;
 
-
     link.style.display =
+
       "none";
 
-
     document.body.appendChild(
-      link
-    );
 
+      link
+
+    );
 
     link.click();
 
-
     document.body.removeChild(
+
       link
+
     );
 
-
     setTimeout(
+
       function () {
 
         window.URL.revokeObjectURL(
+
           url
+
         );
 
       },
+
       1000
+
     );
-
-
-    // ========================================================
-    // THÔNG BÁO
-    // ========================================================
 
     showManagerMessage(
-      "✅ Đã xuất Excel thành công - không có cột STT.",
-      "#16a34a"
-    );
 
+      "✅ Đã xuất Excel thành công - không có cột STT.",
+
+      "#16a34a"
+
+    );
 
   } catch (error) {
 
     console.error(
+
       "Lỗi xuất Excel:",
+
       error
+
     );
 
     showManagerMessage(
+
       "❌ Xuất Excel thất bại: " +
+
       (
+
         error.message ||
+
         error
+
       ),
+
       "#dc2626"
+
     );
 
   } finally {
@@ -2432,9 +3915,11 @@ async function exportExcel() {
     if (exportBtn) {
 
       exportBtn.disabled =
+
         false;
 
       exportBtn.textContent =
+
         "📥 XUẤT EXCEL";
 
     }
@@ -2443,9 +3928,10 @@ async function exportExcel() {
 
 }
 
-
 // ============================================================
+
 // ĐĂNG NHẬP
+
 // ============================================================
 
 async function login() {
@@ -2453,122 +3939,149 @@ async function login() {
   if (!client) {
 
     showLoginMessage(
+
       "❌ Supabase chưa được kết nối."
+
     );
 
     return;
 
   }
 
-
   const email =
-    emailInput
-      ? emailInput.value.trim()
-      : "";
 
+    emailInput
+
+      ? emailInput.value.trim()
+
+      : "";
 
   const password =
+
     passwordInput
+
       ? passwordInput.value
+
       : "";
 
-
   if (
+
     !email ||
+
     !password
+
   ) {
 
     showLoginMessage(
+
       "⚠️ Vui lòng nhập email và mật khẩu."
+
     );
 
     return;
 
   }
-
 
   if (loginBtn) {
 
     loginBtn.disabled =
+
       true;
 
     loginBtn.textContent =
+
       "⏳ ĐANG ĐĂNG NHẬP...";
 
   }
 
-
   showLoginMessage(
-    "",
-    "#2563eb"
-  );
 
+    "",
+
+    "#2563eb"
+
+  );
 
   try {
 
     const {
+
       error
+
     } =
+
       await client.auth
+
         .signInWithPassword({
 
           email:
+
             email,
 
           password:
+
             password
 
         });
 
-
     if (error) {
-      throw error;
-    }
 
+      throw error;
+
+    }
 
     if (loginBox) {
 
       loginBox.style.display =
+
         "none";
 
     }
 
-
     if (managerBox) {
 
       managerBox.style.display =
+
         "block";
 
     }
 
-
     await loadData();
-
 
   } catch (error) {
 
     console.error(
+
       "Lỗi đăng nhập:",
+
       error
+
     );
 
     showLoginMessage(
-      "❌ Đăng nhập thất bại: " +
-      (
-        error.message ||
-        error
-      )
-    );
 
+      "❌ Đăng nhập thất bại: " +
+
+      (
+
+        error.message ||
+
+        error
+
+      )
+
+    );
 
   } finally {
 
     if (loginBtn) {
 
       loginBtn.disabled =
+
         false;
 
       loginBtn.textContent =
+
         "🔐 ĐĂNG NHẬP";
 
     }
@@ -2577,84 +4090,102 @@ async function login() {
 
 }
 
-
 // ============================================================
+
 // ĐĂNG XUẤT
+
 // ============================================================
 
 async function logout() {
 
   if (!client) {
-    return;
-  }
 
+    return;
+
+  }
 
   try {
 
     const {
+
       error
+
     } =
+
       await client.auth.signOut();
 
-
     if (error) {
-      throw error;
-    }
 
+      throw error;
+
+    }
 
     if (managerBox) {
 
       managerBox.style.display =
+
         "none";
 
     }
 
-
     if (loginBox) {
 
       loginBox.style.display =
+
         "block";
 
     }
 
-
     if (passwordInput) {
 
       passwordInput.value =
+
         "";
 
     }
 
-
     showLoginMessage(
-      "✅ Đã đăng xuất.",
-      "#16a34a"
-    );
 
+      "✅ Đã đăng xuất.",
+
+      "#16a34a"
+
+    );
 
   } catch (error) {
 
     console.error(
+
       "Lỗi đăng xuất:",
+
       error
+
     );
 
     showManagerMessage(
+
       "❌ Đăng xuất thất bại: " +
+
       (
+
         error.message ||
+
         error
+
       ),
+
       "#dc2626"
+
     );
 
   }
 
 }
 
-
 // ============================================================
+
 // KIỂM TRA SESSION
+
 // ============================================================
 
 async function checkSession() {
@@ -2662,51 +4193,58 @@ async function checkSession() {
   if (!client) {
 
     showLoginMessage(
+
       "❌ Không thể kết nối Supabase."
+
     );
 
     return;
 
   }
 
-
   try {
 
     const {
+
       data,
+
       error
+
     } =
+
       await client.auth.getSession();
 
-
     if (error) {
+
       throw error;
+
     }
 
-
     const session =
-      data
-        ? data.session
-        : null;
 
+      data
+
+        ? data.session
+
+        : null;
 
     if (session) {
 
       if (loginBox) {
 
         loginBox.style.display =
+
           "none";
 
       }
 
-
       if (managerBox) {
 
         managerBox.style.display =
+
           "block";
 
       }
-
 
       try {
 
@@ -2715,98 +4253,123 @@ async function checkSession() {
       } catch (error) {
 
         console.error(
+
           error
+
         );
 
         showManagerMessage(
+
           "❌ Không thể tải dữ liệu: " +
+
           (
+
             error.message ||
+
             error
+
           ),
+
           "#dc2626"
+
         );
 
       }
-
 
     } else {
 
       if (loginBox) {
 
         loginBox.style.display =
+
           "block";
 
       }
 
-
       if (managerBox) {
 
         managerBox.style.display =
+
           "none";
 
       }
 
     }
 
-
   } catch (error) {
 
     console.error(
+
       "Lỗi kiểm tra session:",
+
       error
+
     );
 
     showLoginMessage(
+
       "❌ Không thể kiểm tra đăng nhập: " +
+
       (
+
         error.message ||
+
         error
+
       )
+
     );
 
   }
 
 }
 
-
 // ============================================================
+
 // GẮN SỰ KIỆN
+
 // ============================================================
 
 if (loginBtn) {
 
   loginBtn.addEventListener(
+
     "click",
+
     login
+
   );
 
 }
-
 
 if (logoutBtn) {
 
   logoutBtn.addEventListener(
+
     "click",
+
     logout
+
   );
 
 }
-
 
 if (filterBtn) {
 
   filterBtn.addEventListener(
+
     "click",
+
     filterData
+
   );
 
 }
 
-
 if (refreshBtn) {
 
   refreshBtn.addEventListener(
+
     "click",
 
     async function () {
@@ -2820,17 +4383,27 @@ if (refreshBtn) {
       } catch (error) {
 
         console.error(
+
           "Lỗi làm mới:",
+
           error
+
         );
 
         showManagerMessage(
+
           "❌ Làm mới thất bại: " +
+
           (
+
             error.message ||
+
             error
+
           ),
+
           "#dc2626"
+
         );
 
       }
@@ -2841,10 +4414,10 @@ if (refreshBtn) {
 
 }
 
-
 if (exportBtn) {
 
   exportBtn.addEventListener(
+
     "click",
 
     function (event) {
@@ -2859,9 +4432,10 @@ if (exportBtn) {
 
 }
 
-
 // ============================================================
+
 // KHỞI ĐỘNG
+
 // ============================================================
 
 checkSession();
