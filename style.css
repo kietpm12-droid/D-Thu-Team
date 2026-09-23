@@ -1,63 +1,264 @@
-/* =========================
-   BUTTONS (ĐÃ PHÂN MÀU TỪNG NÚT)
-========================= */
+/* =========================================
+   1. RESET & BASE STYLES
+========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* Định dạng khung chung cho nút */
-.btn-primary,
-button:not(#tableBody button) {
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f1f5f9;
+  color: #1e293b;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 12px;
+}
+
+/* Hiệu ứng nền mềm phía trên */
+.top-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  z-index: -1;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+/* =========================================
+   2. CONTAINER & CARD LAYOUT
+========================================= */
+.container {
   width: 100%;
-  height: 46px;
-  margin-top: 8px;
-  border: 0;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+/* =========================================
+   3. HEADER
+========================================= */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.header p {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* =========================================
+   4. SECTION TITLES
+========================================= */
+.section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #e0e7ff;
+  color: #3730a3;
+  margin: 20px 0 12px 0;
+  display: inline-block;
+}
+
+.money-title {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.note-title {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* =========================================
+   5. FORM FIELDS & INPUTS
+========================================= */
+.field {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+label span {
+  color: #ef4444;
+}
+
+/* Định dạng chuẩn cho toàn bộ input, select, textarea */
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+textarea {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #0f172a;
+  background-color: #f8fafc;
+  border: 1.5px solid #cbd5e1;
   border-radius: 10px;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+textarea {
+  height: auto;
+  padding: 10px 14px;
+  resize: vertical;
+}
+
+/* Hiệu ứng khi click/focus vào ô nhập */
+input:focus,
+textarea:focus {
+  background-color: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3.5px rgba(99, 102, 241, 0.15);
+}
+
+::placeholder {
+  color: #94a3b8;
+}
+
+/* =========================================
+   6. MONEY INPUT BOX
+========================================= */
+.money-box {
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.money-box label {
+  color: #9a3412;
+}
+
+.money-input {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #fdba74;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.money-input:focus-within {
+  border-color: #ea580c;
+  box-shadow: 0 0 0 3.5px rgba(234, 88, 12, 0.15);
+}
+
+.money-input input {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 18px;
+  font-weight: 700;
+  color: #c2410c;
+  padding-right: 8px;
+}
+
+.money-input b {
+  padding-right: 14px;
+  color: #ea580c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =========================================
+   7. SUBMIT BUTTON
+========================================= */
+#submitBtn {
+  width: 100%;
+  height: 48px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
   color: #ffffff;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  transition: all 0.2s ease;
 }
 
-/* Nút Đăng xuất - Màu Xám/Đỏ Đô nhã nhặn */
-#logoutBtn {
-  background: #64748b;
-  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
-}
-#logoutBtn:hover {
-  background: #475569;
-}
-
-/* Nút Lọc dữ liệu - Màu Tím Indigo chính */
-#filterBtn {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-}
-#filterBtn:hover {
+#submitBtn:hover {
   opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
 }
 
-/* Nút Làm mới - Màu Xanh Lam (Cyan/Blue) */
-#refreshBtn {
-  background: linear-gradient(135deg, #0284c7, #38bdf8);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
-}
-#refreshBtn:hover {
-  opacity: 0.95;
+#submitBtn:active {
+  transform: translateY(0);
 }
 
-/* Nút Xuất Excel - Màu Xanh Lá Cây (Excel Style) */
-#exportBtn {
-  background: linear-gradient(135deg, #15803d, #22c55e);
-  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
-}
-#exportBtn:hover {
-  opacity: 0.95;
+/* =========================================
+   8. MESSAGE & FOOTER
+========================================= */
+#message {
+  margin-top: 12px;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 600;
+  min-height: 20px;
 }
 
-/* Hiệu ứng chung khi bấm nút */
-button:not(#tableBody button):active {
-  transform: translateY(1px);
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 16px;
 }
