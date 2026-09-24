@@ -2226,9 +2226,41 @@ function exportExcel() {
 
     const worksheet =
       XLSX.utils.json_to_sheet(
-        excelData
-      );
+        // ========================================================
+// TÔ MÀU HÀNG TIÊU ĐỀ CÁC CỘT
+// ========================================================
 
+for (let col = 0; col < 7; col++) {
+
+    const cellAddress = XLSX.utils.encode_cell({
+        r: 0,
+        c: col
+    });
+
+    if (worksheet[cellAddress]) {
+
+        worksheet[cellAddress].s = {
+            fill: {
+                patternType: "solid",
+                fgColor: {
+                    rgb: "1D4ED8"
+                }
+            },
+
+            font: {
+                bold: true,
+                color: {
+                    rgb: "FFFFFF"
+                }
+            },
+
+            alignment: {
+                horizontal: "center",
+                vertical: "center"
+            }
+        };
+    }
+}
 
     /* ========================================================
        ĐỘ RỘNG CỘT
