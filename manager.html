@@ -24,11 +24,8 @@
     ===================================================== */
 
     .manager-card {
-
       max-width: 1200px;
-
       margin: auto;
-
     }
 
 
@@ -37,49 +34,31 @@
     ===================================================== */
 
     .stats {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
-
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-
       margin: 20px 0;
-
     }
 
 
     .stat {
-
       background: #f1f5f9;
-
       padding: 16px;
-
       border-radius: 12px;
-
       text-align: center;
-
     }
 
 
     .stat-title {
-
       color: #64748b;
-
       font-size: 14px;
-
     }
 
 
     .stat-value {
-
       font-size: 22px;
-
       font-weight: bold;
-
       margin-top: 6px;
-
     }
 
 
@@ -88,11 +67,8 @@
     ===================================================== */
 
     .filters {
-
       display: grid;
-
       gap: 10px;
-
     }
 
 
@@ -101,45 +77,30 @@
     ===================================================== */
 
     .table-wrap {
-
       overflow-x: auto;
-
       margin-top: 20px;
-
     }
 
 
     table {
-
       width: 100%;
-
       border-collapse: collapse;
-
       min-width: 1100px;
-
     }
 
 
     th,
     td {
-
       border: 1px solid #ddd;
-
       padding: 9px;
-
       text-align: left;
-
       white-space: nowrap;
-
     }
 
 
     th {
-
       background: #f1f5f9;
-
       font-weight: bold;
-
     }
 
 
@@ -148,32 +109,20 @@
     ===================================================== */
 
     .logout-btn {
-
       background: #64748b !important;
-
       color: white !important;
-
       width: 100%;
-
       height: 44px;
-
       border: 0;
-
       border-radius: 10px;
-
       font-weight: bold;
-
       cursor: pointer;
-
       margin-bottom: 15px;
-
     }
 
 
     .logout-btn:hover {
-
       background: #475569 !important;
-
     }
 
 
@@ -182,7 +131,6 @@
     ===================================================== */
 
     .filter-btn {
-
       background:
         linear-gradient(
           135deg,
@@ -191,33 +139,22 @@
         ) !important;
 
       color: white !important;
-
       height: 44px;
-
       border: 0;
-
       border-radius: 10px;
-
       font-weight: bold;
-
       cursor: pointer;
-
     }
 
 
     .filter-btn:hover {
-
       opacity: 0.92;
-
     }
 
 
     .filter-btn:disabled {
-
       opacity: 0.6;
-
       cursor: not-allowed;
-
     }
 
 
@@ -226,7 +163,6 @@
     ===================================================== */
 
     .refresh-btn {
-
       background:
         linear-gradient(
           135deg,
@@ -235,24 +171,16 @@
         ) !important;
 
       color: white !important;
-
       height: 44px;
-
       border: 0;
-
       border-radius: 10px;
-
       font-weight: bold;
-
       cursor: pointer;
-
     }
 
 
     .refresh-btn:hover {
-
       opacity: 0.92;
-
     }
 
 
@@ -261,7 +189,6 @@
     ===================================================== */
 
     .export-btn {
-
       background:
         linear-gradient(
           135deg,
@@ -270,23 +197,84 @@
         ) !important;
 
       color: white !important;
-
       height: 44px;
-
       border: 0;
-
       border-radius: 10px;
-
       font-weight: bold;
-
       cursor: pointer;
-
     }
 
 
     .export-btn:hover {
-
       opacity: 0.92;
+    }
+
+
+    /* =====================================================
+       NÚT XÓA TẤT CẢ
+    ===================================================== */
+
+    .delete-all-btn {
+
+      width: 100% !important;
+
+      height: 46px !important;
+
+      margin-top: 10px !important;
+
+      border: 0 !important;
+
+      border-radius: 11px !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          #dc2626,
+          #ef4444
+        ) !important;
+
+      color: #ffffff !important;
+
+      font-size: 14px !important;
+
+      font-weight: 800 !important;
+
+      cursor: pointer !important;
+
+      box-shadow:
+        0 7px 16px
+        rgba(220, 38, 38, 0.20) !important;
+
+      transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+    }
+
+
+    .delete-all-btn:hover {
+
+      background:
+        linear-gradient(
+          135deg,
+          #b91c1c,
+          #dc2626
+        ) !important;
+
+    }
+
+
+    .delete-all-btn:active {
+
+      transform: scale(0.98);
+
+    }
+
+
+    .delete-all-btn:disabled {
+
+      opacity: 0.6 !important;
+
+      cursor: not-allowed !important;
 
     }
 
@@ -296,15 +284,10 @@
     ===================================================== */
 
     .action-wrap {
-
       display: flex;
-
       gap: 6px;
-
       justify-content: center;
-
       align-items: center;
-
     }
 
 
@@ -340,43 +323,32 @@
       align-items: center !important;
 
       justify-content: center !important;
-
     }
 
 
     .edit-btn {
-
       background: #f59e0b;
-
     }
 
 
     .edit-btn:hover {
-
       background: #d97706;
-
     }
 
 
     .delete-btn {
-
       background: #dc2626;
-
     }
 
 
     .delete-btn:hover {
-
       background: #b91c1c;
-
     }
 
 
     .edit-btn:active,
     .delete-btn:active {
-
       transform: scale(0.95);
-
     }
 
 
@@ -394,7 +366,6 @@
       font-weight: bold;
 
       min-height: 20px;
-
     }
 
 
@@ -415,7 +386,6 @@
       margin-top: 20px !important;
 
       width: 100% !important;
-
     }
 
 
@@ -436,7 +406,6 @@
       border: 1px solid #cbd5e1 !important;
 
       display: inline-block !important;
-
     }
 
 
@@ -477,7 +446,6 @@
       align-items: center !important;
 
       justify-content: center !important;
-
     }
 
 
@@ -488,7 +456,6 @@
       color: #ffffff !important;
 
       border-color: #4f46e5 !important;
-
     }
 
 
@@ -501,7 +468,6 @@
       border-color: #e2e8f0 !important;
 
       cursor: not-allowed !important;
-
     }
 
 
@@ -531,6 +497,19 @@
         width: 40px !important;
 
         min-width: 40px !important;
+
+      }
+
+
+      .delete-all-btn {
+
+        height: 44px !important;
+
+        font-size: 12px !important;
+
+        border-radius: 10px !important;
+
+        margin-top: 8px !important;
 
       }
 
@@ -587,11 +566,6 @@
           autocomplete="current-password"
         >
 
-
-        <!--
-          Không dùng onclick ở đây.
-          manager.js tự gắn sự kiện click.
-        -->
 
         <button
           id="loginBtn"
@@ -746,6 +720,21 @@
           >
 
             📥 XUẤT EXCEL
+
+          </button>
+
+
+          <!-- =================================================
+               XÓA TẤT CẢ
+          ================================================== -->
+
+          <button
+            id="deleteAllBtn"
+            type="button"
+            class="delete-all-btn"
+          >
+
+            🗑️ XÓA TẤT CẢ
 
           </button>
 
@@ -913,7 +902,7 @@
   ====================================================== -->
 
   <script
-    src="manager.js?v=5"
+    src="manager.js?v=6"
     defer
   ></script>
 
