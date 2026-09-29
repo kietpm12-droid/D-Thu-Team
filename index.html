@@ -1,196 +1,104 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-
-  <meta name="viewport"
-        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-  <title>Nhập Dự Thu</title>
-
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dự Thu Khách Hàng</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <div class="top-bg"></div>
-
-  <main class="container">
-
-    <section class="card">
-
-      <div class="header">
-
-        <div class="logo">
-          💰
-        </div>
-
-        <div>
-          <h1>DỰ THU KHÁCH HÀNG</h1>
-          <p>Nhập thông tin dự thu</p>
-        </div>
-
-      </div>
-
-
-      <form id="duThuForm">
-
-        <div class="section-title">
-          👤 THÔNG TIN KHÁCH HÀNG
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            User <span>*</span>
-          </label>
-
-          <input
-            id="user_name"
-            type="text"
-            placeholder="Nhập User"
-            autocomplete="off"
-            required>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Số CIF <span>*</span>
-          </label>
-
-          <input
-            id="cif"
-            type="text"
-            placeholder="Nhập số CIF"
-            autocomplete="off"
-            required>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Tên khách hàng <span>*</span>
-          </label>
-
-          <input
-            id="customer_name"
-            type="text"
-            placeholder="Nhập tên khách hàng"
-            autocomplete="off"
-            required>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Số điện thoại
-          </label>
-
-          <input
-            id="phone"
-            type="tel"
-            inputmode="tel"
-            placeholder="Nhập số điện thoại"
-            autocomplete="off">
-
-        </div>
-
-
-        <div class="section-title money-title">
-          💵 THÔNG TIN DỰ THU
-        </div>
-
-
-        <div class="money-box">
-
-          <label>
-            Số tiền dự thu <span>*</span>
-          </label>
-
-
-          <div class="money-input">
-
-            <input
-              id="amount"
-              type="text"
-              inputmode="numeric"
-              placeholder="0"
-              autocomplete="off"
-              required>
-
-            <b>VNĐ</b>
-
-          </div>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Ngày thanh toán <span>*</span>
-          </label>
-
-          <input
-            id="payment_date"
-            type="date"
-            required>
-
-        </div>
-
-
-        <div class="section-title note-title">
-          📝 GHI CHÚ
-        </div>
-
-
-        <div class="field">
-
-          <textarea
-            id="note"
-            rows="4"
-            placeholder="Nhập ghi chú nếu có..."></textarea>
-
-        </div>
-
-
-        <button
-          id="submitBtn"
-          type="submit">
-
-          <span>🚀</span>
-          GỬI DỰ THU
-
-        </button>
-
-
-        <div id="message"></div>
-
-      </form>
-
-    </section>
-
-
-    <p class="footer">
-      🔒 Dữ liệu được lưu tập trung trên hệ thống
-    </p>
-
-  </main>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script src="config.js"></script>
-
-  <script src="app.js"></script>
+  <main class="form-container">
+    <div class="form-card">
+
+      <!-- HEADER -->
+      <div class="form-header">
+        <div class="logo-icon">
+          💰
+        </div>
+        <div class="header-titles">
+          <h1>DỰ THU KHÁCH HÀNG</h1>
+          <p>Nhập thông tin dự thu chi tiết</p>
+        </div>
+      </div>
+
+      <form id="duThuForm">
+
+        <!-- 1. THÔNG TIN KHÁCH HÀNG -->
+        <div class="form-section-title">
+          👤 THÔNG TIN KHÁCH HÀNG
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="user_name">User <span>*</span></label>
+            <input id="user_name" type="text" placeholder="Nhập User cán bộ" autocomplete="off" required>
+          </div>
+
+          <div class="form-field">
+            <label for="cif">Số CIF <span>*</span></label>
+            <input id="cif" type="text" placeholder="Nhập số CIF" autocomplete="off" required>
+          </div>
+
+          <div class="form-field full-width">
+            <label for="customer_name">Tên khách hàng <span>*</span></label>
+            <input id="customer_name" type="text" placeholder="Nhập tên khách hàng" autocomplete="off" required>
+          </div>
+
+          <div class="form-field full-width">
+            <label for="phone">Số điện thoại</label>
+            <input id="phone" type="tel" inputmode="tel" placeholder="Nhập số điện thoại" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- 2. THÔNG TIN DỰ THU -->
+        <div class="form-section-title green-title">
+          💵 THÔNG TIN DỰ THU
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="amount">Số tiền dự thu (VNĐ) <span>*</span></label>
+            <div class="amount-input-wrap">
+              <input id="amount" type="text" inputmode="numeric" placeholder="0" autocomplete="off" required>
+              <span class="currency-tag">VNĐ</span>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="payment_date">Ngày thanh toán <span>*</span></label>
+            <input id="payment_date" type="date" required>
+          </div>
+        </div>
+
+        <!-- 3. GHI CHÚ -->
+        <div class="form-section-title gray-title">
+          📝 GHI CHÚ
+        </div>
+
+        <div class="form-field full-width">
+          <textarea id="note" rows="3" placeholder="Nhập ghi chú chi tiết nếu có..."></textarea>
+        </div>
+
+        <!-- NÚT GỬI -->
+        <button id="submitBtn" class="submit-btn" type="submit">
+          <span>🚀</span> GỬI DỰ THU
+        </button>
+
+        <div id="message" class="form-message"></div>
+
+      </form>
+
+    </div>
+
+    <p class="form-footer">
+      🔒 Dữ liệu được bảo mật và lưu tập trung trên hệ thống
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
