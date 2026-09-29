@@ -12,7 +12,6 @@ body {
   padding: 0;
   min-height: 100%;
 
-  /* QUAN TRỌNG: chống iPhone tự phóng to chữ */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -360,14 +359,15 @@ textarea::placeholder {
 
 
 /* =========================================
-   8. NÚT LỚN
+   8. NÚT CHUNG
 ========================================= */
 
 button:not(#tableBody button)
 :not(.edit-btn)
 :not(.delete-btn)
 :not(.page-btn)
-:not(#pagination button) {
+:not(#pagination button)
+:not(#submitBtn) {
 
   width: 100%;
 
@@ -402,27 +402,121 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   MÀU NÚT
+   9. NÚT GỬI DỰ THU
+   GỌN - ĐẸP - CÂN ĐỐI
 ========================================= */
 
 #submitBtn {
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  width: 190px !important;
+
+  min-width: 190px !important;
+
+  max-width: 190px !important;
+
+  height: 46px !important;
+
+  min-height: 46px !important;
+
+  max-height: 46px !important;
+
+  margin: 18px auto !important;
+
+  padding: 0 18px !important;
+
+  box-sizing: border-box !important;
+
   background:
     linear-gradient(
       135deg,
       #4f46e5,
       #6366f1
-    );
+    ) !important;
+
+  color: #ffffff !important;
+
+  border: none !important;
+
+  border-radius: 13px !important;
+
+  font-size: 17px !important;
+
+  font-weight: 800 !important;
+
+  line-height: 1 !important;
+
+  white-space: nowrap !important;
+
+  cursor: pointer !important;
 
   box-shadow:
-    0 6px 16px
-    rgba(79, 70, 229, 0.25);
+    0 6px 14px
+    rgba(79, 70, 229, 0.22) !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease !important;
+
+  -webkit-text-size-adjust: 100%;
 }
 
+
+/* Hover */
+
+#submitBtn:hover {
+
+  opacity: 0.94 !important;
+
+  transform: translateY(-1px) !important;
+
+  box-shadow:
+    0 8px 18px
+    rgba(79, 70, 229, 0.25) !important;
+}
+
+
+/* Khi bấm */
+
+#submitBtn:active {
+
+  transform: scale(0.97) !important;
+
+  box-shadow:
+    0 3px 8px
+    rgba(79, 70, 229, 0.18) !important;
+}
+
+
+/* Khi đang disabled */
+
+#submitBtn:disabled {
+
+  opacity: 0.6 !important;
+
+  cursor: not-allowed !important;
+
+  transform: none !important;
+}
+
+
+/* =========================================
+   10. MÀU CÁC NÚT KHÁC
+========================================= */
+
 #logoutBtn {
+
   background: #64748b;
 }
 
 #filterBtn {
+
   background:
     linear-gradient(
       135deg,
@@ -432,6 +526,7 @@ button:not(#tableBody button)
 }
 
 #refreshBtn {
+
   background:
     linear-gradient(
       135deg,
@@ -441,6 +536,7 @@ button:not(#tableBody button)
 }
 
 #exportBtn {
+
   background:
     linear-gradient(
       135deg,
@@ -449,26 +545,33 @@ button:not(#tableBody button)
     );
 }
 
+
+/* Hover nút chung */
+
 button:not(#tableBody button)
 :not(.page-btn)
-:not(#pagination button):hover {
+:not(#pagination button)
+:not(#submitBtn):hover {
 
   opacity: 0.93;
 
   transform: translateY(-1px);
 }
 
+
+/* Active nút chung */
+
 button:not(#tableBody button)
 :not(.page-btn)
-:not(#pagination button):active {
+:not(#pagination button)
+:not(#submitBtn):active {
 
   transform: translateY(0);
 }
 
 
 /* =========================================
-   9. BẢNG
-   QUAN TRỌNG: KHÓA FONT CHỮ
+   11. BẢNG
 ========================================= */
 
 .table-container,
@@ -503,7 +606,6 @@ button:not(#tableBody button)
 
   text-align: left;
 
-  /* KHÓA FONT */
   font-size: 13px !important;
 
   line-height: 1.35 !important;
@@ -515,7 +617,7 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   HEADER BẢNG
+   12. HEADER BẢNG
 ========================================= */
 
 .table-container thead th,
@@ -525,7 +627,6 @@ button:not(#tableBody button)
 
   color: #475569;
 
-  /* FONT NHỎ */
   font-size: 13px !important;
 
   font-weight: 700 !important;
@@ -544,13 +645,12 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   DÒNG DỮ LIỆU
+   13. DÒNG DỮ LIỆU
 ========================================= */
 
 .table-container tbody td,
 .table-wrap tbody td {
 
-  /* FONT NHỎ */
   font-size: 13px !important;
 
   font-weight: 400 !important;
@@ -580,7 +680,7 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   CỘT GHI CHÚ
+   14. CỘT GHI CHÚ
 ========================================= */
 
 .table-container td:nth-child(7),
@@ -603,7 +703,7 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   CỘT SỐ TIỀN
+   15. CỘT SỐ TIỀN
 ========================================= */
 
 .table-container td:nth-child(4),
@@ -618,7 +718,7 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   CỘT NGÀY
+   16. CỘT NGÀY
 ========================================= */
 
 .table-container td:nth-child(5),
@@ -631,7 +731,7 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   CỘT SĐT
+   17. CỘT SĐT
 ========================================= */
 
 .table-container td:nth-child(6),
@@ -644,7 +744,7 @@ button:not(#tableBody button)
 
 
 /* =========================================
-   NÚT SỬA / XÓA
+   18. NÚT SỬA / XÓA
 ========================================= */
 
 #tableBody button,
@@ -708,7 +808,7 @@ table .delete-btn {
 
 
 /* =========================================
-   10. MESSAGE
+   19. MESSAGE
 ========================================= */
 
 #message,
@@ -728,7 +828,7 @@ table .delete-btn {
 
 
 /* =========================================
-   11. ĐĂNG NHẬP
+   20. ĐĂNG NHẬP
 ========================================= */
 
 #loginBtn,
@@ -772,7 +872,7 @@ form button[type="submit"]:disabled {
 
 
 /* =========================================
-   12. PHÂN TRANG
+   21. PHÂN TRANG
 ========================================= */
 
 #pagination,
@@ -884,7 +984,7 @@ button.page-btn {
 
 
 /* =========================================
-   13. MOBILE
+   22. MOBILE
 ========================================= */
 
 @media (max-width: 480px) {
@@ -925,6 +1025,38 @@ button.page-btn {
   .money-input input {
 
     font-size: 18px;
+  }
+
+
+  /* =====================================
+     NÚT GỬI DỰ THU TRÊN IPHONE
+  ===================================== */
+
+  #submitBtn {
+
+    width: 190px !important;
+
+    min-width: 190px !important;
+
+    max-width: 190px !important;
+
+    height: 46px !important;
+
+    min-height: 46px !important;
+
+    max-height: 46px !important;
+
+    margin:
+      18px auto !important;
+
+    padding:
+      0 18px !important;
+
+    font-size:
+      17px !important;
+
+    border-radius:
+      13px !important;
   }
 
 
@@ -975,7 +1107,9 @@ button.page-btn {
   }
 
 
-  /* Nút sửa xóa trên iPhone */
+  /* =====================================
+     NÚT SỬA XÓA TRÊN IPHONE
+  ===================================== */
 
   #tableBody button,
   table .edit-btn,
@@ -994,48 +1128,5 @@ button.page-btn {
     max-height: 30px !important;
 
     font-size: 10px !important;
-  }
-}
-//* =========================================================
-   NÚT GỬI DỰ THU - KÍCH THƯỚC VỪA
-========================================================= */
-
-#submitBtn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 230px !important;
-  min-width: 230px !important;
-  max-width: 230px !important;
-
-  height: 52px !important;
-
-  margin: 18px auto !important;
-  padding: 0 18px !important;
-
-  box-sizing: border-box !important;
-
-  font-size: 19px !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
-
-  border-radius: 12px !important;
-
-  white-space: nowrap !important;
-}
-
-/* iPhone */
-@media (max-width: 480px) {
-  #submitBtn {
-    width: 230px !important;
-    min-width: 230px !important;
-    max-width: 230px !important;
-
-    height: 52px !important;
-
-    margin: 18px auto !important;
-
-    font-size: 19px !important;
   }
 }
