@@ -5,40 +5,41 @@ let filteredRecords = [];
 let currentPage = 1;
 const pageSize = 10;
 
-// Chạy khi trang web được tải xong hoàn toàn
+// Khởi chạy khi DOM và các thư viện CDN đã sẵn sàng
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
 });
 
 async function initApp() {
-    // 1. Kiểm tra và khởi tạo Supabase Client
+    // 1. Khởi tạo Supabase client từ thư viện CDN và file config.js
     if (window.supabase && typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_KEY !== 'undefined') {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     } else {
         console.error("Chưa cấu hình Supabase hoặc thiếu file config.js");
+        alert("Lỗi kết nối hệ thống: Thiếu thông tin cấu hình Supabase.");
+        return;
     }
 
-    // 2. Lắng nghe sự kiện cho các nút bấm (Gán sự kiện ngay lập tức)
+    // 2. Gán sự kiện cho các nút bấm trên giao diện
     setupEventListeners();
 
-    // 3. Kiểm tra đăng nhập & Tải dữ liệu
+    // 3. Kiểm tra trạng thái đăng nhập & Tải dữ liệu
     await checkAuthAndLoad();
 }
 
-// Gán sự kiện cho các Element trong manager.html
+// Gán sự kiện nút bấm theo đúng các ID trong HTML
 function setupEventListeners() {
     // Nút Đăng xuất
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
-        // Loại bỏ mọi listener cũ bằng cách gán onclick trực tiếp
         logoutBtn.onclick = handleLogout;
-    } else {
-        console.error("Không tìm thấy nút logoutBtn trong HTML");
     }
 
     // Nút Lọc dữ liệu
     const filterBtn = document.getElementById('filterBtn');
-    if (filterBtn) filterBtn.onclick = handleFilter;
+    if (filterBtn) {
+        filterBtn.onclick = handleFilter;
+    }
 
     // Nút Làm mới
     const refreshBtn = document.getElementById('refreshBtn');
@@ -54,11 +55,15 @@ function setupEventListeners() {
 
     // Nút Xuất Excel
     const exportBtn = document.getElementById('exportBtn');
-    if (exportBtn) exportBtn.onclick = exportToExcel;
+    if (exportBtn) {
+        exportBtn.onclick = exportToExcel;
+    }
 
     // Nút Xóa tất cả
     const deleteAllBtn = document.getElementById('deleteAllBtn');
-    if (deleteAllBtn) deleteAllBtn.onclick = handleDeleteAll;
+    if (deleteAllBtn) {
+        deleteAllBtn.onclick = handleDeleteAll;
+    }
 
     // Nút Phân trang
     const prevPageBtn = document.getElementById('prevPageBtn');
@@ -67,7 +72,22 @@ function setupEventListeners() {
     if (nextPageBtn) nextPageBtn.onclick = () => changePage(1);
 }
 
-// Xử lý Chức năng Đăng xuất (Chống treo/đứng màn hình)
+// Kiểm tra xác thực Supabase & Chuyển hướng nếu chưa đăng nhập
+async function checkAuthAndLoad() {
+    try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        if (error || !session) {
+            window.location.href = 'index.html';
+            return;
+        }
+        loadData();
+    } catch (err) {
+        console.error("Lỗi xác thực:", err);
+        window.location.href = 'index.html';
+    }
+}
+
+// Chức năng Đăng xuất (Chống kẹt / Chống lỗi 404 Vercel)
 async function handleLogout(e) {
     if (e) e.preventDefault();
 
@@ -75,59 +95,38 @@ async function handleLogout(e) {
         return;
     }
 
-    // Bật hiệu ứng phản hồi nút ngay lập tức
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.innerText = "⏳ Đang đăng xuất...";
         logoutBtn.disabled = true;
     }
 
-    // Hàm thực hiện xóa bộ nhớ local & chuyển trang
+    // Xóa bộ nhớ tạm và quay lại trang đăng nhập chính (index.html)
     const redirectToLogin = () => {
         try {
             localStorage.clear();
             sessionStorage.clear();
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            console.error(err);
         }
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     };
 
     try {
         if (supabaseClient && supabaseClient.auth) {
-            // Đặt giới hạn thời gian chờ tối đa 1.5s cho Supabase SignOut
+            // Giới hạn thời gian chờ SignOut trong 1.5s để tránh treo màn hình
             const signOutPromise = supabaseClient.auth.signOut();
             const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 1500));
-
-            // Đợi 1 trong 2 cái xong trước
             await Promise.race([signOutPromise, timeoutPromise]);
         }
     } catch (error) {
-        console.warn("Lỗi gọi API đăng xuất Supabase:", error);
+        console.warn("Lỗi API Supabase khi đăng xuất:", error);
     } finally {
-        // Luôn luôn chuyển trang dù Supabase response thành công hay thất bại
         redirectToLogin();
     }
 }
 
-// Kiểm tra phiên đăng nhập
-async function checkAuthAndLoad() {
-    if (!supabaseClient) return;
-
-    try {
-        const { data: { session }, error } = await supabaseClient.auth.getSession();
-        if (error || !session) {
-            window.location.href = 'login.html';
-            return;
-        }
-        loadData();
-    } catch (err) {
-        console.error("Lỗi xác thực:", err);
-        window.location.href = 'login.html';
-    }
-}
-
-// Tải dữ liệu từ Supabase table 'records'
+// Tải dữ liệu từ bảng 'records' trong Supabase
 async function loadData() {
     const tableBody = document.getElementById('tableBody');
     if (tableBody) {
@@ -151,12 +150,12 @@ async function loadData() {
     } catch (error) {
         console.error("Lỗi tải dữ liệu:", error);
         if (tableBody) {
-            tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red;">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
         }
     }
 }
 
-// Cập nhật thống kê
+// Cập nhật 2 thẻ Thống kê (Tổng khách hàng & Tổng dự thu)
 function updateStats() {
     const totalCustomers = document.getElementById('totalCustomers');
     const totalAmount = document.getElementById('totalAmount');
@@ -171,7 +170,7 @@ function updateStats() {
     }
 }
 
-// Lọc dữ liệu
+// Lọc dữ liệu theo User và Ngày thanh toán
 function handleFilter() {
     const userKeyword = document.getElementById('filterUser')?.value.toLowerCase().trim() || '';
     const dateKeyword = document.getElementById('filterDate')?.value || '';
@@ -195,7 +194,7 @@ function handleFilter() {
     renderTable();
 }
 
-// Hiển thị dữ liệu ra bảng
+// Render bảng dữ liệu kèm phân trang
 function renderTable() {
     const tableBody = document.getElementById('tableBody');
     if (!tableBody) return;
@@ -237,7 +236,7 @@ function renderTable() {
     updatePaginationInfo(totalPages);
 }
 
-// Phân trang
+// Cập nhật giao diện thanh Phân trang
 function updatePaginationInfo(totalPages) {
     const pageInfo = document.getElementById('pageInfo');
     const prevPageBtn = document.getElementById('prevPageBtn');
@@ -253,7 +252,7 @@ function changePage(direction) {
     renderTable();
 }
 
-// Xóa 1 dòng bản ghi
+// Xóa 1 bản ghi
 window.deleteRecord = async function(id) {
     if (confirm("Bạn có chắc chắn muốn xóa bản ghi này?")) {
         try {
@@ -267,10 +266,10 @@ window.deleteRecord = async function(id) {
     }
 };
 
-// Xóa tất cả
+// Xóa toàn bộ dữ liệu
 async function handleDeleteAll() {
     if (confirm("⚠️ CẢNH BÁO: Bạn có chắc muốn xóa TOÀN BỘ dữ liệu dự thu?")) {
-        if (confirm("XÁC NHẬN LẦN 2: Thao tác này không thể hoàn tác!")) {
+        if (confirm("XÁC NHẬN LẦN 2: Thao tác này không thể hoàn tác! Tiếp tục?")) {
             try {
                 const { error } = await supabaseClient.from('records').delete().neq('id', '00000000-0000-0000-0000-000000000000');
                 if (error) throw error;
@@ -283,7 +282,7 @@ async function handleDeleteAll() {
     }
 }
 
-// Xuất file Excel
+// Xuất Excel
 function exportToExcel() {
     if (filteredRecords.length === 0) {
         alert("Không có dữ liệu để xuất Excel!");
@@ -291,7 +290,7 @@ function exportToExcel() {
     }
 
     if (typeof XLSX === 'undefined') {
-        alert("Thư viện Excel chưa sẵn sàng, thử lại sau giây lát.");
+        alert("Thư viện Excel chưa sẵn sàng, vui lòng thử lại sau vài giây.");
         return;
     }
 
@@ -308,7 +307,7 @@ function exportToExcel() {
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "DuThuData");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "QuanLyDuThu");
 
     XLSX.writeFile(workbook, `Bao_Cao_Du_Thu_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
