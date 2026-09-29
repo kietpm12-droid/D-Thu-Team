@@ -1,265 +1,998 @@
 /* =====================================================
-   1. CHUẨN HÓA CẤU TRÚC CHUNG
+   1. RESET
 ===================================================== */
+
 * {
-  box-sizing: border-box !important;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background-color: #f8fafc;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  background: #f8fafc;
   color: #1e293b;
+
   padding: 20px 16px;
 }
 
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+
+/* =====================================================
+   2. KHUNG CHÍNH
+===================================================== */
+
 .manager-card {
-  max-width: 1100px;
-  margin: auto;
   width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .card {
   background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
   border-radius: 16px;
+
   padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f1f5f9;
+
+  box-shadow:
+    0 4px 18px
+    rgba(15, 23, 42, 0.05);
 }
+
+
+/* =====================================================
+   3. TIÊU ĐỀ
+===================================================== */
 
 .header-title {
   font-size: 20px;
   font-weight: 800;
+
   color: #0f172a;
-  margin-bottom: 16px;
-}
 
-/* =====================================================
-   2. NÚT ĐĂNG XUẤT (GỌN GÀNG CĂN PHẢI)
-===================================================== */
-.logout-btn {
-  background: #5c6b73;
-  color: white;
-  height: 38px;
-  padding: 0 18px;
-  border: 0;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 20px;
-  float: right; /* Đẩy sang góc phải */
-  clear: both;
-}
-
-.logout-btn:hover {
-  background: #4a5568;
-}
-
-/* Clear float để các phần tử dưới không bị đè */
-.stats {
-  clear: both;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
   margin-bottom: 20px;
 }
 
-.stat {
-  background: #f1f5f9;
-  padding: 16px;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.stat-title {
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.stat-value {
-  font-size: 22px;
-  font-weight: 800;
-  color: #0f172a;
-}
 
 /* =====================================================
-   3. BỘ LỌC VÀ CÁC NÚT HÀNH ĐỘNG (PC)
+   4. ĐĂNG NHẬP
 ===================================================== */
-.filters-box {
-  background: #ffffff;
+
+.login-box {
+  width: 100%;
+  max-width: 430px;
+
+  margin: 35px auto 20px;
+
+  padding: 24px;
+
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 20px;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 25px
+    rgba(15, 23, 42, 0.07);
+}
+
+.login-title {
+  text-align: center;
+
+  font-size: 20px;
+  font-weight: 800;
+
+  color: #0f172a;
+
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  margin-bottom: 22px;
+}
+
+.login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+
+  gap: 14px;
 }
 
-.filter-inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
+
+/* =====================================================
+   5. FORM
+===================================================== */
 
 .form-group {
   display: flex;
+
   flex-direction: column;
+
   gap: 6px;
 }
 
 .form-group label {
   font-size: 13px;
+
   font-weight: 700;
+
   color: #334155;
 }
 
 .form-group input {
-  height: 40px;
-  padding: 0 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
   width: 100%;
+
+  height: 42px;
+
+  padding: 0 13px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #0f172a;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-/* Dãy nút bấm gom gọn không tràn full-width trên PC */
+.form-group input:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(99, 102, 241, 0.12);
+}
+
+
+/* =====================================================
+   6. NÚT ĐĂNG NHẬP
+===================================================== */
+
+.login-btn {
+  width: 100%;
+
+  height: 44px;
+
+  margin-top: 5px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background: #5555ff;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+
+.login-btn:hover {
+  background: #4444ee;
+}
+
+.login-btn:active {
+  transform: scale(0.99);
+}
+
+.login-btn:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   7. LỖI ĐĂNG NHẬP
+===================================================== */
+
+.login-error {
+  display: none;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+
+  color: #dc2626;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   8. TOPBAR QUẢN LÝ
+===================================================== */
+
+.manager-topbar {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.logged-user {
+  color: #64748b;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   9. ĐĂNG XUẤT
+===================================================== */
+
+.logout-btn {
+  flex-shrink: 0;
+
+  height: 38px;
+
+  padding: 0 16px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #64748b;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #475569;
+}
+
+.logout-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   10. THỐNG KÊ
+===================================================== */
+
+.stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.stat {
+  background: #f1f5f9;
+
+  border-radius: 12px;
+
+  padding: 16px;
+
+  text-align: center;
+}
+
+.stat-title {
+  color: #64748b;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  color: #0f172a;
+
+  font-size: 22px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   11. BỘ LỌC
+===================================================== */
+
+.filters-box {
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  margin-bottom: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.filter-inputs {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 16px;
+}
+
+
+/* =====================================================
+   12. NÚT CHỨC NĂNG
+===================================================== */
+
 .btn-group-action {
   display: flex;
+
   flex-wrap: wrap;
-  gap: 10px;
+
   align-items: center;
-  margin-top: 4px;
+
+  gap: 10px;
 }
 
 .btn-action {
   height: 38px;
-  padding: 0 18px;
-  border-radius: 8px;
-  border: 0;
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: auto;
+
   min-width: 120px;
+
+  padding: 0 17px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
 }
 
-.btn-filter { background: #5555ff; }
-.btn-filter:hover { background: #4444ee; }
+.btn-action:disabled {
+  opacity: 0.6;
 
-.btn-refresh { background: #00b0ff; }
-.btn-refresh:hover { background: #0099e0; }
+  cursor: not-allowed;
+}
 
-.btn-export { background: #10b981; }
-.btn-export:hover { background: #059669; }
+.btn-filter {
+  background: #5555ff;
+}
 
-.btn-delete-all { background: #ef4444; }
-.btn-delete-all:hover { background: #dc2626; }
+.btn-filter:hover {
+  background: #4444ee;
+}
+
+.btn-refresh {
+  background: #00a8e8;
+}
+
+.btn-refresh:hover {
+  background: #008fca;
+}
+
+.btn-export {
+  background: #10b981;
+}
+
+.btn-export:hover {
+  background: #059669;
+}
+
+.btn-delete-all {
+  background: #ef4444;
+}
+
+.btn-delete-all:hover {
+  background: #dc2626;
+}
+
 
 /* =====================================================
-   4. BẢNG DỮ LIỆU & PHÂN TRANG
+   13. BẢNG
 ===================================================== */
+
 .table-wrap {
+  width: 100%;
+
   overflow-x: auto;
+
   border: 1px solid #e2e8f0;
+
   border-radius: 10px;
+
   -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
+
+  min-width: 900px;
+
   border-collapse: collapse;
-  min-width: 800px;
 }
 
-th, td {
-  padding: 12px;
-  font-size: 13px;
+th,
+td {
+  padding: 11px 12px;
+
   border-bottom: 1px solid #f1f5f9;
+
   text-align: left;
+
+  font-size: 13px;
+
   white-space: nowrap;
 }
 
 th {
   background: #f8fafc;
-  font-weight: 700;
+
   color: #334155;
+
+  font-weight: 700;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.amount-cell {
+  color: #15803d;
+
+  font-weight: 800;
+}
+
+.note-cell {
+  max-width: 250px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
 }
 
 .empty-row {
-  text-align: center;
+  text-align: center !important;
+
   color: #94a3b8;
-  padding: 24px;
+
+  padding: 25px !important;
+
   font-style: italic;
 }
 
+.error-row {
+  color: #dc2626 !important;
+
+  font-style: normal;
+}
+
+
+/* =====================================================
+   14. NÚT SỬA / XÓA
+===================================================== */
+
+.action-buttons {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+}
+
+.edit-btn,
+.delete-btn {
+  width: 32px;
+
+  height: 32px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  font-size: 15px;
+}
+
+.edit-btn {
+  background: #eef2ff;
+}
+
+.edit-btn:hover {
+  background: #e0e7ff;
+}
+
+.delete-btn {
+  background: #fef2f2;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+}
+
+
+/* =====================================================
+   15. PHÂN TRANG
+===================================================== */
+
 #pagination {
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 12px;
+
   margin-top: 16px;
 }
 
 .page-info {
-  font-size: 13px;
-  font-weight: 700;
   color: #475569;
+
+  font-size: 13px;
+
+  font-weight: 700;
 }
 
 .page-btn {
   width: 34px;
+
   height: 34px;
-  border-radius: 50%;
+
   border: 1px solid #cbd5e1;
-  background: #fff;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #334155;
+
   cursor: pointer;
 }
 
+.page-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.page-btn:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+
 /* =====================================================
-   5. DÀNH RIÊNG CHO ĐIỆN THOẠI (MOBILE)
+   16. POPUP SỬA
 ===================================================== */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+#editModal {
+  display: none;
+}
+
+#editModal.show {
+  display: block;
+}
+
+.edit-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  background:
+    rgba(15, 23, 42, 0.55);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 16px;
+}
+
+.edit-modal-box {
+  width: 100%;
+
+  max-width: 620px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 20px 60px
+    rgba(15, 23, 42, 0.25);
+}
+
+.edit-modal-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #0f172a;
+
+  font-size: 16px;
+}
+
+.edit-modal-close {
+  width: 32px;
+
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background: #f1f5f9;
+
+  color: #475569;
+
+  cursor: pointer;
+
+  font-size: 16px;
+}
+
+.edit-modal-close:hover {
+  background: #e2e8f0;
+}
+
+.edit-modal-body {
+  padding: 18px;
+}
+
+.edit-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 14px;
+}
+
+.edit-form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.edit-form-group.full {
+  grid-column: 1 / -1;
+}
+
+.edit-form-group label {
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #334155;
+}
+
+.edit-form-group input,
+.edit-form-group textarea {
+  width: 100%;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  padding: 10px 12px;
+
+  font-size: 14px;
+
+  color: #0f172a;
+
+  background: #ffffff;
+}
+
+.edit-form-group input {
+  height: 40px;
+}
+
+.edit-form-group textarea {
+  min-height: 80px;
+
+  resize: vertical;
+}
+
+.edit-form-group input:focus,
+.edit-form-group textarea:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(99, 102, 241, 0.1);
+}
+
+.edit-modal-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 14px 18px;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+.modal-cancel-btn,
+.modal-save-btn {
+  height: 38px;
+
+  padding: 0 16px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.modal-cancel-btn {
+  background: #f1f5f9;
+
+  color: #475569;
+}
+
+.modal-cancel-btn:hover {
+  background: #e2e8f0;
+}
+
+.modal-save-btn {
+  background: #10b981;
+
+  color: #ffffff;
+}
+
+.modal-save-btn:hover {
+  background: #059669;
+}
+
+.modal-save-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   17. MOBILE
+===================================================== */
+
 @media (max-width: 640px) {
+
   body {
     padding: 8px;
   }
 
   .card {
     padding: 14px;
+
+    border-radius: 12px;
+  }
+
+  .header-title {
+    font-size: 18px;
+
+    margin-bottom: 16px;
+  }
+
+  .login-box {
+    margin-top: 20px;
+
+    padding: 18px;
+
+    border-radius: 12px;
+  }
+
+  .login-title {
+    font-size: 18px;
+  }
+
+  .manager-topbar {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .logged-user {
+    white-space: normal;
+
+    word-break: break-word;
   }
 
   .logout-btn {
-    float: none;
-    width: 100% !important;
+    width: 100%;
+
     height: 42px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .stat {
+    padding: 14px;
   }
 
   .filter-inputs {
     grid-template-columns: 1fr;
+
     gap: 12px;
+  }
+
+  .filters-box {
+    padding: 14px;
   }
 
   .btn-group-action {
     flex-direction: column;
+
     width: 100%;
   }
 
   .btn-action {
-    width: 100% !important;
-    height: 44px;
-    font-size: 14px;
+    width: 100%;
+
+    height: 43px;
   }
+
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-form-group.full {
+    grid-column: auto;
+  }
+
+  .edit-modal-overlay {
+    padding: 8px;
+  }
+
+  .edit-modal-box {
+    max-height: 94vh;
+
+    border-radius: 12px;
+  }
+
+  .edit-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-cancel-btn,
+  .modal-save-btn {
+    width: 100%;
+
+    height: 42px;
+  }
+
 }
