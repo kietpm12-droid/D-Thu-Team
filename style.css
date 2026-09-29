@@ -996,3 +996,43 @@ button.page-btn {
     font-size: 10px !important;
   }
 }
+/* =========================================================
+   FIX NÚT GỬI DỰ THU - HIỂN THỊ ĐÚNG KÍCH THƯỚC MOBILE
+========================================================= */
+
+#submitBtn,
+button[type="submit"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-width: 100% !important;
+  height: 58px !important;
+
+  padding: 0 20px !important;
+  margin: 20px 0 !important;
+
+  box-sizing: border-box !important;
+
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+
+  border-radius: 14px !important;
+  white-space: nowrap !important;
+
+  cursor: pointer;
+}
+
+/* Riêng trên điện thoại */
+@media (max-width: 768px) {
+  #submitBtn,
+  button[type="submit"] {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 58px !important;
+    font-size: 20px !important;
+    padding: 0 16px !important;
+  }
+}
