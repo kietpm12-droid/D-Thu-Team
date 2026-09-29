@@ -2,44 +2,79 @@
 <html lang="vi">
 
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  >
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Quản Lý Dự Thu</title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <link rel="stylesheet" href="style.css">
 
   <style>
-
     /* =====================================================
-       KHUNG CHÍNH
+       RESET & CHUNG
     ===================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      padding: 20px 12px;
+    }
 
     .manager-card {
       max-width: 1200px;
       margin: auto;
     }
 
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+
+    /* =====================================================
+       KHUNG ĐĂNG NHẬP
+    ===================================================== */
+    #loginBox {
+      max-width: 400px;
+      margin: 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #loginBox label {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    #loginBox input {
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+    }
 
     /* =====================================================
        THỐNG KÊ
     ===================================================== */
-
     .stats {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 16px;
       margin: 20px 0;
     }
-
 
     .stat {
       background: #f1f5f9;
@@ -48,241 +83,162 @@
       text-align: center;
     }
 
-
     .stat-title {
       color: #64748b;
       font-size: 14px;
     }
 
-
     .stat-value {
       font-size: 22px;
       font-weight: bold;
       margin-top: 6px;
+      color: #0f172a;
     }
 
-
     /* =====================================================
-       BỘ LỌC
+       BỘ LỌC & FORM (SỬA LỖI CHÍNH Ở ĐÂY)
     ===================================================== */
-
     .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #ffffff;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .filter-grid {
       display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: bold;
+      color: #475569;
+    }
+
+    .form-group input {
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
 
-
     /* =====================================================
-       BẢNG
+       CÁC LOẠI NÚT BẤM
     ===================================================== */
-
-    .table-wrap {
-      overflow-x: auto;
-      margin-top: 20px;
-    }
-
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1100px;
-    }
-
-
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 9px;
-      text-align: left;
-      white-space: nowrap;
-    }
-
-
-    th {
-      background: #f1f5f9;
-      font-weight: bold;
-    }
-
-
-    /* =====================================================
-       NÚT ĐĂNG XUẤT
-    ===================================================== */
-
     .logout-btn {
       background: #64748b !important;
       color: white !important;
       width: 100%;
-      height: 44px;
+      height: 42px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
       margin-bottom: 15px;
     }
 
-
-    .logout-btn:hover {
-      background: #475569 !important;
-    }
-
-
-    /* =====================================================
-       NÚT ĐĂNG NHẬP / LỌC
-    ===================================================== */
+    .logout-btn:hover { background: #475569 !important; }
 
     .filter-btn {
-      background:
-        linear-gradient(
-          135deg,
-          #4f46e5,
-          #6366f1
-        ) !important;
-
+      background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
       color: white !important;
-      height: 44px;
+      height: 42px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
     }
-
-
-    .filter-btn:hover {
-      opacity: 0.92;
-    }
-
-
-    .filter-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-
-    /* =====================================================
-       NÚT LÀM MỚI
-    ===================================================== */
 
     .refresh-btn {
-      background:
-        linear-gradient(
-          135deg,
-          #0284c7,
-          #38bdf8
-        ) !important;
-
+      background: linear-gradient(135deg, #0284c7, #38bdf8) !important;
       color: white !important;
-      height: 44px;
+      height: 42px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
     }
-
-
-    .refresh-btn:hover {
-      opacity: 0.92;
-    }
-
-
-    /* =====================================================
-       NÚT EXCEL
-    ===================================================== */
 
     .export-btn {
-      background:
-        linear-gradient(
-          135deg,
-          #15803d,
-          #22c55e
-        ) !important;
-
+      background: linear-gradient(135deg, #15803d, #22c55e) !important;
       color: white !important;
-      height: 44px;
+      height: 42px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
     }
 
-
-    .export-btn:hover {
-      opacity: 0.92;
-    }
-
-
-    /* =====================================================
-       NÚT XÓA TẤT CẢ
-    ===================================================== */
-
     .delete-all-btn {
-
       width: 100% !important;
-
-      height: 46px !important;
-
-      margin-top: 10px !important;
-
+      height: 44px !important;
       border: 0 !important;
-
-      border-radius: 11px !important;
-
-      background:
-        linear-gradient(
-          135deg,
-          #dc2626,
-          #ef4444
-        ) !important;
-
+      border-radius: 8px !important;
+      background: linear-gradient(135deg, #dc2626, #ef4444) !important;
       color: #ffffff !important;
-
       font-size: 14px !important;
-
       font-weight: 800 !important;
-
       cursor: pointer !important;
-
-      box-shadow:
-        0 7px 16px
-        rgba(220, 38, 38, 0.20) !important;
-
-      transition:
-        transform 0.15s ease,
-        opacity 0.15s ease;
+      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.15) !important;
+      transition: transform 0.15s ease, opacity 0.15s ease;
     }
-
 
     .delete-all-btn:hover {
-
-      background:
-        linear-gradient(
-          135deg,
-          #b91c1c,
-          #dc2626
-        ) !important;
-
+      background: linear-gradient(135deg, #b91c1c, #dc2626) !important;
     }
-
-
-    .delete-all-btn:active {
-
-      transform: scale(0.98);
-
-    }
-
-
-    .delete-all-btn:disabled {
-
-      opacity: 0.6 !important;
-
-      cursor: not-allowed !important;
-
-    }
-
 
     /* =====================================================
-       NÚT SỬA / XÓA
+       BẢNG DỮ LIỆU
     ===================================================== */
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: left;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: bold;
+      color: #334155;
+    }
+
+    /* =====================================================
+       NÚT SỬA / XÓA BONG BẢNG
+    ===================================================== */
     .action-wrap {
       display: flex;
       gap: 6px;
@@ -290,622 +246,199 @@
       align-items: center;
     }
 
-
-    .edit-btn,
-    .delete-btn {
-
-      width: 42px !important;
-
-      height: 34px !important;
-
-      min-width: 42px !important;
-
-      max-width: 42px !important;
-
-      padding: 0 !important;
-
-      margin: 0 !important;
-
+    .edit-btn, .delete-btn {
+      width: 36px !important;
+      height: 32px !important;
       border: 0;
-
-      border-radius: 7px;
-
+      border-radius: 6px;
       color: white;
-
       font-weight: bold;
-
-      font-size: 14px;
-
+      font-size: 13px;
       cursor: pointer;
-
       display: inline-flex !important;
-
       align-items: center !important;
-
       justify-content: center !important;
     }
 
-
-    .edit-btn {
-      background: #f59e0b;
-    }
-
-
-    .edit-btn:hover {
-      background: #d97706;
-    }
-
-
-    .delete-btn {
-      background: #dc2626;
-    }
-
-
-    .delete-btn:hover {
-      background: #b91c1c;
-    }
-
-
-    .edit-btn:active,
-    .delete-btn:active {
-      transform: scale(0.95);
-    }
-
+    .edit-btn { background: #f59e0b; }
+    .edit-btn:hover { background: #d97706; }
+    .delete-btn { background: #dc2626; }
+    .delete-btn:hover { background: #b91c1c; }
 
     /* =====================================================
-       THÔNG BÁO
+       THÔNG BÁO & PHÂN TRANG
     ===================================================== */
-
-    #managerMessage,
-    #loginMessage {
-
+    #managerMessage, #loginMessage {
       margin-top: 15px;
-
       text-align: center;
-
       font-weight: bold;
-
       min-height: 20px;
     }
 
-
-    /* =====================================================
-       PHÂN TRANG
-    ===================================================== */
-
     #pagination {
-
       display: flex !important;
-
       align-items: center !important;
-
       justify-content: center !important;
-
       gap: 10px !important;
-
       margin-top: 20px !important;
-
       width: 100% !important;
     }
 
-
     .page-info {
-
       font-size: 14px !important;
-
       font-weight: 700 !important;
-
       color: #334155 !important;
-
       background-color: #f1f5f9 !important;
-
       padding: 6px 14px !important;
-
       border-radius: 20px !important;
-
       border: 1px solid #cbd5e1 !important;
-
-      display: inline-block !important;
     }
 
-
     .page-btn {
-
       width: 36px !important;
-
       height: 36px !important;
-
-      min-width: 36px !important;
-
-      max-width: 36px !important;
-
-      margin: 0 !important;
-
-      padding: 0 !important;
-
       border-radius: 50% !important;
-
       background: #ffffff !important;
-
       border: 1.5px solid #cbd5e1 !important;
-
       color: #4f46e5 !important;
-
-      font-size: 14px !important;
-
       font-weight: bold !important;
-
       cursor: pointer !important;
-
-      box-shadow:
-        0 2px 4px
-        rgba(0, 0, 0, 0.05) !important;
-
       display: inline-flex !important;
-
       align-items: center !important;
-
       justify-content: center !important;
     }
 
-
-    .page-btn:hover {
-
-      background: #4f46e5 !important;
-
-      color: #ffffff !important;
-
-      border-color: #4f46e5 !important;
-    }
-
-
     .page-btn:disabled {
-
       background: #f8fafc !important;
-
       color: #cbd5e1 !important;
-
       border-color: #e2e8f0 !important;
-
       cursor: not-allowed !important;
     }
 
-
     /* =====================================================
-       MOBILE
+       RESPONSIVE MOBILE
     ===================================================== */
-
-    @media (max-width: 600px) {
-
-      .stats {
-
+    @media (max-width: 640px) {
+      .stats, .filter-grid, .btn-group {
         grid-template-columns: 1fr;
-
       }
-
-
-      .stat-value {
-
-        font-size: 20px;
-
-      }
-
-
-      .edit-btn,
-      .delete-btn {
-
-        width: 40px !important;
-
-        min-width: 40px !important;
-
-      }
-
-
-      .delete-all-btn {
-
-        height: 44px !important;
-
-        font-size: 12px !important;
-
-        border-radius: 10px !important;
-
-        margin-top: 8px !important;
-
-      }
-
     }
-
   </style>
-
 </head>
-
 
 <body>
 
-
   <main class="container manager-card">
-
-
     <section class="card">
 
+      <h1>📊 QUẢN LÝ DỰ THU</h1>
 
-      <h1>
-        📊 QUẢN LÝ DỰ THU
-      </h1>
-
-
-      <!-- =================================================
-           ĐĂNG NHẬP
-      ================================================== -->
-
+      <!-- ĐĂNG NHẬP -->
       <div id="loginBox">
+        <label for="email">Email quản lý</label>
+        <input id="email" type="email" placeholder="Nhập email" autocomplete="username">
 
+        <label for="password">Mật khẩu</label>
+        <input id="password" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password">
 
-        <label for="email">
-          Email quản lý
-        </label>
-
-
-        <input
-          id="email"
-          type="email"
-          placeholder="Nhập email"
-          autocomplete="username"
-        >
-
-
-        <label for="password">
-          Mật khẩu
-        </label>
-
-
-        <input
-          id="password"
-          type="password"
-          placeholder="Nhập mật khẩu"
-          autocomplete="current-password"
-        >
-
-
-        <button
-          id="loginBtn"
-          type="button"
-          class="filter-btn"
-        >
-
+        <button id="loginBtn" type="button" class="filter-btn">
           🔐 ĐĂNG NHẬP
-
         </button>
-
 
         <div id="loginMessage"></div>
-
-
       </div>
 
+      <!-- TRANG QUẢN LÝ -->
+      <div id="managerBox" style="display:none">
 
-      <!-- =================================================
-           TRANG QUẢN LÝ
-      ================================================== -->
-
-      <div
-        id="managerBox"
-        style="display:none"
-      >
-
-
-        <!-- =================================================
-             ĐĂNG XUẤT
-        ================================================== -->
-
-        <button
-          id="logoutBtn"
-          type="button"
-          class="logout-btn"
-        >
-
+        <!-- ĐĂNG XUẤT -->
+        <button id="logoutBtn" type="button" class="logout-btn">
           🚪 ĐĂNG XUẤT
-
         </button>
 
-
-        <!-- =================================================
-             THỐNG KÊ
-        ================================================== -->
-
+        <!-- THỐNG KÊ -->
         <div class="stats">
-
-
           <div class="stat">
-
-
-            <div class="stat-title">
-              Tổng khách hàng
-            </div>
-
-
-            <div
-              class="stat-value"
-              id="totalCustomers"
-            >
-
-              0
-
-            </div>
-
-
+            <div class="stat-title">Tổng khách hàng</div>
+            <div class="stat-value" id="totalCustomers">0</div>
           </div>
 
-
           <div class="stat">
-
-
-            <div class="stat-title">
-              Tổng dự thu
-            </div>
-
-
-            <div
-              class="stat-value"
-              id="totalAmount"
-            >
-
-              0 đ
-
-            </div>
-
-
+            <div class="stat-title">Tổng dự thu</div>
+            <div class="stat-value" id="totalAmount">0 đ</div>
           </div>
-
-
         </div>
 
-
-        <!-- =================================================
-             BỘ LỌC
-        ================================================== -->
-
+        <!-- BỘ LỌC (ĐÃ CHỈNH BỐ CỤC) -->
         <div class="filters">
+          <div class="filter-grid">
+            <div class="form-group">
+              <label for="filterUser">Lọc theo User</label>
+              <input id="filterUser" type="text" placeholder="Nhập User">
+            </div>
 
+            <div class="form-group">
+              <label for="filterDate">Lọc theo ngày thanh toán</label>
+              <input id="filterDate" type="date">
+            </div>
+          </div>
 
-          <label for="filterUser">
-            Lọc theo User
-          </label>
+          <div class="btn-group">
+            <button id="filterBtn" type="button" class="filter-btn">
+              🔎 LỌC DỮ LIỆU
+            </button>
+            <button id="refreshBtn" type="button" class="refresh-btn">
+              🔄 LÀM MỚI
+            </button>
+            <button id="exportBtn" type="button" class="export-btn">
+              📥 XUẤT EXCEL
+            </button>
+          </div>
 
-
-          <input
-            id="filterUser"
-            type="text"
-            placeholder="Nhập User"
-          >
-
-
-          <label for="filterDate">
-            Lọc theo ngày thanh toán
-          </label>
-
-
-          <input
-            id="filterDate"
-            type="date"
-          >
-
-
-          <button
-            id="filterBtn"
-            type="button"
-            class="filter-btn"
-          >
-
-            🔎 LỌC DỮ LIỆU
-
-          </button>
-
-
-          <button
-            id="refreshBtn"
-            type="button"
-            class="refresh-btn"
-          >
-
-            🔄 LÀM MỚI
-
-          </button>
-
-
-          <button
-            id="exportBtn"
-            type="button"
-            class="export-btn"
-          >
-
-            📥 XUẤT EXCEL
-
-          </button>
-
-
-          <!-- =================================================
-               XÓA TẤT CẢ
-          ================================================== -->
-
-          <button
-            id="deleteAllBtn"
-            type="button"
-            class="delete-all-btn"
-          >
-
+          <button id="deleteAllBtn" type="button" class="delete-all-btn">
             🗑️ XÓA TẤT CẢ
-
           </button>
-
-
         </div>
 
-
-        <!-- =================================================
-             BẢNG DỮ LIỆU
-        ================================================== -->
-
+        <!-- BẢNG DỮ LIỆU -->
         <div class="table-wrap">
-
-
           <table>
-
-
             <thead>
-
-
               <tr>
-
-                <th>
-                  User
-                </th>
-
-                <th>
-                  Số CIF
-                </th>
-
-                <th>
-                  Tên Khách hàng
-                </th>
-
-                <th>
-                  Số tiền dự thu
-                </th>
-
-                <th>
-                  Ngày thanh toán
-                </th>
-
-                <th>
-                  SĐT
-                </th>
-
-                <th>
-                  Ghi chú
-                </th>
-
-                <th>
-                  Thao tác
-                </th>
-
+                <th>User</th>
+                <th>Số CIF</th>
+                <th>Tên Khách hàng</th>
+                <th>Số tiền dự thu</th>
+                <th>Ngày thanh toán</th>
+                <th>SĐT</th>
+                <th>Ghi chú</th>
+                <th>Thao tác</th>
               </tr>
-
-
             </thead>
-
-
-            <tbody
-              id="tableBody"
-            ></tbody>
-
-
+            <tbody id="tableBody"></tbody>
           </table>
-
-
         </div>
 
-
-        <!-- =================================================
-             PHÂN TRANG
-        ================================================== -->
-
+        <!-- PHÂN TRANG -->
         <div id="pagination">
-
-
-          <button
-            type="button"
-            class="page-btn"
-            id="prevPageBtn"
-          >
-
-            ❮
-
-          </button>
-
-
-          <span
-            class="page-info"
-            id="pageInfo"
-          >
-
-            Trang 1 / 1
-
-          </span>
-
-
-          <button
-            type="button"
-            class="page-btn"
-            id="nextPageBtn"
-          >
-
-            ❯
-
-          </button>
-
-
+          <button type="button" class="page-btn" id="prevPageBtn">❮</button>
+          <span class="page-info" id="pageInfo">Trang 1 / 1</span>
+          <button type="button" class="page-btn" id="nextPageBtn">❯</button>
         </div>
 
-
-        <!-- =================================================
-             THÔNG BÁO
-        ================================================== -->
-
-        <div
-          id="managerMessage"
-        ></div>
-
+        <!-- THÔNG BÁO -->
+        <div id="managerMessage"></div>
 
       </div>
 
-
     </section>
-
-
   </main>
 
-
-  <!-- =====================================================
-       SUPABASE
-  ====================================================== -->
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    defer
-  ></script>
-
-
-  <!-- =====================================================
-       XLSX-JS-STYLE
-       HỖ TRỢ TÔ MÀU Ô EXCEL
-  ====================================================== -->
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"
-    defer
-  ></script>
-
-
-  <!-- =====================================================
-       CONFIG
-  ====================================================== -->
-
-  <script
-    src="config.js"
-    defer
-  ></script>
-
-
-  <!-- =====================================================
-       MANAGER JS
-  ====================================================== -->
-
-  <script
-    src="manager.js?v=6"
-    defer
-  ></script>
-
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" defer></script>
+  <script src="config.js" defer></script>
+  <script src="manager.js?v=6" defer></script>
 
 </body>
 
