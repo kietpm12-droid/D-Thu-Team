@@ -3,77 +3,83 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản Lý Dự Thu</title>
   <link rel="stylesheet" href="style.css">
 
   <style>
     /* =====================================================
-       RESET & CHUNG
+       1. CẤU TRÚC VÀ CHUNG (RESET)
     ===================================================== */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
       background-color: #f8fafc;
       color: #1e293b;
-      padding: 20px 12px;
+      padding: 16px 12px;
     }
 
     .manager-card {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: auto;
     }
 
     .card {
       background: #ffffff;
       border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      border: 1px solid #f1f5f9;
     }
 
-    h1 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      color: #0f172a;
-    }
-
-    /* =====================================================
-       KHUNG ĐĂNG NHẬP
-    ===================================================== */
-    #loginBox {
-      max-width: 400px;
-      margin: 40px auto;
+    /* HEADER & TITLE */
+    .header-title {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    #loginBox label {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    #loginBox input {
-      height: 42px;
-      padding: 0 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      outline: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
     }
 
     /* =====================================================
-       THỐNG KÊ
+       2. NÚT ĐĂNG XUẤT (NẰM TRÊN CÙNG)
+    ===================================================== */
+    .logout-btn {
+      background: #5c6b73 !important;
+      color: white !important;
+      width: 100%;
+      height: 44px;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .logout-btn:hover {
+      background: #4a5568 !important;
+    }
+
+    /* =====================================================
+       3. KHUNG THỐNG KÊ (2 KHỐI NẰM CẠNH NHAU)
     ===================================================== */
     .stats {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
-      margin: 20px 0;
+      margin-bottom: 20px;
     }
 
     .stat {
@@ -85,31 +91,33 @@
 
     .stat-title {
       color: #64748b;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
     }
 
     .stat-value {
       font-size: 22px;
-      font-weight: bold;
-      margin-top: 6px;
+      font-weight: 800;
       color: #0f172a;
     }
 
     /* =====================================================
-       BỘ LỌC & FORM (SỬA LỖI CHÍNH Ở ĐÂY)
+       4. KHUNG BỘ LỌC (CÓ VIỀN BO TRÒN NHƯ HÌNH MẪU)
     ===================================================== */
-    .filters {
+    .filters-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      background: #ffffff;
-      padding: 16px;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      margin-bottom: 20px;
     }
 
-    .filter-grid {
+    /* Ô NHẬP LỌC - MẶC ĐỊNH MÁY TÍNH LÀ 2 CỘT */
+    .filter-inputs {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
@@ -123,204 +131,166 @@
 
     .form-group label {
       font-size: 13px;
-      font-weight: bold;
-      color: #475569;
+      font-weight: 700;
+      color: #334155;
     }
 
     .form-group input {
       height: 42px;
-      padding: 0 12px;
+      padding: 0 14px;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
+      font-size: 14px;
       outline: none;
+      width: 100%;
     }
 
-    .btn-group {
+    .form-group input:focus {
+      border-color: #6366f1;
+    }
+
+    /* NHÓM NÚT BẤM (LỌC, LÀM MỚI, XUẤT EXCEL) - MÁY TÍNH LÀ 3 CỘT */
+    .btn-group-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
-    /* =====================================================
-       CÁC LOẠI NÚT BẤM
-    ===================================================== */
-    .logout-btn {
-      background: #64748b !important;
-      color: white !important;
+    .btn-action {
+      height: 44px;
+      border-radius: 8px;
+      border: 0;
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 10px;
+    }
+
+    .btn-filter { background: #5555ff; }
+    .btn-filter:hover { background: #4444ee; }
+
+    .btn-refresh { background: #00b0ff; }
+    .btn-refresh:hover { background: #0099e0; }
+
+    .btn-export { background: #10b981; }
+    .btn-export:hover { background: #059669; }
+
+    .btn-delete-all {
+      background: #ef4444;
+      color: white;
       width: 100%;
-      height: 42px;
+      height: 44px;
       border: 0;
       border-radius: 8px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 800;
       cursor: pointer;
-      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
-    .logout-btn:hover { background: #475569 !important; }
-
-    .filter-btn {
-      background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
-      color: white !important;
-      height: 42px;
-      border: 0;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .refresh-btn {
-      background: linear-gradient(135deg, #0284c7, #38bdf8) !important;
-      color: white !important;
-      height: 42px;
-      border: 0;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .export-btn {
-      background: linear-gradient(135deg, #15803d, #22c55e) !important;
-      color: white !important;
-      height: 42px;
-      border: 0;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .delete-all-btn {
-      width: 100% !important;
-      height: 44px !important;
-      border: 0 !important;
-      border-radius: 8px !important;
-      background: linear-gradient(135deg, #dc2626, #ef4444) !important;
-      color: #ffffff !important;
-      font-size: 14px !important;
-      font-weight: 800 !important;
-      cursor: pointer !important;
-      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.15) !important;
-      transition: transform 0.15s ease, opacity 0.15s ease;
-    }
-
-    .delete-all-btn:hover {
-      background: linear-gradient(135deg, #b91c1c, #dc2626) !important;
-    }
+    .btn-delete-all:hover { background: #dc2626; }
 
     /* =====================================================
-       BẢNG DỮ LIỆU
+       5. BẢNG DỮ LIỆU
     ===================================================== */
     .table-wrap {
       overflow-x: auto;
-      margin-top: 10px;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
+      border-radius: 10px;
+      -webkit-overflow-scrolling: touch; /* Giúp cuộn mượt trên iPhone/iOS */
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1000px;
+      min-width: 800px; /* Đảm bảo bảng không bị ép nhỏ trên điện thoại */
     }
 
     th, td {
-      border-bottom: 1px solid #e2e8f0;
-      padding: 10px 12px;
+      padding: 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #f1f5f9;
       text-align: left;
       white-space: nowrap;
-      font-size: 14px;
     }
 
     th {
       background: #f8fafc;
-      font-weight: bold;
+      font-weight: 700;
       color: #334155;
     }
 
-    /* =====================================================
-       NÚT SỬA / XÓA BONG BẢNG
-    ===================================================== */
-    .action-wrap {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .edit-btn, .delete-btn {
-      width: 36px !important;
-      height: 32px !important;
-      border: 0;
-      border-radius: 6px;
-      color: white;
-      font-weight: bold;
-      font-size: 13px;
-      cursor: pointer;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-    }
-
-    .edit-btn { background: #f59e0b; }
-    .edit-btn:hover { background: #d97706; }
-    .delete-btn { background: #dc2626; }
-    .delete-btn:hover { background: #b91c1c; }
-
-    /* =====================================================
-       THÔNG BÁO & PHÂN TRANG
-    ===================================================== */
-    #managerMessage, #loginMessage {
-      margin-top: 15px;
+    .empty-row {
       text-align: center;
-      font-weight: bold;
-      min-height: 20px;
+      color: #94a3b8;
+      padding: 24px;
+      font-style: italic;
     }
 
+    /* PHÂN TRANG & THÔNG BÁO */
     #pagination {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 10px !important;
-      margin-top: 20px !important;
-      width: 100% !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .page-info {
-      font-size: 14px !important;
-      font-weight: 700 !important;
-      color: #334155 !important;
-      background-color: #f1f5f9 !important;
-      padding: 6px 14px !important;
-      border-radius: 20px !important;
-      border: 1px solid #cbd5e1 !important;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
     }
 
     .page-btn {
-      width: 36px !important;
-      height: 36px !important;
-      border-radius: 50% !important;
-      background: #ffffff !important;
-      border: 1.5px solid #cbd5e1 !important;
-      color: #4f46e5 !important;
-      font-weight: bold !important;
-      cursor: pointer !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-    }
-
-    .page-btn:disabled {
-      background: #f8fafc !important;
-      color: #cbd5e1 !important;
-      border-color: #e2e8f0 !important;
-      cursor: not-allowed !important;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      cursor: pointer;
     }
 
     /* =====================================================
-       RESPONSIVE MOBILE
+       6. ĐẶC BIỆT: TỐI ƯU DÀNH RIÊNG CHO ĐIỆN THOẠI (CSS MOBILE)
     ===================================================== */
     @media (max-width: 640px) {
-      .stats, .filter-grid, .btn-group {
+      body {
+        padding: 8px; /* Thu nhỏ lề viền màn hình điện thoại */
+      }
+
+      .card {
+        padding: 14px; /* Giảm padding thẻ card */
+      }
+
+      /* Ô nhập liệu xếp thành 1 cột */
+      .filter-inputs {
         grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      /* 3 Nút (Lọc, Làm mới, Xuất Excel) tự xếp dốc để không bị dính chữ */
+      .btn-group-3 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      /* Tăng kích thước nút bấm một chút để ngón tay dễ bấm */
+      .btn-action, .btn-delete-all, .logout-btn {
+        height: 46px;
+        font-size: 14px;
+      }
+
+      .stat-value {
+        font-size: 18px; /* Thu nhỏ chữ số tiền một chút để không vỡ dòng */
       }
     }
   </style>
@@ -328,35 +298,28 @@
 
 <body>
 
-  <main class="container manager-card">
+  <main class="manager-card">
     <section class="card">
 
-      <h1>📊 QUẢN LÝ DỰ THU</h1>
+      <!-- TIÊU ĐỀ -->
+      <div class="header-title">
+        <span>📊</span> QUẢN LÝ DỰ THU
+      </div>
 
-      <!-- ĐĂNG NHẬP -->
-      <div id="loginBox">
-        <label for="email">Email quản lý</label>
-        <input id="email" type="email" placeholder="Nhập email" autocomplete="username">
-
-        <label for="password">Mật khẩu</label>
-        <input id="password" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password">
-
-        <button id="loginBtn" type="button" class="filter-btn">
-          🔐 ĐĂNG NHẬP
-        </button>
-
-        <div id="loginMessage"></div>
+      <!-- ĐĂNG NHẬP (ẨN KHI ĐÃ ĐĂNG NHẬP) -->
+      <div id="loginBox" style="display:none;">
+        <!-- Code đăng nhập nếu có -->
       </div>
 
       <!-- TRANG QUẢN LÝ -->
-      <div id="managerBox" style="display:none">
+      <div id="managerBox">
 
-        <!-- ĐĂNG XUẤT -->
+        <!-- NÚT ĐĂNG XUẤT -->
         <button id="logoutBtn" type="button" class="logout-btn">
           🚪 ĐĂNG XUẤT
         </button>
 
-        <!-- THỐNG KÊ -->
+        <!-- THỐNG KÊ (2 KHỐI) -->
         <div class="stats">
           <div class="stat">
             <div class="stat-title">Tổng khách hàng</div>
@@ -369,9 +332,10 @@
           </div>
         </div>
 
-        <!-- BỘ LỌC (ĐÃ CHỈNH BỐ CỤC) -->
-        <div class="filters">
-          <div class="filter-grid">
+        <!-- BỘ LỌC DỮ LIỆU -->
+        <div class="filters-box">
+          <!-- 2 HÀNG NHẬP LỌC -->
+          <div class="filter-inputs">
             <div class="form-group">
               <label for="filterUser">Lọc theo User</label>
               <input id="filterUser" type="text" placeholder="Nhập User">
@@ -383,19 +347,21 @@
             </div>
           </div>
 
-          <div class="btn-group">
-            <button id="filterBtn" type="button" class="filter-btn">
+          <!-- 3 NÚT CHỨC NĂNG -->
+          <div class="btn-group-3">
+            <button id="filterBtn" type="button" class="btn-action btn-filter">
               🔎 LỌC DỮ LIỆU
             </button>
-            <button id="refreshBtn" type="button" class="refresh-btn">
+            <button id="refreshBtn" type="button" class="btn-action btn-refresh">
               🔄 LÀM MỚI
             </button>
-            <button id="exportBtn" type="button" class="export-btn">
+            <button id="exportBtn" type="button" class="btn-action btn-export">
               📥 XUẤT EXCEL
             </button>
           </div>
 
-          <button id="deleteAllBtn" type="button" class="delete-all-btn">
+          <!-- NÚT XÓA TẤT CẢ -->
+          <button id="deleteAllBtn" type="button" class="btn-delete-all">
             🗑️ XÓA TẤT CẢ
           </button>
         </div>
@@ -415,26 +381,26 @@
                 <th>Thao tác</th>
               </tr>
             </thead>
-            <tbody id="tableBody"></tbody>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="8" class="empty-row">Không có dữ liệu</td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
         <!-- PHÂN TRANG -->
         <div id="pagination">
-          <button type="button" class="page-btn" id="prevPageBtn">❮</button>
+          <button type="button" class="page-btn" id="prevPageBtn" disabled>❮</button>
           <span class="page-info" id="pageInfo">Trang 1 / 1</span>
-          <button type="button" class="page-btn" id="nextPageBtn">❯</button>
+          <button type="button" class="page-btn" id="nextPageBtn" disabled>❯</button>
         </div>
-
-        <!-- THÔNG BÁO -->
-        <div id="managerMessage"></div>
 
       </div>
 
     </section>
   </main>
 
-  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" defer></script>
   <script src="config.js" defer></script>
