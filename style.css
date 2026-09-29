@@ -996,43 +996,46 @@ button.page-btn {
     font-size: 10px !important;
   }
 }
-/* =========================================================
-   FIX NÚT GỬI DỰ THU - HIỂN THỊ ĐÚNG KÍCH THƯỚC MOBILE
+//* =========================================================
+   NÚT GỬI DỰ THU - KÍCH THƯỚC VỪA
 ========================================================= */
 
-#submitBtn,
-button[type="submit"] {
+#submitBtn {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 
-  width: 100% !important;
-  min-width: 100% !important;
-  height: 58px !important;
+  width: 230px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
 
-  padding: 0 20px !important;
-  margin: 20px 0 !important;
+  height: 52px !important;
+
+  margin: 18px auto !important;
+  padding: 0 18px !important;
 
   box-sizing: border-box !important;
 
-  font-size: 20px !important;
+  font-size: 19px !important;
   font-weight: 800 !important;
   line-height: 1 !important;
 
-  border-radius: 14px !important;
-  white-space: nowrap !important;
+  border-radius: 12px !important;
 
-  cursor: pointer;
+  white-space: nowrap !important;
 }
 
-/* Riêng trên điện thoại */
-@media (max-width: 768px) {
-  #submitBtn,
-  button[type="submit"] {
-    width: 100% !important;
-    min-width: 100% !important;
-    height: 58px !important;
-    font-size: 20px !important;
-    padding: 0 16px !important;
+/* iPhone */
+@media (max-width: 480px) {
+  #submitBtn {
+    width: 230px !important;
+    min-width: 230px !important;
+    max-width: 230px !important;
+
+    height: 52px !important;
+
+    margin: 18px auto !important;
+
+    font-size: 19px !important;
   }
 }
