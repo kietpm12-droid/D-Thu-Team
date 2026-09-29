@@ -28,32 +28,21 @@ body {
   border: 1px solid #f1f5f9;
 }
 
-/* =====================================================
-   2. HEADER: TIÊU ĐỀ BÊN TRÁI & NÚT ĐĂNG XUẤT BÊN PHẢI
-===================================================== */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  gap: 12px;
-}
-
 .header-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   font-size: 20px;
   font-weight: 800;
   color: #0f172a;
+  margin-bottom: 16px;
 }
 
-/* Nút đăng xuất nhỏ gọn bên góc phải */
+/* =====================================================
+   2. NÚT ĐĂNG XUẤT (GỌN GÀNG CĂN PHẢI)
+===================================================== */
 .logout-btn {
   background: #5c6b73;
   color: white;
   height: 38px;
-  padding: 0 16px;
+  padding: 0 18px;
   border: 0;
   border-radius: 8px;
   font-weight: 700;
@@ -62,18 +51,18 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: background 0.2s;
-  white-space: nowrap;
+  margin-bottom: 20px;
+  float: right; /* Đẩy sang góc phải */
+  clear: both;
 }
 
 .logout-btn:hover {
   background: #4a5568;
 }
 
-/* =====================================================
-   3. KHUNG THỐNG KÊ (2 KHỐI NẰM CẠNH NHAU)
-===================================================== */
+/* Clear float để các phần tử dưới không bị đè */
 .stats {
+  clear: both;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
@@ -101,7 +90,7 @@ body {
 }
 
 /* =====================================================
-   4. BỘ LỌC VÀ CỤM NÚT BẤM (MÁY TÍNH / PC)
+   3. BỘ LỌC VÀ CÁC NÚT HÀNH ĐỘNG (PC)
 ===================================================== */
 .filters-box {
   background: #ffffff;
@@ -142,11 +131,7 @@ body {
   width: 100%;
 }
 
-.form-group input:focus {
-  border-color: #6366f1;
-}
-
-/* Cụm 4 nút nằm trên 1 hàng ngang trên PC, không bị dãn dài full-width */
+/* Dãy nút bấm gom gọn không tràn full-width trên PC */
 .btn-group-action {
   display: flex;
   flex-wrap: wrap;
@@ -170,11 +155,6 @@ body {
   gap: 6px;
   width: auto;
   min-width: 120px;
-  transition: opacity 0.2s, transform 0.1s;
-}
-
-.btn-action:active {
-  transform: scale(0.98);
 }
 
 .btn-filter { background: #5555ff; }
@@ -190,7 +170,7 @@ body {
 .btn-delete-all:hover { background: #dc2626; }
 
 /* =====================================================
-   5. BẢNG DỮ LIỆU
+   4. BẢNG DỮ LIỆU & PHÂN TRANG
 ===================================================== */
 .table-wrap {
   overflow-x: auto;
@@ -226,7 +206,6 @@ th {
   font-style: italic;
 }
 
-/* PHÂN TRANG */
 #pagination {
   display: flex;
   align-items: center;
@@ -251,7 +230,7 @@ th {
 }
 
 /* =====================================================
-   6. RESPONSIVE TỰ ĐỘNG CHO ĐIỆN THOẠI (MOBILE)
+   5. DÀNH RIÊNG CHO ĐIỆN THOẠI (MOBILE)
 ===================================================== */
 @media (max-width: 640px) {
   body {
@@ -262,12 +241,17 @@ th {
     padding: 14px;
   }
 
+  .logout-btn {
+    float: none;
+    width: 100% !important;
+    height: 42px;
+  }
+
   .filter-inputs {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  /* Trên Mobile: Các nút chuyển thành 1 cột xếp dọc full width cho dễ bấm */
   .btn-group-action {
     flex-direction: column;
     width: 100%;
@@ -277,9 +261,5 @@ th {
     width: 100% !important;
     height: 44px;
     font-size: 14px;
-  }
-
-  .stat-value {
-    font-size: 18px;
   }
 }
