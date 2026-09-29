@@ -1,121 +1,91 @@
-/* =========================================
+/* =========================================================
+   QUẢN LÝ DỰ THU - STYLE.CSS
+   BẢN GỌN - ĐẸP - MOBILE IPHONE
+========================================================= */
 
-   1. RESET & NỀN CHÍNH
 
-========================================= */
+/* =========================================================
+   1. RESET
+========================================================= */
 
 * {
-
   box-sizing: border-box;
-
 }
 
 html,
-
 body {
-
   margin: 0;
-
   padding: 0;
-
   min-height: 100%;
 
   -webkit-text-size-adjust: 100%;
-
   text-size-adjust: 100%;
-
 }
 
 body {
-
   font-family:
-
     -apple-system,
-
     BlinkMacSystemFont,
-
     "Segoe UI",
-
     Roboto,
-
     Arial,
-
     sans-serif;
-
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #f8fafc 0%,
-
-      #eef2ff 50%,
-
-      #f0fdf4 100%
-
-    );
 
   color: #172033;
 
   line-height: 1.5;
 
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc 0%,
+      #eef2ff 50%,
+      #f0fdf4 100%
+    );
 }
 
-/* =========================================
 
-   2. KHUNG CHỨA
-
-========================================= */
+/* =========================================================
+   2. CONTAINER
+========================================================= */
 
 .container {
-
   width: 100%;
-
   max-width: 1200px;
 
   margin: 0 auto;
 
-  padding:
-
-    20px 16px 30px;
-
+  padding: 20px 16px 30px;
 }
 
-.card {
 
+/* =========================================================
+   3. CARD
+========================================================= */
+
+.card {
   position: relative;
 
-  background:
+  width: 100%;
 
-    rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.98);
+
+  border: 1px solid #e2e8f0;
 
   border-radius: 24px;
 
-  padding:
-
-    24px 20px;
+  padding: 24px 20px;
 
   box-shadow:
-
-    0 15px 35px
-
-    rgba(79, 70, 229, 0.08);
-
-  border:
-
-    1px solid #e2e8f0;
-
+    0 15px 35px rgba(79, 70, 229, 0.08);
 }
 
-/* =========================================
 
-   3. HEADER
-
-========================================= */
+/* =========================================================
+   4. HEADER
+========================================================= */
 
 .header {
-
   display: flex;
 
   align-items: center;
@@ -127,15 +97,11 @@ body {
   padding-bottom: 18px;
 
   border-bottom:
-
     1px solid #f1f5f9;
-
 }
 
 .logo {
-
   width: 54px;
-
   height: 54px;
 
   flex-shrink: 0;
@@ -143,37 +109,27 @@ body {
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   border-radius: 16px;
 
   font-size: 26px;
 
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #4f46e5,
-
-      #7c3aed
-
-    );
-
   color: #ffffff;
 
+  background:
+    linear-gradient(
+      135deg,
+      #4f46e5,
+      #7c3aed
+    );
+
   box-shadow:
-
     0 8px 18px
-
     rgba(79, 70, 229, 0.25);
-
 }
 
 h1 {
-
   margin: 0;
 
   font-size: 20px;
@@ -183,406 +139,313 @@ h1 {
   color: #0f172a;
 
   letter-spacing: -0.3px;
-
 }
 
 .header p {
-
   margin: 3px 0 0;
 
   color: #64748b;
 
   font-size: 13px;
-
 }
 
-/* =========================================
 
-   4. TIÊU ĐỀ PHÂN PHẦN
-
-========================================= */
+/* =========================================================
+   5. TIÊU ĐỀ PHÂN KHU
+========================================================= */
 
 .section-title {
+  margin: 18px 0 12px;
 
-  margin:
+  padding: 9px 12px;
 
-    18px 0 12px;
+  border-radius: 11px;
 
-  padding:
+  background: #e0e7ff;
 
-    8px 12px;
+  color: #3730a3;
 
-  border-radius: 10px;
+  font-size: 14px;
 
-  background:
+  font-weight: 800;
 
-    #e0e7ff;
-
-  color:
-
-    #3730a3;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.2px;
-
+  letter-spacing: 0.1px;
 }
 
 .money-title {
+  background: #ffedd5;
 
-  background:
-
-    #ffedd5;
-
-  color:
-
-    #9a3412;
-
+  color: #9a3412;
 }
 
 .note-title {
+  background: #e0f2fe;
 
-  background:
-
-    #e0f2fe;
-
-  color:
-
-    #0369a1;
-
+  color: #0369a1;
 }
 
-/* =========================================
 
-   5. FIELD & INPUT
-
-========================================= */
+/* =========================================================
+   6. FIELD
+========================================================= */
 
 .field {
-
   margin-bottom: 15px;
-
 }
 
 label {
-
   display: block;
 
   margin-bottom: 6px;
 
-  font-size: 13px;
-
-  font-weight: 700;
-
   color: #334155;
 
+  font-size: 14px;
+
+  font-weight: 700;
 }
 
 label span {
-
   color: #ef4444;
-
 }
 
+
+/* =========================================================
+   7. INPUT / SELECT / TEXTAREA
+========================================================= */
+
 input,
-
 textarea,
-
 select {
-
   width: 100%;
 
   border:
-
     1.5px solid #cbd5e1;
-
-  background:
-
-    #f8fafc;
 
   border-radius: 12px;
 
-  padding:
-
-    10px 14px;
-
-  font-size: 15px;
+  background: #f8fafc;
 
   color: #0f172a;
 
   outline: none;
 
-  transition:
-
-    all 0.2s ease;
-
   font-family: inherit;
 
-  -webkit-text-size-adjust: 100%;
+  font-size: 15px;
 
+  padding: 10px 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  -webkit-text-size-adjust: 100%;
 }
 
 input {
-
   height: 48px;
-
 }
 
 textarea {
-
   min-height: 95px;
 
   resize: vertical;
-
 }
 
 input:focus,
-
 textarea:focus,
-
 select:focus {
+  background: #ffffff;
 
-  background:
-
-    #ffffff;
-
-  border-color:
-
-    #6366f1;
+  border-color: #6366f1;
 
   box-shadow:
-
-    0 0 0 3.5px
-
-    rgba(99, 102, 241, 0.15);
-
+    0 0 0 3px
+    rgba(99, 102, 241, 0.13);
 }
 
 input::placeholder,
-
 textarea::placeholder {
-
-  color:
-
-    #94a3b8;
-
+  color: #94a3b8;
 }
 
-/* =========================================
 
-   6. KHUNG SỐ TIỀN
-
-========================================= */
+/* =========================================================
+   8. KHUNG DỰ THU
+========================================================= */
 
 .money-box {
+  margin-bottom: 16px;
 
   padding: 16px;
 
-  margin-bottom: 16px;
+  border:
+    1px solid #ffedd5;
 
   border-radius: 16px;
 
-  background:
-
-    #fff7ed;
-
-  border:
-
-    1px solid #ffedd5;
-
+  background: #fff7ed;
 }
 
 .money-box label {
-
-  color:
-
-    #9a3412;
-
+  color: #9a3412;
 }
 
-.money-input {
 
+/* =========================================================
+   9. Ô TIỀN
+========================================================= */
+
+.money-input {
   display: flex;
 
   align-items: center;
 
-  background:
+  width: 100%;
 
-    #ffffff;
+  overflow: hidden;
 
   border:
-
     1.5px solid #fdba74;
 
   border-radius: 12px;
 
-  overflow: hidden;
+  background: #ffffff;
 
   transition:
-
-    all 0.2s ease;
-
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .money-input:focus-within {
-
-  border-color:
-
-    #ea580c;
+  border-color: #ea580c;
 
   box-shadow:
-
-    0 0 0 3.5px
-
-    rgba(234, 88, 12, 0.15);
-
+    0 0 0 3px
+    rgba(234, 88, 12, 0.13);
 }
 
 .money-input input {
-
   height: 52px;
 
   border: 0 !important;
 
-  background:
+  background: transparent !important;
 
-    transparent !important;
+  box-shadow: none !important;
 
-  box-shadow:
-
-    none !important;
+  color: #c2410c;
 
   font-size: 20px;
 
   font-weight: 800;
 
-  color:
-
-    #c2410c;
-
   padding-right: 6px;
-
 }
 
 .money-input b {
+  flex-shrink: 0;
 
   padding-right: 14px;
 
-  color:
-
-    #ea580c;
+  color: #ea580c;
 
   font-size: 13px;
 
-  font-weight: 700;
-
+  font-weight: 800;
 }
 
-/* =========================================
 
-   7. BỘ LỌC
-
-========================================= */
+/* =========================================================
+   10. FILTER
+========================================================= */
 
 .filter-card {
-
-  background:
-
-    #ffffff;
-
-  border-radius: 16px;
+  margin-bottom: 20px;
 
   padding: 16px;
 
-  margin-bottom: 20px;
-
   border:
-
     1px solid #e2e8f0;
 
+  border-radius: 16px;
+
+  background: #ffffff;
 }
 
 .filter-row {
-
   display: grid;
 
   grid-template-columns:
-
     repeat(
-
       auto-fit,
-
       minmax(220px, 1fr)
-
     );
 
   gap: 14px;
 
   margin-bottom: 12px;
-
 }
 
 .button-row {
-
   display: grid;
 
   grid-template-columns:
-
     repeat(
-
       auto-fit,
-
       minmax(130px, 1fr)
-
     );
 
   gap: 10px;
-
 }
 
-/* =========================================
 
-   8. NÚT CHUNG
+/* =========================================================
+   11. NÚT CHUNG
+========================================================= */
 
-========================================= */
-
-button:not(#tableBody button)
-
-:not(.edit-btn)
-
-:not(.delete-btn)
-
-:not(.page-btn)
-
-:not(#pagination button)
-
-:not(#submitBtn) {
-
-  width: 100%;
-
-  height: 48px;
-
-  margin-top: 6px;
-
+button {
   border: 0;
 
-  border-radius: 12px;
-
-  color:
-
-    #ffffff;
-
-  font-size: 15px;
-
-  font-weight: 700;
+  font-family: inherit;
 
   cursor: pointer;
 
-  transition:
+  -webkit-tap-highlight-color: transparent;
 
-    all 0.2s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+
+/* =========================================================
+   12. CÁC NÚT TRONG FILTER / MANAGER
+========================================================= */
+
+.filter-card button,
+.button-row button,
+#loginBtn,
+form button[type="submit"] {
+
+  width: 100%;
+
+  min-height: 46px;
+
+  margin-top: 6px;
+
+  padding: 0 14px;
+
+  border-radius: 12px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 700;
 
   display: inline-flex;
 
@@ -590,1317 +453,141 @@ button:not(#tableBody button)
 
   justify-content: center;
 
-  gap: 8px;
-
-  -webkit-text-size-adjust: 100%;
-
+  gap: 7px;
 }
 
-/* =========================================
 
-   9. NÚT GỬI DỰ THU
-
-   KIỂU GIỐNG NÚT GỬI BÁO CÁO
-
-========================================= */
-
-#submitBtn {
-
-  /* Hiển thị */
-
-  display: flex !important;
-
-  align-items: center !important;
-
-  justify-content: center !important;
-
-  /* Kích thước */
-
-  width: 270px !important;
-
-  min-width: 270px !important;
-
-  max-width: 270px !important;
-
-  height: 72px !important;
-
-  min-height: 72px !important;
-
-  max-height: 72px !important;
-
-  /* Căn giữa */
-
-  margin:
-
-    20px auto !important;
-
-  padding:
-
-    0 20px !important;
-
-  box-sizing:
-
-    border-box !important;
-
-  /* Màu */
-
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #2563eb 0%,
-
-      #4f46e5 100%
-
-    ) !important;
-
-  color:
-
-    #ffffff !important;
-
-  /* Viền */
-
-  border:
-
-    none !important;
-
-  /* Bo tròn */
-
-  border-radius:
-
-    36px !important;
-
-  /* Chữ */
-
-  font-size:
-
-    21px !important;
-
-  font-weight:
-
-    800 !important;
-
-  line-height:
-
-    1 !important;
-
-  white-space:
-
-    nowrap !important;
-
-  text-align:
-
-    center !important;
-
-  /* Bóng */
-
-  box-shadow:
-
-    0 10px 24px
-
-    rgba(37, 99, 235, 0.28) !important;
-
-  cursor:
-
-    pointer !important;
-
-  transition:
-
-    transform 0.2s ease,
-
-    box-shadow 0.2s ease,
-
-    opacity 0.2s ease !important;
-
-  -webkit-text-size-adjust:
-
-    100%;
-
-}
-
-/* =========================================
-
-   HOVER
-
-========================================= */
-
-#submitBtn:hover {
-
-  opacity:
-
-    0.95 !important;
-
-  transform:
-
-    translateY(-2px) !important;
-
-  box-shadow:
-
-    0 13px 28px
-
-    rgba(37, 99, 235, 0.32) !important;
-
-}
-
-/* =========================================
-
-   KHI BẤM
-
-========================================= */
-
-#submitBtn:active {
-
-  transform:
-
-    scale(0.97) !important;
-
-  box-shadow:
-
-    0 5px 12px
-
-    rgba(37, 99, 235, 0.22) !important;
-
-}
-
-/* =========================================
-
-   DISABLED
-
-========================================= */
-
-#submitBtn:disabled {
-
-  opacity:
-
-    0.65 !important;
-
-  cursor:
-
-    not-allowed !important;
-
-  transform:
-
-    none !important;
-
-  box-shadow:
-
-    0 6px 16px
-
-    rgba(37, 99, 235, 0.15) !important;
-
-}
-
-/* =========================================
-
-   10. MÀU CÁC NÚT KHÁC
-
-========================================= */
-
-#logoutBtn {
-
-  background:
-
-    #64748b;
-
-}
+/* =========================================================
+   13. NÚT LỌC
+========================================================= */
 
 #filterBtn {
-
   background:
-
     linear-gradient(
-
       135deg,
-
       #4f46e5,
-
       #6366f1
-
     );
-
-}
-
-#refreshBtn {
-
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #0284c7,
-
-      #38bdf8
-
-    );
-
-}
-
-#exportBtn {
-
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #15803d,
-
-      #22c55e
-
-    );
-
-}
-
-/* =========================================
-
-   HOVER NÚT CHUNG
-
-========================================= */
-
-button:not(#tableBody button)
-
-:not(.page-btn)
-
-:not(#pagination button)
-
-:not(#submitBtn):hover {
-
-  opacity:
-
-    0.93;
-
-  transform:
-
-    translateY(-1px);
-
-}
-
-/* =========================================
-
-   ACTIVE NÚT CHUNG
-
-========================================= */
-
-button:not(#tableBody button)
-
-:not(.page-btn)
-
-:not(#pagination button)
-
-:not(#submitBtn):active {
-
-  transform:
-
-    translateY(0);
-
-}
-
-/* =========================================
-
-   11. BẢNG
-
-========================================= */
-
-.table-container,
-
-.table-wrap {
-
-  width: 100%;
-
-  overflow-x: auto;
-
-  border-radius: 12px;
-
-  border:
-
-    1px solid #e2e8f0;
-
-  margin-top: 16px;
-
-  -webkit-overflow-scrolling:
-
-    touch;
-
-}
-
-.table-container table,
-
-.table-wrap table {
-
-  width: 100%;
-
-  min-width: 1100px;
-
-  border-collapse:
-
-    collapse;
-
-  background:
-
-    #ffffff;
-
-  text-align:
-
-    left;
-
-  font-size:
-
-    13px !important;
-
-  line-height:
-
-    1.35 !important;
-
-  -webkit-text-size-adjust:
-
-    100%;
-
-  text-size-adjust:
-
-    100%;
-
-}
-
-/* =========================================
-
-   12. HEADER BẢNG
-
-========================================= */
-
-.table-container thead th,
-
-.table-wrap thead th {
-
-  background:
-
-    #f8fafc;
-
-  color:
-
-    #475569;
-
-  font-size:
-
-    13px !important;
-
-  font-weight:
-
-    700 !important;
-
-  padding:
-
-    10px 10px !important;
-
-  border-bottom:
-
-    1px solid #e2e8f0;
-
-  white-space:
-
-    nowrap;
-
-  line-height:
-
-    1.3 !important;
-
-  -webkit-text-size-adjust:
-
-    100%;
-
-}
-
-/* =========================================
-
-   13. DÒNG DỮ LIỆU
-
-========================================= */
-
-.table-container tbody td,
-
-.table-wrap tbody td {
-
-  font-size:
-
-    13px !important;
-
-  font-weight:
-
-    400 !important;
-
-  line-height:
-
-    1.35 !important;
-
-  padding:
-
-    9px 10px !important;
-
-  color:
-
-    #334155;
-
-  vertical-align:
-
-    middle;
-
-  border-bottom:
-
-    1px solid #f1f5f9;
-
-  -webkit-text-size-adjust:
-
-    100%;
-
-}
-
-/* =========================================
-
-   HOVER DÒNG
-
-========================================= */
-
-.table-container tbody tr:hover,
-
-.table-wrap tbody tr:hover {
-
-  background-color:
-
-    #f8fafc;
-
-}
-
-/* =========================================
-
-   14. CỘT GHI CHÚ
-
-========================================= */
-
-.table-container td:nth-child(7),
-
-.table-wrap td:nth-child(7) {
-
-  white-space:
-
-    normal !important;
-
-  min-width:
-
-    240px;
-
-  max-width:
-
-    350px;
-
-  word-break:
-
-    break-word;
-
-  overflow-wrap:
-
-    anywhere;
-
-  font-size:
-
-    13px !important;
-
-  line-height:
-
-    1.4 !important;
-
-}
-
-/* =========================================
-
-   15. CỘT SỐ TIỀN
-
-========================================= */
-
-.table-container td:nth-child(4),
-
-.table-wrap td:nth-child(4) {
-
-  font-size:
-
-    13px !important;
-
-  font-weight:
-
-    600 !important;
-
-  white-space:
-
-    nowrap;
-
-}
-
-/* =========================================
-
-   16. CỘT NGÀY
-
-========================================= */
-
-.table-container td:nth-child(5),
-
-.table-wrap td:nth-child(5) {
-
-  font-size:
-
-    13px !important;
-
-  white-space:
-
-    nowrap;
-
-}
-
-/* =========================================
-
-   17. CỘT SĐT
-
-========================================= */
-
-.table-container td:nth-child(6),
-
-.table-wrap td:nth-child(6) {
-
-  font-size:
-
-    13px !important;
-
-  white-space:
-
-    nowrap;
-
-}
-
-/* =========================================
-
-   18. NÚT SỬA / XÓA
-
-========================================= */
-
-#tableBody button,
-
-table .edit-btn,
-
-table .delete-btn {
-
-  width:
-
-    42px !important;
-
-  min-width:
-
-    42px !important;
-
-  max-width:
-
-    42px !important;
-
-  height:
-
-    32px !important;
-
-  min-height:
-
-    32px !important;
-
-  max-height:
-
-    32px !important;
-
-  margin:
-
-    0 2px !important;
-
-  padding:
-
-    0 !important;
-
-  font-size:
-
-    11px !important;
-
-  font-weight:
-
-    600 !important;
-
-  border-radius:
-
-    6px !important;
-
-  display:
-
-    inline-flex !important;
-
-  align-items:
-
-    center !important;
-
-  justify-content:
-
-    center !important;
 
   box-shadow:
-
-    none !important;
-
-  border:
-
-    none !important;
-
-  cursor:
-
-    pointer;
-
-  line-height:
-
-    1 !important;
-
-  -webkit-text-size-adjust:
-
-    100%;
-
+    0 5px 12px
+    rgba(79, 70, 229, 0.18);
 }
 
-.edit-btn {
 
-  background-color:
+/* =========================================================
+   14. NÚT LÀM MỚI
+========================================================= */
 
-    #8b5cf6 !important;
+#refreshBtn {
+  background:
+    linear-gradient(
+      135deg,
+      #0284c7,
+      #38bdf8
+    );
 
-  color:
-
-    #ffffff !important;
-
+  box-shadow:
+    0 5px 12px
+    rgba(2, 132, 199, 0.18);
 }
 
-.delete-btn {
 
-  background-color:
+/* =========================================================
+   15. NÚT XUẤT EXCEL
+========================================================= */
 
-    #ef4444 !important;
+#exportBtn {
+  background:
+    linear-gradient(
+      135deg,
+      #15803d,
+      #22c55e
+    );
 
-  color:
-
-    #ffffff !important;
-
+  box-shadow:
+    0 5px 12px
+    rgba(21, 128, 61, 0.18);
 }
 
-/* =========================================
 
-   19. MESSAGE
-
-========================================= */
-
-#message,
-
-#managerMessage,
-
-#loginMessage {
-
-  min-height:
-
-    20px;
-
-  margin-top:
-
-    14px;
-
-  text-align:
-
-    center;
-
-  font-size:
-
-    13px;
-
-  font-weight:
-
-    700;
-
-}
-
-/* =========================================
-
-   20. ĐĂNG NHẬP
-
-========================================= */
+/* =========================================================
+   16. NÚT ĐĂNG NHẬP
+========================================================= */
 
 #loginBtn,
-
 form button[type="submit"] {
 
   background:
-
     linear-gradient(
-
       135deg,
-
       #4f46e5,
-
       #6366f1
-
     ) !important;
 
-  color:
-
-    #ffffff !important;
-
   box-shadow:
-
-    0 4px 14px
-
-    rgba(79, 70, 229, 0.3) !important;
-
-  opacity:
-
-    1 !important;
-
-}
-
-#loginBtn:hover,
-
-form button[type="submit"]:hover {
-
-  opacity:
-
-    0.92 !important;
-
-  transform:
-
-    translateY(-1px);
-
+    0 5px 14px
+    rgba(79, 70, 229, 0.22);
 }
 
 #loginBtn:disabled,
-
 form button[type="submit"]:disabled {
+  background: #cbd5e1 !important;
 
-  background:
+  color: #94a3b8 !important;
 
-    #cbd5e1 !important;
+  box-shadow: none !important;
 
-  color:
-
-    #94a3b8 !important;
-
-  box-shadow:
-
-    none !important;
-
-  cursor:
-
-    not-allowed;
-
+  cursor: not-allowed;
 }
 
-/* =========================================
 
-   21. PHÂN TRANG
-
-========================================= */
-
-#pagination,
-
-.pagination-container {
-
-  display:
-
-    flex !important;
-
-  align-items:
-
-    center !important;
-
-  justify-content:
-
-    center !important;
-
-  gap:
-
-    12px !important;
-
-  margin:
-
-    20px 0 10px !important;
-
-  width:
-
-    100% !important;
-
-}
-
-.page-info {
-
-  font-size:
-
-    14px !important;
-
-  font-weight:
-
-    700 !important;
-
-  color:
-
-    #334155 !important;
-
-  background-color:
-
-    #f1f5f9 !important;
-
-  padding:
-
-    6px 14px !important;
-
-  border-radius:
-
-    20px !important;
-
-  border:
-
-    1px solid #cbd5e1 !important;
-
-  white-space:
-
-    nowrap !important;
-
-}
-
-#pagination button,
-
-.page-btn,
-
-button.page-btn {
-
-  width:
-
-    38px !important;
-
-  height:
-
-    38px !important;
-
-  min-width:
-
-    38px !important;
-
-  max-width:
-
-    38px !important;
-
-  flex:
-
-    0 0 38px !important;
-
-  margin:
-
-    0 !important;
-
-  padding:
-
-    0 !important;
-
-  border-radius:
-
-    50% !important;
-
-  background:
-
-    #ffffff !important;
-
-  border:
-
-    1.5px solid #cbd5e1 !important;
-
-  color:
-
-    #4f46e5 !important;
-
-  font-size:
-
-    15px !important;
-
-  font-weight:
-
-    bold !important;
-
-  cursor:
-
-    pointer !important;
-
-  box-shadow:
-
-    0 2px 5px
-
-    rgba(0, 0, 0, 0.05) !important;
-
-  display:
-
-    inline-flex !important;
-
-  align-items:
-
-    center !important;
-
-  justify-content:
-
-    center !important;
-
-  transition:
-
-    all 0.2s ease !important;
-
-}
-
-.page-btn:hover:not(:disabled),
-
-#pagination button:hover:not(:disabled) {
-
-  background:
-
-    #4f46e5 !important;
-
-  color:
-
-    #ffffff !important;
-
-  border-color:
-
-    #4f46e5 !important;
-
-}
-
-.page-btn:disabled,
-
-#pagination button:disabled {
-
-  background:
-
-    #f1f5f9 !important;
-
-  color:
-
-    #94a3b8 !important;
-
-  border-color:
-
-    #e2e8f0 !important;
-
-  cursor:
-
-    not-allowed !important;
-
-  box-shadow:
-
-    none !important;
-
-  opacity:
-
-    0.5 !important;
-
-}
-
-/* =========================================
-
-   22. MOBILE - IPHONE
-
-========================================= */
-
-@media (max-width: 480px) {
-
-  .container {
-
-    padding:
-
-      12px 8px 20px;
-
-  }
-
-  .card {
-
-    border-radius:
-
-      18px;
-
-    padding:
-
-      18px 14px;
-
-  }
-
-  .logo {
-
-    width:
-
-      48px;
-
-    height:
-
-      48px;
-
-    font-size:
-
-      22px;
-
-  }
-
-  h1 {
-
-    font-size:
-
-      18px;
-
-  }
-
-  input {
-
-    height:
-
-      44px;
-
-  }
-
-  .money-input input {
-
-    font-size:
-
-      18px;
-
-  }
-
-  /* =====================================
-
-     NÚT GỬI DỰ THU - IPHONE
-
-  ===================================== */
-
-  #submitBtn {
-
-    width:
-
-      270px !important;
-
-    min-width:
-
-      270px !important;
-
-    max-width:
-
-      270px !important;
-
-    height:
-
-      72px !important;
-
-    min-height:
-
-      72px !important;
-
-    max-height:
-
-      72px !important;
-
-    margin:
-
-      20px auto !important;
-
-    padding:
-
-      0 20px !important;
-
-    font-size:
-
-      21px !important;
-
-    font-weight:
-
-      800 !important;
-
-    border-radius:
-
-      36px !important;
-
-    box-shadow:
-
-      0 10px 24px
-
-      rgba(37, 99, 235, 0.28) !important;
-
-  }
-
-  /* =====================================
-
-     BẢNG TRÊN IPHONE
-
-  ===================================== */
-
-  .table-container table,
-
-  .table-wrap table {
-
-    font-size:
-
-      12px !important;
-
-    line-height:
-
-      1.3 !important;
-
-    min-width:
-
-      1050px !important;
-
-  }
-
-  .table-container thead th,
-
-  .table-wrap thead th {
-
-    font-size:
-
-      12px !important;
-
-    padding:
-
-      8px 8px !important;
-
-  }
-
-  .table-container tbody td,
-
-  .table-wrap tbody td {
-
-    font-size:
-
-      12px !important;
-
-    padding:
-
-      8px 8px !important;
-
-    line-height:
-
-      1.3 !important;
-
-  }
-
-  .table-container td:nth-child(7),
-
-  .table-wrap td:nth-child(7) {
-
-    font-size:
-
-      12px !important;
-
-    min-width:
-
-      220px;
-
-    max-width:
-
-      280px;
-
-    line-height:
-
-      1.35 !important;
-
-  }
-
-  /* =====================================
-
-     NÚT SỬA / XÓA TRÊN IPHONE
-
-  ===================================== */
-
-  #tableBody button,
-
-  table .edit-btn,
-
-  table .delete-btn {
-
-    width:
-
-      40px !important;
-
-    min-width:
-
-      40px !important;
-
-    max-width:
-
-      40px !important;
-
-    height:
-
-      30px !important;
-
-    min-height:
-
-      30px !important;
-
-    max-height:
-
-      30px !important;
-
-    font-size:
-
-      10px !important;
-
-  }
-
-}
-
-/* =========================================
-
-   23. MÀN HÌNH RẤT NHỎ
-
-   iPhone SE / màn hình dưới 390px
-
-========================================= */
-
-@media (max-width: 389px) {
-
-/* =========================================
-   NÚT GỬI DỰ THU
-   NHỎ VỪA - GỌN - ĐẸP
-========================================= */
+/* =========================================================
+   17. NÚT GỬI DỰ THU
+   QUAN TRỌNG
+   KHÔNG FULL WIDTH
+========================================================= */
 
 #submitBtn {
+
   display: flex !important;
 
   align-items: center !important;
+
   justify-content: center !important;
 
-  width: 250px !important;
-  min-width: 250px !important;
-  max-width: 250px !important;
+  gap: 7px !important;
 
-  height: 58px !important;
-  min-height: 58px !important;
-  max-height: 58px !important;
+  width: 190px !important;
 
-  margin: 18px auto !important;
+  min-width: 190px !important;
 
-  padding: 0 18px !important;
+  max-width: 190px !important;
+
+  height: 46px !important;
+
+  min-height: 46px !important;
+
+  max-height: 46px !important;
+
+  margin: 18px auto 12px !important;
+
+  padding: 0 16px !important;
+
+  border: none !important;
+
+  border-radius: 13px !important;
 
   background:
     linear-gradient(
       135deg,
-      #2563eb,
-      #4f46e5
+      #4f46e5,
+      #6366f1
     ) !important;
 
   color: #ffffff !important;
 
-  border: none !important;
-
-  border-radius: 29px !important;
-
-  font-size: 18px !important;
+  font-size: 16px !important;
 
   font-weight: 800 !important;
 
@@ -1908,46 +595,45 @@ button.page-btn {
 
   white-space: nowrap !important;
 
-  box-shadow:
-    0 7px 16px
-    rgba(37, 99, 235, 0.25) !important;
-
   cursor: pointer !important;
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    opacity 0.2s ease !important;
+  box-shadow:
+    0 6px 14px
+    rgba(79, 70, 229, 0.22) !important;
+
+  appearance: none !important;
+
+  -webkit-appearance: none !important;
 }
 
 
-/* Khi rê chuột */
+/* Hover */
 
 #submitBtn:hover {
-  opacity: 0.95 !important;
+  opacity: 0.94 !important;
 
   transform:
     translateY(-1px) !important;
 
   box-shadow:
-    0 9px 20px
-    rgba(37, 99, 235, 0.28) !important;
+    0 8px 18px
+    rgba(79, 70, 229, 0.25) !important;
 }
 
 
-/* Khi bấm */
+/* Bấm */
 
 #submitBtn:active {
   transform:
     scale(0.97) !important;
 
   box-shadow:
-    0 4px 10px
-    rgba(37, 99, 235, 0.20) !important;
+    0 3px 8px
+    rgba(79, 70, 229, 0.18) !important;
 }
 
 
-/* Khi đang gửi */
+/* Disabled */
 
 #submitBtn:disabled {
   opacity: 0.6 !important;
@@ -1958,28 +644,627 @@ button.page-btn {
 }
 
 
-/* =========================================
-   IPHONE
-========================================= */
+/* =========================================================
+   18. NÚT ĐĂNG XUẤT
+========================================================= */
+
+#logoutBtn {
+  background: #64748b;
+}
+
+
+/* =========================================================
+   19. HIỆU ỨNG NÚT MANAGER
+========================================================= */
+
+#filterBtn:hover,
+#refreshBtn:hover,
+#exportBtn:hover,
+#loginBtn:hover {
+  opacity: 0.93;
+
+  transform:
+    translateY(-1px);
+}
+
+#filterBtn:active,
+#refreshBtn:active,
+#exportBtn:active,
+#loginBtn:active {
+  transform:
+    translateY(0);
+}
+
+
+/* =========================================================
+   20. TABLE
+========================================================= */
+
+.table-container,
+.table-wrap {
+  width: 100%;
+
+  overflow-x: auto;
+
+  margin-top: 16px;
+
+  border:
+    1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-container table,
+.table-wrap table {
+  width: 100%;
+
+  min-width: 1100px;
+
+  border-collapse: collapse;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  font-size: 13px !important;
+
+  line-height: 1.35 !important;
+}
+
+
+/* =========================================================
+   21. TABLE HEADER
+========================================================= */
+
+.table-container thead th,
+.table-wrap thead th {
+  padding: 10px !important;
+
+  border-bottom:
+    1px solid #e2e8f0;
+
+  background: #f8fafc;
+
+  color: #475569;
+
+  font-size: 13px !important;
+
+  font-weight: 700 !important;
+
+  line-height: 1.3 !important;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   22. TABLE BODY
+========================================================= */
+
+.table-container tbody td,
+.table-wrap tbody td {
+  padding: 9px 10px !important;
+
+  border-bottom:
+    1px solid #f1f5f9;
+
+  color: #334155;
+
+  font-size: 13px !important;
+
+  font-weight: 400 !important;
+
+  line-height: 1.35 !important;
+
+  vertical-align: middle;
+}
+
+.table-container tbody tr:hover,
+.table-wrap tbody tr:hover {
+  background: #f8fafc;
+}
+
+
+/* =========================================================
+   23. CỘT GHI CHÚ
+========================================================= */
+
+.table-container td:nth-child(7),
+.table-wrap td:nth-child(7) {
+  min-width: 240px;
+
+  max-width: 350px;
+
+  white-space: normal !important;
+
+  word-break: break-word;
+
+  overflow-wrap: anywhere;
+
+  font-size: 13px !important;
+
+  line-height: 1.4 !important;
+}
+
+
+/* =========================================================
+   24. CỘT SỐ TIỀN
+========================================================= */
+
+.table-container td:nth-child(4),
+.table-wrap td:nth-child(4) {
+  white-space: nowrap;
+
+  font-size: 13px !important;
+
+  font-weight: 600 !important;
+}
+
+
+/* =========================================================
+   25. CỘT NGÀY
+========================================================= */
+
+.table-container td:nth-child(5),
+.table-wrap td:nth-child(5) {
+  white-space: nowrap;
+
+  font-size: 13px !important;
+}
+
+
+/* =========================================================
+   26. CỘT SĐT
+========================================================= */
+
+.table-container td:nth-child(6),
+.table-wrap td:nth-child(6) {
+  white-space: nowrap;
+
+  font-size: 13px !important;
+}
+
+
+/* =========================================================
+   27. NÚT SỬA / XÓA TRONG BẢNG
+========================================================= */
+
+#tableBody button,
+table .edit-btn,
+table .delete-btn {
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  width: 40px !important;
+
+  min-width: 40px !important;
+
+  max-width: 40px !important;
+
+  height: 30px !important;
+
+  min-height: 30px !important;
+
+  max-height: 30px !important;
+
+  margin: 0 2px !important;
+
+  padding: 0 !important;
+
+  border: none !important;
+
+  border-radius: 6px !important;
+
+  font-size: 10px !important;
+
+  font-weight: 600 !important;
+
+  line-height: 1 !important;
+
+  box-shadow: none !important;
+
+  cursor: pointer !important;
+}
+
+.edit-btn {
+  background: #8b5cf6 !important;
+
+  color: #ffffff !important;
+}
+
+.delete-btn {
+  background: #ef4444 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   28. MESSAGE
+========================================================= */
+
+#message,
+#managerMessage,
+#loginMessage {
+  min-height: 20px;
+
+  margin-top: 14px;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   29. PHÂN TRANG
+========================================================= */
+
+#pagination,
+.pagination-container {
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  gap: 10px !important;
+
+  width: 100% !important;
+
+  margin: 20px 0 10px !important;
+}
+
+.page-info {
+  padding: 6px 14px !important;
+
+  border:
+    1px solid #cbd5e1 !important;
+
+  border-radius: 20px !important;
+
+  background: #f1f5f9 !important;
+
+  color: #334155 !important;
+
+  font-size: 14px !important;
+
+  font-weight: 700 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   30. NÚT PHÂN TRANG
+========================================================= */
+
+#pagination button,
+.page-btn,
+button.page-btn {
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  flex: 0 0 38px !important;
+
+  width: 38px !important;
+
+  min-width: 38px !important;
+
+  max-width: 38px !important;
+
+  height: 38px !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  border:
+    1.5px solid #cbd5e1 !important;
+
+  border-radius: 50% !important;
+
+  background: #ffffff !important;
+
+  color: #4f46e5 !important;
+
+  font-size: 15px !important;
+
+  font-weight: 700 !important;
+
+  box-shadow:
+    0 2px 5px
+    rgba(0, 0, 0, 0.05) !important;
+}
+
+.page-btn:hover:not(:disabled),
+#pagination button:hover:not(:disabled) {
+  background: #4f46e5 !important;
+
+  border-color: #4f46e5 !important;
+
+  color: #ffffff !important;
+}
+
+.page-btn:disabled,
+#pagination button:disabled {
+  background: #f1f5f9 !important;
+
+  border-color: #e2e8f0 !important;
+
+  color: #94a3b8 !important;
+
+  opacity: 0.5 !important;
+
+  cursor: not-allowed !important;
+
+  box-shadow: none !important;
+}
+
+
+/* =========================================================
+   31. MOBILE - IPHONE
+========================================================= */
 
 @media (max-width: 480px) {
 
-  #submitBtn {
-    width: 250px !important;
-    min-width: 250px !important;
-    max-width: 250px !important;
-
-    height: 58px !important;
-    min-height: 58px !important;
-    max-height: 58px !important;
-
-    margin: 18px auto !important;
-
-    padding: 0 16px !important;
-
-    font-size: 18px !important;
-
-    border-radius: 29px !important;
+  .container {
+    padding:
+      12px 8px 20px;
   }
 
+  .card {
+    padding:
+      18px 14px;
+
+    border-radius: 18px;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+
+    font-size: 22px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  .header {
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 14px;
+  }
+
+  .header p {
+    font-size: 12px;
+  }
+
+
+  /* INPUT */
+
+  input {
+    height: 44px;
+
+    font-size: 15px;
+  }
+
+  textarea {
+    min-height: 90px;
+  }
+
+  select {
+    height: 44px;
+
+    font-size: 15px;
+  }
+
+
+  /* SECTION */
+
+  .section-title {
+    margin-top: 15px;
+
+    padding: 8px 11px;
+
+    font-size: 13px;
+  }
+
+
+  /* MONEY */
+
+  .money-box {
+    padding: 14px;
+
+    border-radius: 15px;
+  }
+
+  .money-input input {
+    height: 50px;
+
+    font-size: 18px;
+  }
+
+
+  /* =====================================================
+     NÚT GỬI DỰ THU
+     GỌN GIỐNG NÚT GỬI BÁO CÁO
+  ===================================================== */
+
+  #submitBtn {
+
+    width: 190px !important;
+
+    min-width: 190px !important;
+
+    max-width: 190px !important;
+
+    height: 46px !important;
+
+    min-height: 46px !important;
+
+    max-height: 46px !important;
+
+    margin:
+      18px auto 12px !important;
+
+    padding:
+      0 15px !important;
+
+    border-radius:
+      13px !important;
+
+    font-size:
+      16px !important;
+
+    font-weight:
+      800 !important;
+  }
+
+
+  /* TABLE */
+
+  .table-container table,
+  .table-wrap table {
+    min-width: 1050px !important;
+
+    font-size: 12px !important;
+  }
+
+  .table-container thead th,
+  .table-wrap thead th {
+    padding:
+      8px !important;
+
+    font-size:
+      12px !important;
+  }
+
+  .table-container tbody td,
+  .table-wrap tbody td {
+    padding:
+      8px !important;
+
+    font-size:
+      12px !important;
+
+    line-height:
+      1.3 !important;
+  }
+
+
+  /* GHI CHÚ */
+
+  .table-container td:nth-child(7),
+  .table-wrap td:nth-child(7) {
+
+    min-width: 220px;
+
+    max-width: 280px;
+
+    font-size: 12px !important;
+
+    line-height: 1.35 !important;
+  }
+
+
+  /* NÚT SỬA / XÓA */
+
+  #tableBody button,
+  table .edit-btn,
+  table .delete-btn {
+
+    width: 38px !important;
+
+    min-width: 38px !important;
+
+    max-width: 38px !important;
+
+    height: 29px !important;
+
+    min-height: 29px !important;
+
+    max-height: 29px !important;
+
+    margin:
+      0 2px !important;
+
+    font-size:
+      10px !important;
+  }
+
+
+  /* PAGINATION */
+
+  #pagination,
+  .pagination-container {
+    gap: 8px !important;
+
+    margin:
+      18px 0 8px !important;
+  }
+
+  #pagination button,
+  .page-btn,
+  button.page-btn {
+
+    width: 36px !important;
+
+    min-width: 36px !important;
+
+    max-width: 36px !important;
+
+    height: 36px !important;
+
+    flex-basis: 36px !important;
+  }
+
+  .page-info {
+    padding:
+      5px 11px !important;
+
+    font-size:
+      13px !important;
+  }
+}
+
+
+/* =========================================================
+   32. MÀN HÌNH RẤT NHỎ
+========================================================= */
+
+@media (max-width: 360px) {
+
+  #submitBtn {
+
+    width: 180px !important;
+
+    min-width: 180px !important;
+
+    max-width: 180px !important;
+
+    height: 44px !important;
+
+    min-height: 44px !important;
+
+    max-height: 44px !important;
+
+    font-size: 15px !important;
+  }
 }
