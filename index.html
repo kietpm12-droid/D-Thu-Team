@@ -2,194 +2,141 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-
-  <meta name="viewport"
-        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-  <title>Nhập Dự Thu</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Quản Lý Dự Thu</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="top-bg"></div>
-
   <main class="container">
-
     <section class="card">
 
+      <!-- 1. HEADER (Giao diện chuẩn như mẫu) -->
       <div class="header">
+        <button class="menu-btn" title="Menu" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
 
         <div class="logo">
-          💰
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
         </div>
 
-        <div>
-          <h1>DỰ THU KHÁCH HÀNG</h1>
-          <p>Nhập thông tin dự thu</p>
+        <div class="header-text">
+          <h1>QUẢN LÝ DỰ THU</h1>
+          <p>Theo dõi và xuất dự thu</p>
         </div>
-
       </div>
 
 
-      <form id="duThuForm">
-
-        <div class="section-title">
-          👤 THÔNG TIN KHÁCH HÀNG
+      <!-- 2. KHUNG THỐNG KÊ (STAT CARDS) -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Tổng số dự thu</div>
+          <div class="stat-value" id="totalRecords">0</div>
         </div>
 
-
-        <div class="field">
-
-          <label>
-            User <span>*</span>
-          </label>
-
-          <input
-            id="user_name"
-            type="text"
-            placeholder="Nhập User"
-            autocomplete="off"
-            required>
-
+        <div class="stat-card">
+          <div class="stat-label">Tổng dự thu</div>
+          <div class="stat-value" id="totalMoney">0</div>
         </div>
+      </div>
 
 
-        <div class="field">
-
-          <label>
-            Số CIF <span>*</span>
-          </label>
-
-          <input
-            id="cif"
-            type="text"
-            placeholder="Nhập số CIF"
-            autocomplete="off"
-            required>
-
-        </div>
+      <!-- 3. TIÊU ĐỀ BỘ LỌC -->
+      <div class="section-title">
+        🔎 BỘ LỌC
+      </div>
 
 
-        <div class="field">
-
-          <label>
-            Tên khách hàng <span>*</span>
-          </label>
-
-          <input
-            id="customer_name"
-            type="text"
-            placeholder="Nhập tên khách hàng"
-            autocomplete="off"
-            required>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Số điện thoại
-          </label>
-
-          <input
-            id="phone"
-            type="tel"
-            inputmode="tel"
-            placeholder="Nhập số điện thoại"
-            autocomplete="off">
-
-        </div>
-
-
-        <div class="section-title money-title">
-          💵 THÔNG TIN DỰ THU
-        </div>
-
-
-        <div class="money-box">
-
-          <label>
-            Số tiền dự thu <span>*</span>
-          </label>
-
-
-          <div class="money-input">
-
-            <input
-              id="amount"
-              type="text"
-              inputmode="numeric"
-              placeholder="0"
-              autocomplete="off"
-              required>
-
-            <b>VNĐ</b>
-
+      <!-- 4. KHUNG BỘ LỌC & NÚT THAO TÁC -->
+      <div class="filter-card">
+        <div class="filter-row">
+          <div class="field">
+            <label for="filterUser">Lọc theo cán bộ</label>
+            <input type="text" id="filterUser" placeholder="Nhập tên user cán bộ" autocomplete="off">
           </div>
 
+          <div class="field">
+            <label for="filterDate">Lọc theo ngày field</label>
+            <input type="date" id="filterDate">
+          </div>
+
+          <div class="button-group">
+            <button id="filterBtn" class="btn btn-dark" type="button">
+              🔎 LỌC DỮ LIỆU
+            </button>
+
+            <button id="refreshBtn" class="btn btn-green" type="button">
+              🔄 LÀM MỚI
+            </button>
+
+            <button id="exportBtn" class="btn btn-purple" type="button">
+              📥 XUẤT EXCEL
+            </button>
+          </div>
         </div>
 
+        <div class="action-row">
+          <button id="userSubmittedBtn" class="btn btn-dark-pill" type="button">
+            👤 CÁN BỘ ĐÃ NHẬP DỰ THU (0)
+          </button>
 
-        <div class="field">
-
-          <label>
-            Ngày thanh toán <span>*</span>
-          </label>
-
-          <input
-            id="payment_date"
-            type="date"
-            required>
-
+          <button id="deleteAllBtn" class="btn btn-red-pill" type="button">
+            🗑️ XÓA TẤT CẢ
+          </button>
         </div>
+      </div>
 
 
-        <div class="section-title note-title">
-          📝 GHI CHÚ
-        </div>
+      <!-- 5. BẢNG DỮ LIỆU -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Cán bộ</th>
+              <th>Ngày field</th>
+              <th>Số CIF</th>
+              <th>Tên khách hàng</th>
+              <th>Số điện thoại</th>
+              <th>Số tiền dự thu</th>
+              <th>Ghi chú</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Dữ liệu JS sẽ được chèn vào đây -->
+          </tbody>
+        </table>
+      </div>
 
 
-        <div class="field">
+      <!-- 6. THÔNG BÁO & PHÂN TRANG -->
+      <div id="message" class="message-info">Đã tải dữ liệu dự thu.</div>
 
-          <textarea
-            id="note"
-            rows="4"
-            placeholder="Nhập ghi chú nếu có..."></textarea>
-
-        </div>
-
-
-        <button
-          id="submitBtn"
-          type="submit">
-
-          <span>🚀</span>
-          GỬI DỰ THU
-
-        </button>
-
-
-        <div id="message"></div>
-
-      </form>
+      <div id="pagination" class="pagination-container">
+        <button class="page-btn" disabled>&lt;</button>
+        <span class="page-info">Trang 1 / 1</span>
+        <button class="page-btn" disabled>&gt;</button>
+      </div>
 
     </section>
-
 
     <p class="footer">
       🔒 Dữ liệu được lưu tập trung trên hệ thống
     </p>
-
   </main>
 
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script src="config.js"></script>
-
   <script src="app.js"></script>
 
 </body>
