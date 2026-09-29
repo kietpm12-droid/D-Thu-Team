@@ -4,115 +4,373 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Quản Lý Dự Thu</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
   <main class="manager-card">
+
     <section class="card">
 
-      <!-- TIÊU ĐỀ -->
+      <!-- ==================================================
+           TIÊU ĐỀ
+      =================================================== -->
+
       <div class="header-title">
-        <span>📊</span> QUẢN LÝ DỰ THU
+        <span>📊</span>
+        QUẢN LÝ DỰ THU
       </div>
 
-      <!-- ĐĂNG NHẬP (ẨN KHI ĐÃ ĐĂNG NHẬP) -->
-      <div id="loginBox" style="display:none;"></div>
 
-      <!-- TRANG QUẢN LÝ -->
-      <div id="managerBox">
+      <!-- ==================================================
+           ĐĂNG NHẬP QUẢN LÝ
+      =================================================== -->
 
-        <!-- NÚT ĐĂNG XUẤT -->
-        <button id="logoutBtn" type="button" class="logout-btn">
-          🚪 ĐĂNG XUẤT
-        </button>
+      <div id="loginBox" class="login-box">
 
-        <!-- THỐNG KÊ (2 KHỐI) -->
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-title">Tổng khách hàng</div>
-            <div class="stat-value" id="totalCustomers">0</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-title">Tổng dự thu</div>
-            <div class="stat-value" id="totalAmount">0 đ</div>
-          </div>
+        <div class="login-title">
+          🔐 ĐĂNG NHẬP QUẢN LÝ
         </div>
 
-        <!-- BỘ LỌC DỮ LIỆU -->
-        <div class="filters-box">
-          <!-- 2 Ô NHẬP LỌC -->
-          <div class="filter-inputs">
-            <div class="form-group">
-              <label for="filterUser">Lọc theo User</label>
-              <input id="filterUser" type="text" placeholder="Nhập User">
-            </div>
+        <div class="login-subtitle">
+          Sử dụng Gmail và mật khẩu đã được cấp trong
+          Supabase Authentication
+        </div>
 
-            <div class="form-group">
-              <label for="filterDate">Lọc theo ngày thanh toán</label>
-              <input id="filterDate" type="date">
-            </div>
+
+        <div class="login-form">
+
+          <div class="form-group">
+
+            <label for="loginEmail">
+              Gmail
+            </label>
+
+            <input
+              id="loginEmail"
+              type="email"
+              placeholder="Nhập Gmail"
+              autocomplete="username"
+            >
+
           </div>
 
-          <!-- CỤM NÚT CHỨC NĂNG -->
+
+          <div class="form-group">
+
+            <label for="loginPassword">
+              Mật khẩu
+            </label>
+
+            <input
+              id="loginPassword"
+              type="password"
+              placeholder="Nhập mật khẩu"
+              autocomplete="current-password"
+            >
+
+          </div>
+
+
+          <button
+            id="loginBtn"
+            type="button"
+            class="login-btn"
+          >
+            🔐 ĐĂNG NHẬP
+          </button>
+
+
+          <div
+            id="loginError"
+            class="login-error"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================================
+           TRANG QUẢN LÝ
+           MẶC ĐỊNH ẨN
+      =================================================== -->
+
+      <div
+        id="managerBox"
+        class="manager-box"
+        style="display:none;"
+      >
+
+
+        <!-- ==================================================
+             THÔNG TIN TÀI KHOẢN + ĐĂNG XUẤT
+        =================================================== -->
+
+        <div class="manager-topbar">
+
+          <div
+            id="loggedUser"
+            class="logged-user"
+          ></div>
+
+          <button
+            id="logoutBtn"
+            type="button"
+            class="logout-btn"
+          >
+            🚪 ĐĂNG XUẤT
+          </button>
+
+        </div>
+
+
+        <!-- ==================================================
+             THỐNG KÊ
+        =================================================== -->
+
+        <div class="stats">
+
+          <div class="stat">
+
+            <div class="stat-title">
+              Tổng khách hàng
+            </div>
+
+            <div
+              class="stat-value"
+              id="totalCustomers"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-title">
+              Tổng dự thu
+            </div>
+
+            <div
+              class="stat-value"
+              id="totalAmount"
+            >
+              0 đ
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             BỘ LỌC
+        =================================================== -->
+
+        <div class="filters-box">
+
+          <div class="filter-inputs">
+
+
+            <div class="form-group">
+
+              <label for="filterUser">
+                Lọc theo User
+              </label>
+
+              <input
+                id="filterUser"
+                type="text"
+                placeholder="Nhập User"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="filterDate">
+                Lọc theo ngày thanh toán
+              </label>
+
+              <input
+                id="filterDate"
+                type="date"
+              >
+
+            </div>
+
+
+          </div>
+
+
           <div class="btn-group-action">
-            <button id="filterBtn" type="button" class="btn-action btn-filter">
+
+            <button
+              id="filterBtn"
+              type="button"
+              class="btn-action btn-filter"
+            >
               🔎 LỌC DỮ LIỆU
             </button>
-            <button id="refreshBtn" type="button" class="btn-action btn-refresh">
+
+
+            <button
+              id="refreshBtn"
+              type="button"
+              class="btn-action btn-refresh"
+            >
               🔄 LÀM MỚI
             </button>
-            <button id="exportBtn" type="button" class="btn-action btn-export">
+
+
+            <button
+              id="exportBtn"
+              type="button"
+              class="btn-action btn-export"
+            >
               📥 XUẤT EXCEL
             </button>
-            <button id="deleteAllBtn" type="button" class="btn-action btn-delete-all">
+
+
+            <button
+              id="deleteAllBtn"
+              type="button"
+              class="btn-action btn-delete-all"
+            >
               🗑️ XÓA TẤT CẢ
             </button>
+
           </div>
+
         </div>
 
-        <!-- BẢNG DỮ LIỆU -->
+
+        <!-- ==================================================
+             BẢNG DỮ LIỆU
+        =================================================== -->
+
         <div class="table-wrap">
+
           <table>
+
             <thead>
+
               <tr>
+
                 <th>User</th>
+
                 <th>Số CIF</th>
+
                 <th>Tên Khách hàng</th>
+
                 <th>Số tiền dự thu</th>
+
                 <th>Ngày thanh toán</th>
+
                 <th>SĐT</th>
+
                 <th>Ghi chú</th>
+
                 <th>Thao tác</th>
+
               </tr>
+
             </thead>
+
+
             <tbody id="tableBody">
+
               <tr>
-                <td colspan="8" class="empty-row">Không có dữ liệu</td>
+
+                <td
+                  colspan="8"
+                  class="empty-row"
+                >
+                  Không có dữ liệu
+                </td>
+
               </tr>
+
             </tbody>
+
           </table>
+
         </div>
 
-        <!-- PHÂN TRANG -->
+
+        <!-- ==================================================
+             PHÂN TRANG
+        =================================================== -->
+
         <div id="pagination">
-          <button type="button" class="page-btn" id="prevPageBtn" disabled>❮</button>
-          <span class="page-info" id="pageInfo">Trang 1 / 1</span>
-          <button type="button" class="page-btn" id="nextPageBtn" disabled>❯</button>
+
+          <button
+            type="button"
+            class="page-btn"
+            id="prevPageBtn"
+            disabled
+          >
+            ❮
+          </button>
+
+
+          <span
+            class="page-info"
+            id="pageInfo"
+          >
+            Trang 1 / 1
+          </span>
+
+
+          <button
+            type="button"
+            class="page-btn"
+            id="nextPageBtn"
+            disabled
+          >
+            ❯
+          </button>
+
         </div>
+
 
       </div>
 
     </section>
+
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" defer></script>
-  <script src="config.js" defer></script>
-  <script src="manager.js?v=8" defer></script>
+
+  <!-- ======================================================
+       THƯ VIỆN
+  ======================================================= -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    defer
+  ></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"
+    defer
+  ></script>
+
+  <script
+    src="config.js"
+    defer
+  ></script>
+
+  <script
+    src="manager.js?v=9"
+    defer
+  ></script>
 
 </body>
 
