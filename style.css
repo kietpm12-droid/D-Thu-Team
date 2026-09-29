@@ -1864,40 +1864,122 @@ button.page-btn {
 
 @media (max-width: 389px) {
 
+/* =========================================
+   NÚT GỬI DỰ THU
+   NHỎ VỪA - GỌN - ĐẸP
+========================================= */
+
+#submitBtn {
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 250px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
+
+  height: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+
+  margin: 18px auto !important;
+
+  padding: 0 18px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    ) !important;
+
+  color: #ffffff !important;
+
+  border: none !important;
+
+  border-radius: 29px !important;
+
+  font-size: 18px !important;
+
+  font-weight: 800 !important;
+
+  line-height: 1 !important;
+
+  white-space: nowrap !important;
+
+  box-shadow:
+    0 7px 16px
+    rgba(37, 99, 235, 0.25) !important;
+
+  cursor: pointer !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease !important;
+}
+
+
+/* Khi rê chuột */
+
+#submitBtn:hover {
+  opacity: 0.95 !important;
+
+  transform:
+    translateY(-1px) !important;
+
+  box-shadow:
+    0 9px 20px
+    rgba(37, 99, 235, 0.28) !important;
+}
+
+
+/* Khi bấm */
+
+#submitBtn:active {
+  transform:
+    scale(0.97) !important;
+
+  box-shadow:
+    0 4px 10px
+    rgba(37, 99, 235, 0.20) !important;
+}
+
+
+/* Khi đang gửi */
+
+#submitBtn:disabled {
+  opacity: 0.6 !important;
+
+  cursor: not-allowed !important;
+
+  transform: none !important;
+}
+
+
+/* =========================================
+   IPHONE
+========================================= */
+
+@media (max-width: 480px) {
+
   #submitBtn {
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
 
-    width:
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
 
-      250px !important;
+    margin: 18px auto !important;
 
-    min-width:
+    padding: 0 16px !important;
 
-      250px !important;
+    font-size: 18px !important;
 
-    max-width:
-
-      250px !important;
-
-    height:
-
-      66px !important;
-
-    min-height:
-
-      66px !important;
-
-    max-height:
-
-      66px !important;
-
-    font-size:
-
-      19px !important;
-
-    border-radius:
-
-      33px !important;
-
+    border-radius: 29px !important;
   }
 
 }
