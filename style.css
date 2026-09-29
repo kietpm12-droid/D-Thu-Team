@@ -1,5 +1,5 @@
 /* =====================================================
-   1. CẤU TRÚC VÀ CHUNG (RESET)
+   1. CHUẨN HÓA CẤU TRÚC CHUNG
 ===================================================== */
 * {
   box-sizing: border-box !important;
@@ -28,7 +28,17 @@ body {
   border: 1px solid #f1f5f9;
 }
 
-/* HEADER & TITLE */
+/* =====================================================
+   2. HEADER: TIÊU ĐỀ BÊN TRÁI & NÚT ĐĂNG XUẤT BÊN PHẢI
+===================================================== */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
 .header-title {
   display: flex;
   align-items: center;
@@ -36,33 +46,28 @@ body {
   font-size: 20px;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 20px;
 }
 
-/* =====================================================
-   2. NÚT ĐĂNG XUẤT (GỌN GÀNG BÊN TRÊN)
-===================================================== */
+/* Nút đăng xuất nhỏ gọn bên góc phải */
 .logout-btn {
-  background: #5c6b73 !important;
-  color: white !important;
-  width: auto !important;           /* Thu gọn không dãn tràn màn hình */
-  display: inline-flex !important;  /* Ôm sát nội dung */
-  padding: 0 20px !important;
-  height: 38px !important;
+  background: #5c6b73;
+  color: white;
+  height: 38px;
+  padding: 0 16px;
   border: 0;
   border-radius: 8px;
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
-  margin-bottom: 20px;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
   transition: background 0.2s;
+  white-space: nowrap;
 }
 
 .logout-btn:hover {
-  background: #4a5568 !important;
+  background: #4a5568;
 }
 
 /* =====================================================
@@ -96,7 +101,7 @@ body {
 }
 
 /* =====================================================
-   4. KHUNG BỘ LỌC VÀ CÁC NÚT (TỐI ƯU MÁY TÍNH / PC)
+   4. BỘ LỌC VÀ CỤM NÚT BẤM (MÁY TÍNH / PC)
 ===================================================== */
 .filters-box {
   background: #ffffff;
@@ -109,7 +114,6 @@ body {
   gap: 16px;
 }
 
-/* Ô nhập lọc máy tính */
 .filter-inputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -142,29 +146,35 @@ body {
   border-color: #6366f1;
 }
 
-/* 3 Nút chức năng: Cố định độ rộng vừa vặn chữ, xếp cạnh nhau */
-.btn-group-3 {
-  display: flex !important;
+/* Cụm 4 nút nằm trên 1 hàng ngang trên PC, không bị dãn dài full-width */
+.btn-group-action {
+  display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: center;
   margin-top: 4px;
 }
 
 .btn-action {
-  height: 38px !important;
-  width: auto !important;          /* Không bị co dãn dài */
-  min-width: 120px;
-  padding: 0 18px !important;
+  height: 38px;
+  padding: 0 18px;
   border-radius: 8px;
   border: 0;
   color: white;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  display: inline-flex !important;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  width: auto;
+  min-width: 120px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-action:active {
+  transform: scale(0.98);
 }
 
 .btn-filter { background: #5555ff; }
@@ -176,31 +186,12 @@ body {
 .btn-export { background: #10b981; }
 .btn-export:hover { background: #059669; }
 
-/* Nút Xóa tất cả: Thu gọn kích thước vừa vặn trên máy tính */
-.btn-delete-all {
-  background: #ef4444;
-  color: white;
-  width: auto !important;          /* Loại bỏ tràn 100% bề ngang */
-  min-width: 130px;
-  height: 38px !important;
-  padding: 0 20px;
-  border: 0;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  align-self: flex-start;          /* Căn trái gọn gàng */
-}
-
+.btn-delete-all { background: #ef4444; }
 .btn-delete-all:hover { background: #dc2626; }
 
 /* =====================================================
    5. BẢNG DỮ LIỆU
-==================================================== */
+===================================================== */
 .table-wrap {
   overflow-x: auto;
   border: 1px solid #e2e8f0;
@@ -260,7 +251,7 @@ th {
 }
 
 /* =====================================================
-   6. TỰ ĐỘNG CHUYỂN DỌC KHI XEM TRÊN ĐIỆN THOẠI (MOBILE)
+   6. RESPONSIVE TỰ ĐỘNG CHO ĐIỆN THOẠI (MOBILE)
 ===================================================== */
 @media (max-width: 640px) {
   body {
@@ -276,15 +267,16 @@ th {
     gap: 12px;
   }
 
-  .btn-group-3 {
+  /* Trên Mobile: Các nút chuyển thành 1 cột xếp dọc full width cho dễ bấm */
+  .btn-group-action {
     flex-direction: column;
+    width: 100%;
   }
 
-  /* Trên Điện thoại: Tự mở rộng 100% cho ngón tay dễ chạm bấm */
-  .logout-btn, .btn-action, .btn-delete-all {
+  .btn-action {
     width: 100% !important;
-    height: 44px !important;
-    font-size: 14px !important;
+    height: 44px;
+    font-size: 14px;
   }
 
   .stat-value {
