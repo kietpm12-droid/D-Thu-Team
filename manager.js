@@ -1,207 +1,259 @@
-import { db } from './firebase-config.js';
-import { 
-    collection, 
-    getDocs, 
-    query, 
-    orderBy, 
-    deleteDoc, 
-    doc, 
-    updateDoc 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// Khai báo biến toàn cục
+let supabaseClient = null;
+let allRecords = [];
+let filteredRecords = [];
+let currentPage = 1;
+const pageSize = 10;
 
-// Đợi DOM tải xong
+// Khởi tạo ứng dụng sau khi DOM và CDN tải xong
 document.addEventListener('DOMContentLoaded', () => {
-    initManager();
+    initApp();
 });
 
-function initManager() {
-    loadData();
-
-    // Sự kiện Tìm kiếm
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', filterData);
-    }
-
-    // Sự kiện Lọc theo trạng thái
-    const statusFilter = document.getElementById('statusFilter');
-    if (statusFilter) {
-        statusFilter.addEventListener('change', filterData);
-    }
-
-    // Sự kiện Nút Xóa tất cả
-    const btnDeleteAll = document.getElementById('btnDeleteAll');
-    if (btnDeleteAll) {
-        btnDeleteAll.addEventListener('click', deleteAllData);
-    }
-}
-
-let allRecords = []; // Lưu trữ dữ liệu gốc để filter
-
-// Hàm tải dữ liệu từ Firestore
-async function loadData() {
-    const tableBody = document.getElementById('tableBody');
-    if (!tableBody) return;
-
-    showLoading(true);
-    tableBody.innerHTML = '';
-
-    try {
-        const q = query(collection(db, "records"), orderBy("timestamp", "desc"));
-        const querySnapshot = await getDocs(q);
-
-        allRecords = [];
-        querySnapshot.forEach((docSnap) => {
-            allRecords.push({ id: docSnap.id, ...docSnap.data() });
-        });
-
-        renderTable(allRecords);
-    } catch (error) {
-        console.error("Lỗi khi tải dữ liệu:", error);
-        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
-    } finally {
-        showLoading(false);
-    }
-}
-
-// Render dữ liệu ra bảng
-function renderTable(data) {
-    const tableBody = document.getElementById('tableBody');
-    if (!tableBody) return;
-
-    tableBody.innerHTML = '';
-
-    if (data.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Không có dữ liệu nào.</td></tr>`;
+function initApp() {
+    // 1. Khởi tạo Supabase client từ config.js
+    if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    } else {
+        console.error("Không thể kết nối Supabase. Vui lòng kiểm tra file config.js");
         return;
     }
 
-    data.forEach((item, index) => {
+    // 2. Kiểm tra trạng thái đăng nhập
+    checkAuth();
+
+    // 3. Đăng ký sự kiện nút bấm
+    setupEventListeners();
+}
+
+// Kiểm tra phiên đăng nhập
+async function checkAuth() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+        // Chưa đăng nhập thì chuyển hướng về trang login
+        window.location.href = 'login.html';
+        return;
+    }
+    // Đã đăng nhập -> Tải dữ liệu
+    loadData();
+}
+
+// Lắng nghe sự kiện các nút bấm (Bám sát ID trong file HTML)
+function setupEventListeners() {
+    // Nút Đăng xuất
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+
+    // Nút Lọc dữ liệu
+    const filterBtn = document.getElementById('filterBtn');
+    if (filterBtn) filterBtn.addEventListener('click', handleFilter);
+
+    // Nút Làm mới
+    const refreshBtn = document.getElementById('refreshBtn');
+    if (refreshBtn) refreshBtn.addEventListener('click', () => {
+        document.getElementById('filterUser').value = '';
+        document.getElementById('filterDate').value = '';
+        loadData();
+    });
+
+    // Nút Xuất Excel
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) exportBtn.addEventListener('click', exportToExcel);
+
+    // Nút Xóa tất cả
+    const deleteAllBtn = document.getElementById('deleteAllBtn');
+    if (deleteAllBtn) deleteAllBtn.addEventListener('click', handleDeleteAll);
+
+    // Nút Phân trang
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    if (prevPageBtn) prevPageBtn.addEventListener('click', () => changePage(-1));
+    if (nextPageBtn) nextPageBtn.addEventListener('click', () => changePage(1));
+}
+
+// Chức năng Đăng xuất
+async function handleLogout() {
+    if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+        try {
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) throw error;
+            window.location.href = 'login.html';
+        } catch (error) {
+            alert("Lỗi khi đăng xuất: " + error.message);
+        }
+    }
+}
+
+// Tải dữ liệu từ Supabase
+async function loadData() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('records') // Đảm bảo tên table trong Supabase của bạn là 'records'
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        allRecords = data || [];
+        filteredRecords = [...allRecords];
+        currentPage = 1;
+
+        updateStats();
+        renderTable();
+    } catch (error) {
+        console.error("Lỗi tải dữ liệu:", error);
+        const tableBody = document.getElementById('tableBody');
+        if (tableBody) {
+            tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+        }
+    }
+}
+
+// Cập nhật 2 ô Thống kê (Tổng khách hàng & Tổng dự thu)
+function updateStats() {
+    const totalCustomers = document.getElementById('totalCustomers');
+    const totalAmount = document.getElementById('totalAmount');
+
+    if (totalCustomers) totalCustomers.innerText = filteredRecords.length;
+
+    if (totalAmount) {
+        const sum = filteredRecords.reduce((acc, item) => acc + (Number(item.amount) || 0), 0);
+        totalAmount.innerText = sum.toLocaleString('vi-VN') + ' đ';
+    }
+}
+
+// Lọc dữ liệu theo User và Ngày thanh toán
+function handleFilter() {
+    const filterUser = document.getElementById('filterUser')?.value.toLowerCase().trim() || '';
+    const filterDate = document.getElementById('filterDate')?.value || '';
+
+    filteredRecords = allRecords.filter(item => {
+        const matchUser = !filterUser || (item.user_name && item.user_name.toLowerCase().includes(filterUser));
+        
+        let matchDate = true;
+        if (filterDate && item.payment_date) {
+            // So sánh định dạng YYYY-MM-DD
+            const itemDate = new Date(item.payment_date).toISOString().split('T')[0];
+            matchDate = (itemDate === filterDate);
+        }
+
+        return matchUser && matchDate;
+    });
+
+    currentPage = 1;
+    updateStats();
+    renderTable();
+}
+
+// Hiển thị bảng dữ liệu kèm Phân trang
+function renderTable() {
+    const tableBody = document.getElementById('tableBody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
+
+    if (filteredRecords.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="8" class="empty-row" style="text-align:center;">Không có dữ liệu</td></tr>`;
+        updatePaginationInfo(0);
+        return;
+    }
+
+    // Tính toán phân trang
+    const totalPages = Math.ceil(filteredRecords.length / pageSize);
+    const startIdx = (currentPage - 1) * pageSize;
+    const pageData = filteredRecords.slice(startIdx, startIdx + pageSize);
+
+    pageData.forEach(item => {
         const tr = document.createElement('tr');
         
-        // Format ngày tháng
-        let dateStr = 'N/A';
-        if (item.timestamp) {
-            const date = item.timestamp.toDate ? item.timestamp.toDate() : new Date(item.timestamp);
-            dateStr = date.toLocaleString('vi-VN');
-        }
-
-        // Tạo danh sách ảnh (preview)
-        let imagesHtml = '';
-        if (item.imageUrls && Array.isArray(item.imageUrls) && item.imageUrls.length > 0) {
-            imagesHtml = item.imageUrls.map(url => 
-                `<a href="${url}" target="_blank"><img src="${url}" class="table-img-thumb" alt="Checkin" style="width:40px;height:40px;object-fit:cover;margin-right:4px;border-radius:4px;"/></a>`
-            ).join('');
-        } else {
-            imagesHtml = '<span style="color:#888;">Không có ảnh</span>';
-        }
+        const formattedAmount = (Number(item.amount) || 0).toLocaleString('vi-VN') + ' đ';
+        const formattedDate = item.payment_date ? new Date(item.payment_date).toLocaleDateString('vi-VN') : 'N/A';
 
         tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td><strong>${item.customerName || 'N/A'}</strong><br><small>${item.customerId || ''}</small></td>
-            <td>${item.address || 'N/A'}</td>
+            <td>${item.user_name || 'N/A'}</td>
+            <td>${item.cif || 'N/A'}</td>
+            <td><strong>${item.customer_name || 'N/A'}</strong></td>
+            <td style="color: #2e7d32; font-weight: bold;">${formattedAmount}</td>
+            <td>${formattedDate}</td>
+            <td>${item.phone || 'N/A'}</td>
             <td>${item.note || ''}</td>
-            <td>${imagesHtml}</td>
-            <td><span class="badge ${getStatusClass(item.status)}">${item.status || 'Chưa xử lý'}</span></td>
-            <td><small>${dateStr}</small></td>
             <td>
-                <button class="btn-action btn-edit" data-id="${item.id}">Sửa</button>
-                <button class="btn-action btn-delete" data-id="${item.id}">Xóa</button>
+                <button class="btn-action btn-delete" onclick="deleteRecord('${item.id}')">🗑️ Xóa</button>
             </td>
         `;
-
         tableBody.appendChild(tr);
     });
 
-    // Gán sự kiện cho các nút Sửa/Xóa từng dòng
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-        btn.addEventListener('click', (e) => editRow(e.target.dataset.id));
-    });
-    document.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.addEventListener('click', (e) => deleteRow(e.target.dataset.id));
-    });
+    updatePaginationInfo(totalPages);
 }
 
-// Lọc dữ liệu theo từ khóa và trạng thái
-function filterData() {
-    const keyword = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
-    const status = document.getElementById('statusFilter')?.value || 'ALL';
+// Cập nhật trạng thái các nút Phân trang
+function updatePaginationInfo(totalPages) {
+    const pageInfo = document.getElementById('pageInfo');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
 
-    const filtered = allRecords.filter(item => {
-        const matchKeyword = 
-            (item.customerName && item.customerName.toLowerCase().includes(keyword)) ||
-            (item.customerId && item.customerId.toLowerCase().includes(keyword)) ||
-            (item.address && item.address.toLowerCase().includes(keyword)) ||
-            (item.note && item.note.toLowerCase().includes(keyword));
-
-        const matchStatus = (status === 'ALL') || (item.status === status);
-
-        return matchKeyword && matchStatus;
-    });
-
-    renderTable(filtered);
+    if (pageInfo) pageInfo.innerText = `Trang ${totalPages === 0 ? 0 : currentPage} / ${totalPages}`;
+    if (prevPageBtn) prevPageBtn.disabled = (currentPage <= 1);
+    if (nextPageBtn) nextPageBtn.disabled = (currentPage >= totalPages || totalPages === 0);
 }
 
-// Hàm bổ trợ hiển thị CSS class cho trạng thái
-function getStatusClass(status) {
-    switch (status) {
-        case 'Đã thu nợ': return 'badge-success';
-        case 'Hẹn trả': return 'badge-warning';
-        case 'Không gặp': return 'badge-danger';
-        default: return 'badge-secondary';
-    }
+function changePage(direction) {
+    currentPage += direction;
+    renderTable();
 }
 
-// Bật/tắt trạng thái Loading
-function showLoading(isLoading) {
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    if (loadingSpinner) {
-        loadingSpinner.style.display = isLoading ? 'block' : 'none';
-    }
-}
-
-// Xóa 1 bản ghi
-async function deleteRow(id) {
-    if (confirm("Bạn có chắc chắn muốn xóa bản ghi này?")) {
+// Xóa 1 dòng
+window.deleteRecord = async function(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa dòng dữ liệu này?")) {
         try {
-            showLoading(true);
-            await deleteDoc(doc(db, "records", id));
+            const { error } = await supabaseClient.from('records').delete().eq('id', id);
+            if (error) throw error;
             alert("Đã xóa thành công!");
             loadData();
         } catch (error) {
-            console.error("Lỗi khi xóa:", error);
             alert("Không thể xóa: " + error.message);
-        } finally {
-            showLoading(false);
         }
     }
-}
+};
 
-// Sửa bản ghi
-function editRow(id) {
-    const record = allRecords.find(r => r.id === id);
-    if (!record) return;
-    alert(`Tính năng sửa cho hồ sơ: ${record.customerName || id}`);
-}
-
-// Xóa toàn bộ dữ liệu
-async function deleteAllData() {
-    if (confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa TOÀN BỘ dữ liệu?")) {
-        if (confirm("XÁC NHẬN LẦN 2: Tất cả hồ sơ sẽ bị xóa vĩnh viễn. Tiếp tục?")) {
+// Xóa tất cả dữ liệu
+async function handleDeleteAll() {
+    if (confirm("⚠️ CẢNH BÁO: Bạn có chắc muốn xóa TOÀN BỘ dữ liệu dự thu?")) {
+        if (confirm("XÁC NHẬN LẦN 2: Thao tác này không thể phục hồi! Tiếp tục?")) {
             try {
-                showLoading(true);
-                const querySnapshot = await getDocs(collection(db, "records"));
-                const deletePromises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "records", docSnap.id)));
-                await Promise.all(deletePromises);
-
-                alert("Đã xóa toàn bộ dữ liệu thành công!");
+                const { error } = await supabaseClient.from('records').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                if (error) throw error;
+                alert("Đã xóa toàn bộ dữ liệu!");
                 loadData();
             } catch (error) {
-                console.error("Lỗi khi xóa dữ liệu:", error);
-                alert("Lỗi khi xóa dữ liệu: " + error.message);
-            } finally {
-                showLoading(false);
+                alert("Lỗi khi xóa tất cả: " + error.message);
             }
         }
     }
+}
+
+// Xuất Excel sử dụng thư viện xlsx-js-style đã khai báo trong HTML
+function exportToExcel() {
+    if (filteredRecords.length === 0) {
+        alert("Không có dữ liệu để xuất Excel!");
+        return;
+    }
+
+    const excelData = filteredRecords.map((item, index) => ({
+        "STT": index + 1,
+        "User": item.user_name || '',
+        "Số CIF": item.cif || '',
+        "Tên Khách Hàng": item.customer_name || '',
+        "Số Tiền Dự Thu": item.amount || 0,
+        "Ngày Thanh Toán": item.payment_date || '',
+        "Số Điện Thoại": item.phone || '',
+        "Ghi Chú": item.note || ''
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "QuanLyDuThu");
+    
+    XLSX.writeFile(workbook, `Quan_Ly_Du_Thu_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
